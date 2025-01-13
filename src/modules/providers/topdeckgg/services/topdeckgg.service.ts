@@ -21,7 +21,9 @@ export class TopdeckggService {
   ) {}
 
   async getTopDecks(topDeckUrl: string): Promise<TopDeck[]> {
-    const url = 'https://topdeck.gg/PublicPData/2-circuito-dk-500-torneio-3';
+
+    const urlPart = topDeckUrl.substring(topDeckUrl.lastIndexOf('/') + 1);
+    const url = `https://topdeck.gg/PublicPData/${urlPart}`;
     this.logger.log(`Requesting top decks from ${url}`);
     
     const response = await firstValueFrom(this.httpService.get(url, {
