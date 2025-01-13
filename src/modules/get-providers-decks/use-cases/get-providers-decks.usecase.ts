@@ -12,7 +12,7 @@ export class GetProvidersDecksUseCase {
   async execute(input: GetDeckDto): Promise<TopDeck[]> {
     try {
       console.log(input.provider);
-      // const platform = PlatformValidator.validatePlatform(input.provider);
+      const platform = PlatformValidator.validatePlatform(input.provider);
 
       if(input.provider == 'topdeckgg') {
         const topDeckUrl = input.url;

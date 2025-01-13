@@ -6,11 +6,12 @@ import { GetProvidersDecksController } from './get-providers-decks.controller';
 import { TopdeckggService } from '../providers/topdeckgg/services/topdeckgg.service';
 
 @Module({
-  imports: [HttpModule, ConfigModule],
+  imports: [ConfigModule, HttpModule.register({})],
   controllers: [GetProvidersDecksController],
   providers: [
     GetProvidersDecksUseCase,
     TopdeckggService
   ],
 })
-export class GetProvidersDecksModule { }
+
+export class GetProvidersDecksModule {}
