@@ -4,13 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 import { GetProvidersDecksUseCase } from './use-cases/get-providers-decks.usecase';
 import { GetProvidersDecksController } from './get-providers-decks.controller';
 import { TopdeckggService } from '../providers/topdeckgg/services/topdeckgg.service';
+import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 
 @Module({
   imports: [ConfigModule, HttpModule.register({})],
   controllers: [GetProvidersDecksController],
   providers: [
     GetProvidersDecksUseCase,
-    TopdeckggService
+    TopdeckggService,
+    MoxfieldService
   ],
 })
 

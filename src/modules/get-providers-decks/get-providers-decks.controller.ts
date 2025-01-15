@@ -6,7 +6,6 @@ import { TopdeckggService } from "../providers/topdeckgg/services/topdeckgg.serv
 export class GetProvidersDecksController {
     constructor(
         private readonly getProvidersDecksUseCase: GetProvidersDecksUseCase,
-        private readonly topdeckggService: TopdeckggService
     ) { }
 
     @Get("/decks")

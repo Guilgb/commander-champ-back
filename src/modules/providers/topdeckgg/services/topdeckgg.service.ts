@@ -12,6 +12,7 @@ export interface TopDeck {
     elo: number;
     decklist: string;
 }
+
 @Injectable()
 export class TopdeckggService {
   private readonly logger = new Logger(TopdeckggService.name);
@@ -25,7 +26,6 @@ export class TopdeckggService {
     const urlPart = topDeckUrl.substring(topDeckUrl.lastIndexOf('/') + 1);
     const url = `https://topdeck.gg/PublicPData/${urlPart}`;
     this.logger.log(`Requesting top decks from ${url}`);
-    
     const response = await firstValueFrom(this.httpService.get(url, {
       headers: {
         'Content-Type': 'application/json',
@@ -33,6 +33,7 @@ export class TopdeckggService {
       }
     }));
     const { data } = response;
+    console.log(data);
     const normalizedData: TopDeck[] = Object.values(data);
 
     return normalizedData;
