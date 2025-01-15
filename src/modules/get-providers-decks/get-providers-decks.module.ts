@@ -5,6 +5,7 @@ import { GetProvidersDecksUseCase } from './use-cases/get-providers-decks.usecas
 import { GetProvidersDecksController } from './get-providers-decks.controller';
 import { TopdeckggService } from '../providers/topdeckgg/services/topdeckgg.service';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
+import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 
 @Module({
   imports: [ConfigModule, HttpModule.register({})],
@@ -12,7 +13,8 @@ import { MoxfieldService } from '../providers/moxfield/service/moxfield.service'
   providers: [
     GetProvidersDecksUseCase,
     TopdeckggService,
-    MoxfieldService
+    MoxfieldService,
+    CurlProviderService,
   ],
 })
 
