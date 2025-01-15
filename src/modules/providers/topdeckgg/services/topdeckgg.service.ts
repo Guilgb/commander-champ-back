@@ -33,7 +33,7 @@ export class TopdeckggService {
       }
     }));
     const { data } = response;
-    console.log(data);
+
     const normalizedData: TopDeck[] = Object.values(data);
 
     return normalizedData;

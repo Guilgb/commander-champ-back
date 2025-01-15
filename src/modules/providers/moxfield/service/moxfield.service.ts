@@ -15,12 +15,6 @@ export class MoxfieldService {
 
     this.logger.log(`Requesting Moxfield deck from ${url}`);
 
-    const curlCommand = `curl --location '${url}' \
-      --header 'Accept: */*' \
-      --header 'Connection: keep-alive' \
-      --header 'User-Agent: PostmanRuntime/7.43.0' \
-      --header 'Host: api.moxfield.com'`;
-
     try {
       const response = await this.curlProviderService.get(url);
 
