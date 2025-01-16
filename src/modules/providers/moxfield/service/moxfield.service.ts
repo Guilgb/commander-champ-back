@@ -22,7 +22,7 @@ export class MoxfieldService {
 
     } catch (error) {
       this.logger.error(`Failed to fetch Moxfield deck: ${error.message}`);
-      throw error;
+      return null;
     }
   }
 }
