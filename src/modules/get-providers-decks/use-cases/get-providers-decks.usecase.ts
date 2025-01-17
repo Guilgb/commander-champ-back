@@ -18,19 +18,21 @@ export class GetProvidersDecksUseCase {
       const platform = PlatformValidator.validatePlatform(input.provider);
 
       if (input.provider === 'topdeckgg') {
-        const topDeckUrl = input.url;
-        const topDecks = await this.topdeckggService.getTopDecks(topDeckUrl);
+        
+        const { url, tournament } = input;
+        const topDecks = await this.topdeckggService.getTopDecks(url);
 
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
-          const deckList = await this.retryRequest(() => this.moxfieldService.getMoxfieldDeck(deck.decklist), deck.decklist);
+          const { decklist, name } = deck;
+          const deckLists = await this.retryRequest(() => this.moxfieldService.getMoxfieldDeck(decklist), decklist);
 
-          if (deckList) {
+          if (deckLists) {
             const {
               name,
               format,
               commanders,
               mainboard
-            } = deckList;
+            } = deckLists;
 
             const maindeck = this.normalizeDeckData(mainboard);
             const commander = this.normalizeDeckData(commanders);
