@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GetProvidersDecksModule } from './modules/get-providers-decks/get-providers-decks.module';
+import { DatabaseModule } from './modules/db/database.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { GetProvidersDecksModule } from './modules/get-providers-decks/get-provi
       isGlobal: true,
     }),
     GetProvidersDecksModule,
+    DatabaseModule,
   ],
 })
 export class AppModule {}

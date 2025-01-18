@@ -38,13 +38,13 @@ export class GetProvidersDecksUseCase {
             const commander = this.normalizeDeckData(commanders);
             let color_identity = [];
 
-            if (commander === null || undefined) {
-              this.logger.error(`failet to fetch deck list for URL: ${deck.decklist}`);
-            } else if (commander.length == 1) {
+            if (commander === null || commander === undefined) {
+              this.logger.error(`Failed to fetch deck list for URL: ${deck.decklist}`);
+            } else if (commander.length === 1) {
               for (const ci of commander) {
                 color_identity.push(...ci.card.color_identity);
               }
-            } else if (commander.length == 0) {
+            } else if (commander.length > 0) {
               color_identity = commander[0].card.color_identity;
             }
 

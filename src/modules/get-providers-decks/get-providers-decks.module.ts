@@ -6,6 +6,7 @@ import { GetProvidersDecksController } from './get-providers-decks.controller';
 import { TopdeckggService } from '../providers/topdeckgg/services/topdeckgg.service';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
+// import { CardsService } from '../db/services/cards.service';
 
 @Module({
   imports: [ConfigModule, HttpModule.register({})],
@@ -15,6 +16,7 @@ import { CurlProviderService } from '../providers/curlProvider/service/curl-prov
     TopdeckggService,
     MoxfieldService,
     CurlProviderService,
+    // CardsService,
   ],
 })
 
