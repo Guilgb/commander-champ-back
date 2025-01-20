@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CardsEntity } from './entities/cards.entity';
+import { entitiesList } from './entities';
 
 
 @Module({
@@ -17,7 +18,7 @@ import { CardsEntity } from './entities/cards.entity';
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASS'),
         database: configService.get('DB_NAME'),
-        entities: [__dirname + 'src/modules/db/entities/**'],
+        entities: [...entitiesList],
         migrations: [__dirname + 'src/modules/db/migrations/*.ts'],
         synchronize: false,
       }),

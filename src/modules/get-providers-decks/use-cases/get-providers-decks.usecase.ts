@@ -3,6 +3,9 @@ import { GetDeckDto } from "./dto/get-providers-decks.dto";
 import { PlatformValidator } from "src/shared/util/platform.validator";
 import { TopDeck, TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
+import { CardsService } from "src/modules/db/services/cards.service";
+import { TournamentService } from "src/modules/db/services/tournament.service";
+import { DecksService } from "src/modules/db/services/decks.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {
@@ -11,6 +14,9 @@ export class GetProvidersDecksUseCase {
   constructor(
     private readonly topdeckggService: TopdeckggService,
     private readonly moxfieldService: MoxfieldService,
+    private readonly cardsService: CardsService,
+    private readonly tournamentService: TournamentService,
+    private readonly deckService: DecksService,
   ) { }
 
   async execute(input: GetDeckDto): Promise<any> {
@@ -18,8 +24,16 @@ export class GetProvidersDecksUseCase {
       const platform = PlatformValidator.validatePlatform(input.provider);
 
       if (input.provider === 'topdeckgg') {
-        
-        const { url, tournament } = input;
+
+        const { url, tournament_name, start_date, end_date, format } = input;
+
+        const tournament = await this.tournamentService.createTournament({
+          name: tournament_name,
+          start_date: new Date(start_date),
+          end_date: new Date(end_date),
+          format
+        });
+
         const topDecks = await this.topdeckggService.getTopDecks(url);
 
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
@@ -81,6 +95,7 @@ export class GetProvidersDecksUseCase {
       }
     }
   }
+
   private normalizeDeckData(data: any): any[] {
     try {
       const normalizedData = Object.keys(data).map(key => {

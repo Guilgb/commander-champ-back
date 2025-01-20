@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { DeckEntity } from './decks.entity';
 
 @Entity('cards')
@@ -9,7 +9,7 @@ export class CardsEntity {
   @Column()
   name: string;
 
-  @ManyToOne(() => DeckEntity, (deck) => deck.id)
+  @Column()
   deck_id: number;
 
   @Column()
@@ -21,9 +21,9 @@ export class CardsEntity {
   @Column()
   mana_cost: string;
 
-  @Column()
+  @Column("text", { array: true })
   colors: string[];
 
-  @Column()
+  @Column("text", { array: true })
   color_identity: string[];
 }

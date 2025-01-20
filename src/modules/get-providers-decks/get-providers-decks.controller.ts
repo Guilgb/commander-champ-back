@@ -10,7 +10,7 @@ export class GetProvidersDecksController {
 
     @Get("/decks")
     async getProvidersDecks(
-        @Body() input: { provider: string, url: string, tournament: string }
+        @Body() input: { provider: string, url: string, tournament_name: string, start_date: string, end_date: string, format: string }
     ) {
         return this.getProvidersDecksUseCase.execute(input);
     }

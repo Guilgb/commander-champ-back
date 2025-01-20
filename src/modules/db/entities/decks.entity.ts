@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
 import { TournamentEntity } from './tournaments.entity';
+import { CardsEntity } from './cards.entity';
 
 @Entity('decks')
 export class DeckEntity {
@@ -7,10 +8,10 @@ export class DeckEntity {
   id!: number;
 
   @Column()
-  name!: string;
+  deckname!: string;
 
   @Column()
-  deckname!: string;
+  username: string;
 
   @Column()
   tournament_id!: number;
@@ -24,6 +25,6 @@ export class DeckEntity {
   @Column({ default: 0 })
   draws!: number;
 
-  @ManyToOne(() => TournamentEntity, tournament => tournament.id)
-  tournament!: TournamentEntity;
+  @OneToMany(() => CardsEntity, (card) => card.id)
+  cards: CardsEntity[];
 }
