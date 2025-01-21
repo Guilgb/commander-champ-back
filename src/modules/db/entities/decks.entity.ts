@@ -8,7 +8,7 @@ export class DeckEntity {
   id!: number;
 
   @Column()
-  deckname!: string;
+  decklist!: string;
 
   @Column()
   username: string;
@@ -24,6 +24,15 @@ export class DeckEntity {
 
   @Column({ default: 0 })
   draws!: number;
+
+  @Column()
+  commander!: string;
+
+  @Column()
+  partner: string;
+
+  @Column()
+  color_identity: string;
 
   @OneToMany(() => CardsEntity, (card) => card.id)
   cards: CardsEntity[];

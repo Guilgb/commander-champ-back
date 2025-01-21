@@ -27,7 +27,9 @@ export class GetProvidersDecksUseCase {
 
         const { url, tournament_name, start_date, end_date, format } = input;
 
-        const tournament = await this.tournamentService.createTournament({
+        let decksArray = [];
+
+        const { id } = await this.tournamentService.createTournament({
           name: tournament_name,
           start_date: new Date(start_date),
           end_date: new Date(end_date),
@@ -37,7 +39,8 @@ export class GetProvidersDecksUseCase {
         const topDecks = await this.topdeckggService.getTopDecks(url);
 
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
-          const { decklist, name } = deck;
+          const { decklist, name, } = deck;
+
           const deckLists = await this.retryRequest(() => this.moxfieldService.getMoxfieldDeck(decklist), decklist);
 
           if (deckLists) {
@@ -50,6 +53,7 @@ export class GetProvidersDecksUseCase {
 
             const maindeck = this.normalizeDeckData(mainboard);
             const commander = this.normalizeDeckData(commanders);
+
             let color_identity = [];
 
             if (commander === null || commander === undefined) {
@@ -62,21 +66,51 @@ export class GetProvidersDecksUseCase {
               color_identity = commander[0].card.color_identity;
             }
 
-            return {
+            const deckData = {
               name,
               format,
               commanders: commander,
               color_identity: color_identity.flat(),
               deck: maindeck
             };
+
+            if(deckData.name) decksArray.push(deckData);
           } else {
             this.logger.error(`Failed to fetch deck list for URL: ${deck.decklist}`);
-            return null;
+          }
+          for (const deck of decksArray) {
+
+            const deckSave = await this.deckService.createDeck({
+              decklist: decklist,
+              tournament_id: id,
+              draws: 0,
+              losses: 0,
+              wins: 0,
+              username: name,
+              commander: '',
+              partner: '',
+              color_identity: deck.color_identity,
+            });
+
+            deck.deck.map(async (card) => {
+              await this.cardsService.saveCards({
+                cmc: card.card.cmc,
+                color_identity: card.card.color_identity,
+                colors: card.card.colors,
+                deck_id: deckSave.id,
+                mana_cost: card.card.mana_cost,
+                name: card.card.name,
+                type: card.card.type,
+              });
+            });
           }
         });
-
         const decks = await Promise.all(deckPromises);
-        return decks.filter(deck => deck !== null);
+
+        return {
+          status: 'success',
+          message: 'Data fetched successfully',
+        }
       }
     } catch (error) {
       throw new Error(error);

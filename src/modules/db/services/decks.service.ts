@@ -12,15 +12,18 @@ export class DecksService {
     private readonly deckRepository: Repository<DeckEntity>,
   ) {}
 
-  async saveDeck(input: DeckDto): Promise<DeckDto> {
+  async createDeck(input: DeckDto): Promise<DeckDto> {
 
     const deck = this.deckRepository.save({
       username: input.username,
-      deck_name: input.deckname,
+      decklist: input.decklist,
       tournament_id: input.tournament_id,
       wins: input.wins,
       losses: input.losses,
       draws: input.draws,
+      commander: input.commander,
+      partner: input.partner ? input.partner : null,
+      color_identity: input.color_identity,
     });
     return deck;
   }
