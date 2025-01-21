@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { GetAllDeckDto } from "./dto/get-all-decks.dto";
 
-Injectable()
+@Injectable()
 export class GetAllDecksUseCaseFromProvider {
   constructor(
     private readonly topdeckggService: TopdeckggService,

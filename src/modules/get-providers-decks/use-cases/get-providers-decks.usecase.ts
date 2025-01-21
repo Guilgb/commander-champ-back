@@ -37,7 +37,7 @@ export class GetProvidersDecksUseCase {
         });
 
         const topDecks = await this.topdeckggService.getTopDecks(url);
-
+        console.log(topDecks);
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
           const { decklist, name, } = deck;
 
