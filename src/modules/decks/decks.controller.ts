@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Post, Put } from "@nestjs/common";
-import { GetAllDecksUseCaseFromProvider } from "./use-cases/get-all-decks/get-all-decks.use-case-from-provider";
+import { GetAllDecksFromProviderUseCase } from "./use-cases/get-all-decks/get-all-decks.use-case-from-provider";
 import { GetAllDeckDto } from "./use-cases/get-all-decks/dto/get-all-decks.dto";
 
 @Controller("/decks")
 export class DecksController {
   constructor(
-    private readonly getAllDecksUseCaseFromProvider: GetAllDecksUseCaseFromProvider,
+    private readonly getAllDecksUseCaseFromProvider: GetAllDecksFromProviderUseCase,
   ) { }
 
   @Post("/save")

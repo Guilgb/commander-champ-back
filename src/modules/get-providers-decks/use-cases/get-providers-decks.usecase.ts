@@ -4,8 +4,8 @@ import { PlatformValidator } from "src/shared/util/platform.validator";
 import { TopDeck, TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { CardsService } from "src/modules/db/services/cards.service";
-import { TournamentService } from "src/modules/db/services/tournament.service";
-import { DecksService } from "src/modules/db/services/decks.service";
+import { DataBaseTournamentService } from "src/modules/db/services/dbtournament.service";
+import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {
@@ -15,8 +15,8 @@ export class GetProvidersDecksUseCase {
     private readonly topdeckggService: TopdeckggService,
     private readonly moxfieldService: MoxfieldService,
     private readonly cardsService: CardsService,
-    private readonly tournamentService: TournamentService,
-    private readonly deckService: DecksService,
+    private readonly tournamentService: DataBaseTournamentService,
+    private readonly deckService: DataBaseDecksService,
   ) { }
 
   async execute(input: GetDeckDto): Promise<any> {
@@ -37,9 +37,9 @@ export class GetProvidersDecksUseCase {
         });
 
         const topDecks = await this.topdeckggService.getTopDecks(url);
-        console.log(topDecks);
+
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
-          const { decklist, name, } = deck;
+          const { decklist, name } = deck;
 
           const deckLists = await this.retryRequest(() => this.moxfieldService.getMoxfieldDeck(decklist), decklist);
 
@@ -74,7 +74,7 @@ export class GetProvidersDecksUseCase {
               deck: maindeck
             };
 
-            if(deckData.name) decksArray.push(deckData);
+            if (deckData.name) decksArray.push(deckData);
           } else {
             this.logger.error(`Failed to fetch deck list for URL: ${deck.decklist}`);
           }

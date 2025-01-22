@@ -5,11 +5,11 @@ import { TournamentEntity } from "../entities/tournaments.entity";
 import { TournamentDto } from "src/modules/get-providers-decks/use-cases/dto/tournaments.dto";
 
 @Injectable()
-export class TournamentService {
+export class DataBaseTournamentService {
   constructor(
     @InjectRepository(TournamentEntity)
     private readonly tournamentRepository: Repository<TournamentEntity>,
-  ) {}
+  ) { }
 
   async createTournament(input: TournamentDto): Promise<TournamentDto> {
 
@@ -32,7 +32,7 @@ export class TournamentService {
 
   async updateTournament(id: number, input: TournamentDto): Promise<TournamentDto> {
     const tournament = await this.getTournamentById(id);
-    
+
     if (!tournament) {
       throw new Error("Tournament not found");
     }
@@ -41,9 +41,9 @@ export class TournamentService {
     tournament.start_date = input.start_date;
     tournament.end_date = input.end_date;
     tournament.format = input.format;
-    
+
     await this.tournamentRepository.update(id, tournament);
-    
+
     return this.getTournamentById(id);
   }
 

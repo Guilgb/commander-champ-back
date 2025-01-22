@@ -8,9 +8,9 @@ import { MoxfieldService } from '../providers/moxfield/service/moxfield.service'
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CardsService } from '../db/services/cards.service';
-import { TournamentService } from '../db/services/tournament.service';
+import { DataBaseTournamentService } from '../db/services/dbtournament.service';
 import { entitiesList } from '../db/entities';
-import { DecksService } from '../db/services/decks.service';
+import { DataBaseDecksService } from '../db/services/dbdecks.service';
 
 @Module({
   imports: [
@@ -25,8 +25,8 @@ import { DecksService } from '../db/services/decks.service';
     MoxfieldService,
     CurlProviderService,
     CardsService,
-    TournamentService,
-    DecksService,
+    DataBaseTournamentService,
+    DataBaseDecksService,
   ],
 })
 

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { CurlProviderService } from '../../curlProvider/service/curl-provider.service';
+import { MoxfieldDeck } from '../types/moxfield.types';
 
 @Injectable()
 export class MoxfieldService {
@@ -9,7 +10,7 @@ export class MoxfieldService {
     private readonly curlProviderService: CurlProviderService
   ) { }
 
-  async getMoxfieldDeck(deckUrl: string) {
+  async getMoxfieldDeck(deckUrl: string): Promise<MoxfieldDeck> {
     const urlPart = deckUrl.substring(deckUrl.lastIndexOf('/') + 1);
     const url = `https://api.moxfield.com/v2/decks/all/${urlPart}`;
 
@@ -17,7 +18,6 @@ export class MoxfieldService {
 
     try {
       const response = await this.curlProviderService.get(url);
-
       return response;
 
     } catch (error) {

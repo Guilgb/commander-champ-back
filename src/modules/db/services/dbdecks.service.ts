@@ -6,11 +6,11 @@ import { DeckDto } from "src/modules/get-providers-decks/use-cases/dto/deck.dto"
 
 
 @Injectable()
-export class DecksService {
+export class DataBaseDecksService {
   constructor(
     @InjectRepository(DeckEntity)
     private readonly deckRepository: Repository<DeckEntity>,
-  ) {}
+  ) { }
 
   async createDeck(input: DeckDto): Promise<DeckDto> {
 
@@ -30,9 +30,9 @@ export class DecksService {
 
   async getDeck(): Promise<any> {
     return this.deckRepository.find();
-  } 
+  }
 
   async getDeckById(id: number): Promise<DeckDto> {
-    return this.deckRepository.findOneBy({id: id});
+    return this.deckRepository.findOneBy({ id: id });
   }
 }
