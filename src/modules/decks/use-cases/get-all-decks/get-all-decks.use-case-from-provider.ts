@@ -3,6 +3,7 @@ import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topde
 import { GetAllDeckDto } from "./dto/get-all-decks.dto";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
+import { ScraperService } from "src/modules/providers/scraper/service/scraper.service";
 
 
 interface Card {
@@ -24,7 +25,8 @@ export class GetAllDecksFromProviderUseCase {
   constructor(
     private readonly topdeckggService: TopdeckggService,
     private readonly moxFieldService: MoxfieldService,
-    private readonly dbDeckService: DataBaseDecksService
+    private readonly dbDeckService: DataBaseDecksService,
+    private readonly scraperService: ScraperService
   ) { }
   async execute(input: GetAllDeckDto) {
     try {
@@ -92,6 +94,7 @@ export class GetAllDecksFromProviderUseCase {
       throw new Error(error.message);
     }
   }
+
   private normalizeDeckData(data: any): any[] | null {
     try {
       const normalizedData: NormalizedDeck[] = Object.keys(data).map(key => {

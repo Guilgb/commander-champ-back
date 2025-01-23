@@ -10,6 +10,7 @@ import { TopdeckggModule } from '../providers/topdeckgg/topdeckgg.module';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 import { DataBaseTournamentService } from '../db/services/dbtournament.service';
+import { ScraperService } from '../providers/scraper/service/scraper.service';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { DataBaseTournamentService } from '../db/services/dbtournament.service';
     CurlProviderService,
     GetAllDecksFromProviderUseCase,
     DataBaseDecksService,
+    ScraperService,
   ],
   exports: [GetAllDecksFromProviderUseCase]
 })
