@@ -3,8 +3,6 @@ import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topde
 import { GetAllDeckDto } from "./dto/get-all-decks.dto";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
-import { ScraperService } from "src/modules/providers/scraper/service/scraper.service";
-
 
 interface Card {
   name: string;
@@ -26,7 +24,6 @@ export class GetAllDecksFromProviderUseCase {
     private readonly topdeckggService: TopdeckggService,
     private readonly moxFieldService: MoxfieldService,
     private readonly dbDeckService: DataBaseDecksService,
-    private readonly scraperService: ScraperService
   ) { }
   async execute(input: GetAllDeckDto) {
     try {
@@ -38,22 +35,27 @@ export class GetAllDecksFromProviderUseCase {
         const deckLists = await this.retryRequest(() => this.moxFieldService.getMoxfieldDeck(decklist), decklist);
 
         if (deckLists) {
-          const commander = this.normalizeDeckData(deckLists.commanders);
+          const commander = this.normalizeDeckData(deckLists.boards.commanders.cards)
+          if (commander) {
+
+          }
+          console.log(deck.name);
           if (commander != null || commander != undefined) {
             if (commander.length > 0) {
               const [primaryCommander, secondaryCommander] = commander;
               const ci = primaryCommander.card.color_identity.concat(secondaryCommander.card.color_identity);
-              await this.dbDeckService.createDeck({
-                username: deckLists.username,
-                decklist,
-                tournament_id: 1,
-                wins: 0,
-                losses: 0,
-                draws: 0,
-                color_identity: ci,
-                commander: primaryCommander.name,
-                partner: secondaryCommander,
-              });
+              console.log(ci);
+              // await this.dbDeckService.createDeck({
+              //   username: deckLists.username,
+              //   decklist,
+              //   tournament_id: 1,
+              //   wins: 0,
+              //   losses: 0,
+              //   draws: 0,
+              //   color_identity: ci,
+              //   commander: primaryCommander.name,
+              //   partner: secondaryCommander,
+              // });
               return {
                 name: deck.name,
                 url: decklist,
@@ -62,17 +64,17 @@ export class GetAllDecksFromProviderUseCase {
               };
             } else {
               const primaryCommander = commander[0];
-              await this.dbDeckService.createDeck({
-                username: deckLists.username,
-                decklist,
-                tournament_id: 1,
-                wins: 0,
-                losses: 0,
-                draws: 0,
-                color_identity: primaryCommander.card.color_identity,
-                commander: primaryCommander.name,
-                partner: null,
-              });
+              // await this.dbDeckService.createDeck({
+              //   username: deckLists.username,
+              //   decklist,
+              //   tournament_id: 1,
+              //   wins: 0,
+              //   losses: 0,
+              //   draws: 0,
+              //   color_identity: primaryCommander.card.color_identity,
+              //   commander: primaryCommander.name,
+              //   partner: null,
+              // });
               return {
                 name: deck.name,
                 url: decklist,
@@ -83,7 +85,6 @@ export class GetAllDecksFromProviderUseCase {
           }
 
         }
-        return null;
       });
       const results = await Promise.all(deckPromises);
 
@@ -91,6 +92,7 @@ export class GetAllDecksFromProviderUseCase {
       return flattenedResults;
 
     } catch (error) {
+      console.log(error);
       throw new Error(error.message);
     }
   }
@@ -113,6 +115,7 @@ export class GetAllDecksFromProviderUseCase {
       });
       return normalizedData;
     } catch (error) {
+      console.log(error);
       return null;
     }
   }

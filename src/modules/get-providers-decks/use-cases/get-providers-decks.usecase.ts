@@ -6,7 +6,6 @@ import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield
 import { CardsService } from "src/modules/db/services/cards.service";
 import { DataBaseTournamentService } from "src/modules/db/services/dbtournament.service";
 import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
-import { ScraperService } from "src/modules/providers/scraper/service/scraper.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {
@@ -18,15 +17,12 @@ export class GetProvidersDecksUseCase {
     private readonly cardsService: CardsService,
     private readonly tournamentService: DataBaseTournamentService,
     private readonly deckService: DataBaseDecksService,
-    private readonly scraperService: ScraperService,
   ) { }
 
   async execute(input: GetDeckDto): Promise<any> {
     try {
       const platform = PlatformValidator.validatePlatform(input.provider);
-      const scraper = await this.scraperService.getMoxfieldDecklist('https://moxfield.com/decks/CeUYdgT8OEuYisHhMD_4CQ');
 
-      return scraper;
       if (input.provider === 'topdeckgg') {
 
         const { url, tournament_name, start_date, end_date, format } = input;
@@ -110,7 +106,7 @@ export class GetProvidersDecksUseCase {
           }
         });
         const decks = await Promise.all(deckPromises);
-
+        
         return {
           status: 'success',
           message: 'Data fetched successfully',
@@ -130,6 +126,7 @@ export class GetProvidersDecksUseCase {
           this.logger.error(`Failed to fetch data from ${url} after ${retries} attempts: ${error.message}`);
           return null;
         }
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
       }
     }
   }
