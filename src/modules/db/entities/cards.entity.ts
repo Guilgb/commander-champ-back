@@ -11,7 +11,7 @@ export class CardsEntity {
 
   @ManyToOne(() => DeckEntity, (deck) => deck.id)
   @JoinColumn({ name: 'deck_id' })
-  deck_id: number;
+  deck_id: DeckEntity;
 
   @Column()
   cmc: number;

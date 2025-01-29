@@ -4,6 +4,7 @@ import { GetProvidersDecksModule } from './modules/get-providers-decks/get-provi
 import { DatabaseModule } from './modules/db/database.module';
 import { TournamentsModule } from './modules/tournaments/tournaments.module';
 import { DecksModule } from './modules/decks/decks.module';
+import { CardsModule } from './modules/cards/cards.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { DecksModule } from './modules/decks/decks.module';
     DatabaseModule,
     TournamentsModule,
     DecksModule,
+    CardsModule,
   ],
 })
 export class AppModule {}

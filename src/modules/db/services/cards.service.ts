@@ -1,8 +1,9 @@
-import { Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { CardsEntity } from "../entities/cards.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CardsDto } from "src/modules/get-providers-decks/use-cases/dto/cards.dto";
+import { DeckEntity } from "../entities/decks.entity";
 
 
 @Injectable()
@@ -12,11 +13,11 @@ export class CardsService {
     private readonly cardRepository: Repository<CardsEntity>,
   ) { }
 
-  async saveCards(input: CardsDto): Promise<CardsDto> {
+  async saveCards(input: CardsDto): Promise<any> {
 
-    const card = await this.cardRepository.create({
+    const card = this.cardRepository.create({
       name: input.name,
-      deck_id: input.deck_id,
+      deck_id: { id: input.deck_id } as DeckEntity,
       cmc: input.cmc,
       type: input.type,
       mana_cost: input.mana_cost,
@@ -27,7 +28,6 @@ export class CardsService {
 
     return {
       ...saveCards,
-      deck_id: saveCards.deck_id,
     };
   }
 
