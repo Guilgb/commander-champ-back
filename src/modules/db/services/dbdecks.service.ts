@@ -51,7 +51,6 @@ export class DataBaseDecksService {
 
   async getAllDecksByTournament(tournament_id: number): Promise<any> {
     const decks = await this.deckRepository.find({ where: { tournament_id: { id: tournament_id } } });
-    console.log(decks);
     return decks.map(deck => ({
       ...deck,
       tournament_id,
