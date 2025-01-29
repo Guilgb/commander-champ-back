@@ -1,3 +1,3 @@
-export interface GetAllDeckDto {
-    url: string;
+export interface GetAllDecksByTournamentDto {
+  tournament_id: number;
 }

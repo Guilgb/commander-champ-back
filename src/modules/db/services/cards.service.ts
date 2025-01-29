@@ -14,7 +14,7 @@ export class CardsService {
 
   async saveCards(input: CardsDto): Promise<CardsDto> {
 
-    const card = await this.cardRepository.save({
+    const card = await this.cardRepository.create({
       name: input.name,
       deck_id: input.deck_id,
       cmc: input.cmc,
@@ -23,7 +23,12 @@ export class CardsService {
       colors: input.colors,
       color_identity: input.color_identity
     });
-    return card;
+    const saveCards = await this.cardRepository.save(card);
+
+    return {
+      ...saveCards,
+      deck_id: saveCards.deck_id,
+    };
   }
 
   async getCards(): Promise<any> {

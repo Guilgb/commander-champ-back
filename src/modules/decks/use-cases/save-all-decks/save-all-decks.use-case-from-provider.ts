@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
-import { GetAllDeckDto } from "./dto/get-all-decks.dto";
+import { SaveAllDeckDto } from "./dto/save-all-decks.dto";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
 
@@ -19,13 +19,13 @@ interface NormalizedDeck {
 }
 
 @Injectable()
-export class GetAllDecksFromProviderUseCase {
+export class SaveAllDecksFromProviderUseCase {
   constructor(
     private readonly topdeckggService: TopdeckggService,
     private readonly moxFieldService: MoxfieldService,
     private readonly dbDeckService: DataBaseDecksService,
   ) { }
-  async execute(input: GetAllDeckDto) {
+  async execute(input: SaveAllDeckDto) {
     try {
       const { url } = input;
       const allDecks = await this.topdeckggService.getTopDecks(url);

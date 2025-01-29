@@ -4,11 +4,12 @@ import { DecksController } from './decks.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DeckEntity } from '../db/entities/decks.entity';
-import { GetAllDecksFromProviderUseCase } from './use-cases/get-all-decks/get-all-decks.use-case-from-provider';
+import { SaveAllDecksFromProviderUseCase } from './use-cases/save-all-decks/save-all-decks.use-case-from-provider';
 import { HttpModule } from '@nestjs/axios';
 import { TopdeckggModule } from '../providers/topdeckgg/topdeckgg.module';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
+import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-decks/get-all-decks-from-provider.use-case';
 
 @Module({
   imports: [
@@ -21,10 +22,11 @@ import { CurlProviderService } from '../providers/curlProvider/service/curl-prov
   providers: [
     DataBaseDecksService,
     MoxfieldService,
-    CurlProviderService,
-    GetAllDecksFromProviderUseCase,
     DataBaseDecksService,
+    CurlProviderService,
+    SaveAllDecksFromProviderUseCase,
+    GetAllDecksByTournamentFromProviderUseCase,
   ],
-  exports: [GetAllDecksFromProviderUseCase]
+  exports: [SaveAllDecksFromProviderUseCase]
 })
 export class DecksModule { }
