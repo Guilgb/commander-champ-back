@@ -1,38 +1,42 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, JoinColumn } from 'typeorm';
 import { TournamentEntity } from './tournaments.entity';
 import { CardsEntity } from './cards.entity';
 
 @Entity('decks')
 export class DeckEntity {
   @PrimaryGeneratedColumn()
-  id!: number;
-
-  @Column()
-  decklist!: string;
+  id: number;
 
   @Column()
   username: string;
-
-  @Column()
-  tournament_id!: number;
-
-  @Column({ default: 0 })
-  wins!: number;
-
-  @Column({ default: 0 })
-  losses!: number;
-
-  @Column({ default: 0 })
-  draws!: number;
 
   @Column()
   commander!: string;
 
   @Column()
   partner: string;
+  
+  @ManyToOne(() => TournamentEntity, (tournament) => tournament.id)
+  @JoinColumn({ name: 'tournament_id' })
+  tournament_id: TournamentEntity;
+
+  @Column()
+  decklist: string;
+
+  @Column({ default: 0 })
+  wins: number;
+
+  @Column({ default: 0 })
+  losses: number;
+
+  @Column({ default: 0 })
+  draws: number;
 
   @Column()
   color_identity: string;
+
+  @CreateDateColumn()
+  created_at: Date;
 
   @OneToMany(() => CardsEntity, (card) => card.id)
   cards: CardsEntity[];

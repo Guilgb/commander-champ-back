@@ -32,59 +32,38 @@ export class GetAllDecksFromProviderUseCase {
 
       const deckPromises = allDecks.map(async (deck) => {
         const { decklist } = deck;
-        const deckLists = await this.retryRequest(() => this.moxFieldService.getMoxfieldDeck(decklist), decklist);
+
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        const deckLists = await this.moxFieldService.getMoxfieldDeck(decklist);
 
         if (deckLists) {
-          const commander = this.normalizeDeckData(deckLists.boards.commanders.cards)
-          if (commander) {
+          const commanders = this.normalizeDeckData(deckLists.boards.commanders.cards)
+          const color_identity = deckLists.colors;
+          let username = deck.name;
 
+          if (commanders) {
+            const commander = commanders[0];
+            const partner = commanders.length >= 1 ? commanders[1] : null;
+            await this.dbDeckService.createDeck({
+              username,
+              decklist,
+              tournament_id: 14,
+              wins: 0,
+              losses: 0,
+              draws: 0,
+              color_identity,
+              commander: commander.card.name,
+              partner: partner ? partner.card.name : null,
+            });
+            return {
+              username,
+              url: decklist,
+              commander,
+              partner
+            };
           }
-          console.log(deck.name);
-          if (commander != null || commander != undefined) {
-            if (commander.length > 0) {
-              const [primaryCommander, secondaryCommander] = commander;
-              const ci = primaryCommander.card.color_identity.concat(secondaryCommander.card.color_identity);
-              console.log(ci);
-              // await this.dbDeckService.createDeck({
-              //   username: deckLists.username,
-              //   decklist,
-              //   tournament_id: 1,
-              //   wins: 0,
-              //   losses: 0,
-              //   draws: 0,
-              //   color_identity: ci,
-              //   commander: primaryCommander.name,
-              //   partner: secondaryCommander,
-              // });
-              return {
-                name: deck.name,
-                url: decklist,
-                primaryCommander,
-                secondaryCommander
-              };
-            } else {
-              const primaryCommander = commander[0];
-              // await this.dbDeckService.createDeck({
-              //   username: deckLists.username,
-              //   decklist,
-              //   tournament_id: 1,
-              //   wins: 0,
-              //   losses: 0,
-              //   draws: 0,
-              //   color_identity: primaryCommander.card.color_identity,
-              //   commander: primaryCommander.name,
-              //   partner: null,
-              // });
-              return {
-                name: deck.name,
-                url: decklist,
-                primaryCommander,
-                secondaryCommander: null
-              };
-            }
-          }
-
         }
+        return null;
       });
       const results = await Promise.all(deckPromises);
 

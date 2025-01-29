@@ -3,6 +3,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeckEntity } from "../entities/decks.entity";
 import { DeckDto } from "src/modules/get-providers-decks/use-cases/dto/deck.dto";
+import { TournamentEntity } from "../entities/tournaments.entity";
 
 
 @Injectable()
@@ -13,19 +14,24 @@ export class DataBaseDecksService {
   ) { }
 
   async createDeck(input: DeckDto): Promise<DeckDto> {
-
-    const deck = this.deckRepository.save({
+    const deck = this.deckRepository.create({
       username: input.username,
       decklist: input.decklist,
-      tournament_id: input.tournament_id,
+      tournament_id: { id: input.tournament_id } as TournamentEntity,
       wins: input.wins,
       losses: input.losses,
       draws: input.draws,
       commander: input.commander,
       partner: input.partner ? input.partner : null,
       color_identity: input.color_identity,
+      created_at: new Date(),
     });
-    return deck;
+
+    const savedDeck = await this.deckRepository.save(deck);
+    return {
+      ...savedDeck,
+      tournament_id: savedDeck.tournament_id.id,
+    };
   }
 
   async getDeck(): Promise<any> {
@@ -33,6 +39,13 @@ export class DataBaseDecksService {
   }
 
   async getDeckById(id: number): Promise<DeckDto> {
-    return this.deckRepository.findOneBy({ id: id });
+    const deck = await this.deckRepository.findOneBy({ id: id });
+    if (!deck) {
+      return null;
+    }
+    return {
+      ...deck,
+      tournament_id: deck.tournament_id.id,
+    };
   }
 }

@@ -38,4 +38,5 @@ export interface MoxfieldDeck {
     publicUrl: string;
     commanders: Commanders;
     mainboard: Mainboard;
+    colors: string[];
 }

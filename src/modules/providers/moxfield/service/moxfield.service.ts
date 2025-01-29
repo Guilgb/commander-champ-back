@@ -11,7 +11,7 @@ export class MoxfieldService {
     private readonly httpService: HttpService
   ) { }
 
-  async getMoxfieldDeck(deckUrl: string): Promise<MoxfieldDeck> {
+  async getMoxfieldDeck(deckUrl: string): Promise<any> {
     const urlPart = deckUrl.substring(deckUrl.lastIndexOf('/') + 1);
     const url = `https://api2.moxfield.com/v3/decks/all/${urlPart}`;
     const headers = {

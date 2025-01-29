@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { DeckEntity } from "./decks.entity";
 
 @Entity({ name: "tournaments" })
 export class TournamentEntity {
@@ -16,4 +17,7 @@ export class TournamentEntity {
 
     @Column({ type: "enum", enum: ["c500", "cedh", "casual", "conquest"], nullable: false })
     format!: string;
+
+    @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
+    decks: DeckEntity[];
 }
