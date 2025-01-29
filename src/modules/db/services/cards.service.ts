@@ -16,9 +16,11 @@ export class CardsService {
   async saveCards(input: CardsDto): Promise<any> {
     try {
       const deck = await this.cardRepository.manager.findOne(DeckEntity, { where: { id: input.deck_id } });
+
       if (!deck) {
         throw new Error(`Deck with id ${input.deck_id} does not exist`);
       }
+
       const card = this.cardRepository.create({
         name: input.name,
         deck_id: deck,
