@@ -39,6 +39,10 @@ export class CardsService {
   }
 
   async getCards(): Promise<any> {
-    return this.cardRepository.find();
+    try {
+      return this.cardRepository.find();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
