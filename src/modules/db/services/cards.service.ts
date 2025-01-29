@@ -14,21 +14,28 @@ export class CardsService {
   ) { }
 
   async saveCards(input: CardsDto): Promise<any> {
+    try {
+      const deck = await this.cardRepository.manager.findOne(DeckEntity, { where: { id: input.deck_id } });
+      if (!deck) {
+        throw new Error(`Deck with id ${input.deck_id} does not exist`);
+      }
+      const card = this.cardRepository.create({
+        name: input.name,
+        deck_id: deck,
+        cmc: input.cmc,
+        type: input.type,
+        mana_cost: input.mana_cost,
+        colors: input.colors,
+        color_identity: input.color_identity
+      });
+      const saveCards = await this.cardRepository.save(card);
 
-    const card = this.cardRepository.create({
-      name: input.name,
-      deck_id: { id: input.deck_id } as DeckEntity,
-      cmc: input.cmc,
-      type: input.type,
-      mana_cost: input.mana_cost,
-      colors: input.colors,
-      color_identity: input.color_identity
-    });
-    const saveCards = await this.cardRepository.save(card);
-
-    return {
-      ...saveCards,
-    };
+      return {
+        ...saveCards,
+      };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getCards(): Promise<any> {
