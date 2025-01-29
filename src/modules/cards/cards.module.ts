@@ -10,6 +10,7 @@ import { SaveCardsUseCase } from './use-cases/save-cards/save-cards.use-case';
 import { DataBaseDecksService } from '../db/services/dbdecks.service';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { DeckEntity } from '../db/entities/decks.entity';
+import { MostUsedsUseCase } from './use-cases/most-useds/most-useds.use-case';
 
 @Module({
   imports: [
@@ -21,8 +22,8 @@ import { DeckEntity } from '../db/entities/decks.entity';
   providers: [
     CardsService,
     DataBaseDecksService,
-    
     MoxfieldService,
+    MostUsedsUseCase,
     SaveCardsUseCase,
   ],
 })

@@ -27,4 +27,7 @@ export class CardsEntity {
 
   @Column("text", { array: true })
   color_identity: string[];
+
+  @Column()
+  created_at: Date;
 }

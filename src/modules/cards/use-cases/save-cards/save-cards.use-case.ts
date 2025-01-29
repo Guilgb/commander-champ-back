@@ -37,15 +37,15 @@ export class SaveCardsUseCase {
         const mainboardCards = deckLists.boards.mainboard.cards;
         for (const cardKey in mainboardCards) {
           const card = mainboardCards[cardKey].card;
-          await this.cardsService?.saveCards({
+            await this.cardsService?.saveCards({
             cmc: card.cmc,
-            color_identity: card.color_identity,
+            color_identity: card.color_identity || null,
             colors: card.colors,
-            mana_cost: card.mana_cost,
+            mana_cost: card.mana_cost || null,
             name: card.name,
             type: card.type,
             deck_id: deck.id,
-          });
+            });
         }
       }
     });
