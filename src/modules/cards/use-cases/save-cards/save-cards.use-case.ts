@@ -30,7 +30,7 @@ export class SaveCardsUseCase {
     const { tournament_id } = body
 
     const allDeckList = await this.dbDeckService.getAllDecksByTournament(tournament_id);
-    
+
     allDeckList.map(async (deck) => {
       const deckLists = await this.moxFieldService.getMoxfieldDeck(deck.decklist);
       if (deckLists) {

@@ -20,6 +20,13 @@ export class CardsController {
 
   @Get("/most-useds")
   async mostUsedCards(
+    @Body() tournament_id: number
+  ) {
+    return await this.mostUsedsUseCase.execute(tournament_id);
+  }
+
+  @Get("/filters")
+  async filterCard(
     @Body() body: MostUsedsDto
   ) {
     return await this.mostUsedsUseCase.execute(body);

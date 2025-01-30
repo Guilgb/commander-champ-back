@@ -32,7 +32,7 @@ export class DeckEntity {
   @Column({ default: 0 })
   draws: number;
 
-  @Column()
+  @Column("jsonb", { array: true })
   color_identity: string;
 
   @CreateDateColumn()

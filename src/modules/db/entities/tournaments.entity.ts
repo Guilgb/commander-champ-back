@@ -18,6 +18,9 @@ export class TournamentEntity {
     @Column({ type: "enum", enum: ["c500", "cedh", "casual", "conquest"], nullable: false })
     format!: string;
 
+    @Column()
+    online: boolean;
+
     @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
     decks: DeckEntity[];
 }

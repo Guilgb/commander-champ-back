@@ -19,13 +19,13 @@ export class CardsEntity {
   @Column()
   type: string;
 
-  @Column()
+  @Column("jsonb", { array: true })
   mana_cost: string;
 
-  @Column("text", { array: true })
+  @Column("jsonb", { array: true })
   colors: string[];
 
-  @Column("text", { array: true })
+  @Column("jsonb", { array: true })
   color_identity: string[];
 
   @Column()

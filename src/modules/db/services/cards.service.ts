@@ -5,8 +5,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CardsDto } from "src/modules/get-providers-decks/use-cases/dto/cards.dto";
 import { DeckEntity } from "../entities/decks.entity";
 import { MostUsedsDto } from "src/modules/cards/use-cases/most-useds/types/most-useds.dto";
-import { create } from "domain";
-
 
 @Injectable()
 export class CardsService {
@@ -53,8 +51,10 @@ export class CardsService {
       }
 
       if (filters.colors) {
-        queryBuilder.andWhere(':color = ANY(cards.colors)', { color: filters.colors });
-      } 
+        const color = filters.colors
+        console.log(color);
+        queryBuilder.andWhere('cards.colors = :colors', { colors: `{"${filters.colors}"}` });
+      }
 
       if (filters.type) {
         queryBuilder.andWhere('cards.type = :type', { type: filters.type });
@@ -64,8 +64,13 @@ export class CardsService {
         queryBuilder.andWhere('cards.deck_id = :deck_id', { deck_id: filters.deck_id });
       }
 
+      if (filters.color_identity) {
+        console.log(filters.color_identity);
+        queryBuilder.andWhere(':color_identity = ANY(cards.color_identity)', { color_identity: filters.color_identity });
+      }
+
       const result = await queryBuilder.getMany();
-      return result;
+      return result
     } catch (error) {
       throw new Error(error);
     }
@@ -77,16 +82,15 @@ export class CardsService {
       if (filters.name) {
         queryBuilder.andWhere('cards.name = :name', { name: filters.name });
       }
-      // const query = `
-      //   SELECT name, COUNT(*) as usage_count
-      //   FROM cards
-      //   WHERE type != '0'
-      //   GROUP BY name
-      //   ORDER BY usage_count DESC
-      //   LIMIT 10;
-      // `;
-      // const result = await this.cardRepository.query(query);
-      const result = await queryBuilder.getMany();
+      const query = `
+        SELECT name, COUNT(*) as usage_count
+        FROM cards
+        WHERE type != '0'
+        GROUP BY name
+        ORDER BY usage_count DESC
+        LIMIT 10;
+      `;
+      const result = await this.cardRepository.query(query);
       return result;
     } catch (error) {
       throw new Error(error);

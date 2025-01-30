@@ -8,7 +8,7 @@ export class MostUsedsUseCase {
   ) { }
 
   async execute(body) {
-    const test = await this.cardsService.getMostUsedCards(body);
+    const test = await this.cardsService.getCards(body);
     return test;
   }
 }
