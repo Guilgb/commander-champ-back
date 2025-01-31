@@ -10,6 +10,7 @@ import { TopdeckggModule } from '../providers/topdeckgg/topdeckgg.module';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-decks/get-all-decks-from-provider.use-case';
+import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-
     CurlProviderService,
     SaveAllDecksFromProviderUseCase,
     GetAllDecksByTournamentFromProviderUseCase,
+    UpdateDeckUseCase,
   ],
   exports: [SaveAllDecksFromProviderUseCase]
 })

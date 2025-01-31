@@ -34,6 +34,33 @@ export class DataBaseDecksService {
     };
   }
 
+  async updateDeck(input: DeckDto): Promise<any> {
+    try {
+      const deck = await this.deckRepository.findOne({
+        where: { id: 65 },
+        relations: ["tournament_id"],
+      });
+      // console.log(deck.tournament_id.id);
+      // return
+      const response = await this.deckRepository.update({ id: 65 }, {
+        username: input.username,
+        decklist: input.decklist,
+        tournament_id: { id: input.tournament_id } as TournamentEntity,
+        wins: input.wins,
+        losses: input.losses,
+        draws: input.draws,
+        commander: input.commander,
+        partner: input.partner ? input.partner : null,
+        color_identity: input.color_identity,
+        created_at: new Date(),
+      });
+      return response;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error);
+    }
+  }
+
   async getDeck(): Promise<any> {
     return this.deckRepository.find();
   }

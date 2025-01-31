@@ -51,9 +51,7 @@ export class CardsService {
       }
 
       if (filters.colors) {
-        const color = filters.colors
-        console.log(color);
-        queryBuilder.andWhere('cards.colors = :colors', { colors: `{"${filters.colors}"}` });
+        queryBuilder.andWhere('cards.colors::jsonb = :colors::jsonb', { colors: JSON.stringify(filters.colors) });
       }
 
       if (filters.type) {
@@ -91,6 +89,24 @@ export class CardsService {
         LIMIT 10;
       `;
       const result = await this.cardRepository.query(query);
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByTournament(tournament_id: number): Promise<any> {
+    try {
+      const query = `
+        SELECT c.name, c.type, c.cmc, c.colors, COUNT(*) as usage_count
+        FROM cards c
+        JOIN decks d ON c.deck_id = d.id
+        WHERE d.tournament_id = $1 AND c.type != '8'
+        GROUP BY c.name, c.type, c.cmc, c.colors
+        ORDER BY usage_count DESC
+        LIMIT 100;
+      `;
+      const result = await this.cardRepository.query(query, [tournament_id]);
       return result;
     } catch (error) {
       throw new Error(error);

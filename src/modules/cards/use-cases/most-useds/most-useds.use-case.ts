@@ -8,7 +8,14 @@ export class MostUsedsUseCase {
   ) { }
 
   async execute(body) {
-    const test = await this.cardsService.getCards(body);
-    return test;
+
+    if (body.tournament_id) {
+      const response = await this.cardsService.getMostUsedCardsByTournament(body.tournament_id);
+      return response;
+    } else {
+      const response = await this.cardsService.getCards(body);
+      return response;
+    }
+
   }
 }
