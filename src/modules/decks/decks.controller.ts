@@ -5,6 +5,8 @@ import { GetAllDecksByTournamentFromProviderUseCase } from "./use-cases/get-all-
 import { GetAllDecksByTournamentDto } from "./use-cases/get-all-decks/dto/get-all-decks.dto";
 import { UpdateDeckUseCase } from "./use-cases/update-deck/update-deck.use-case";
 import { UpdateDeckDto } from "./use-cases/update-deck/dto/update-deck.dto";
+import { DeckMetricsUseCase } from "./use-cases/decks-metrics/deck-metrics.use-case";
+import { DeckMetricsDto } from "./use-cases/decks-metrics/dto/deck-metrics.dto";
 
 @Controller("/decks")
 export class DecksController {
@@ -12,6 +14,7 @@ export class DecksController {
     private readonly saveAllDecksUseCaseFromProvider: SaveAllDecksFromProviderUseCase,
     private readonly getAllDecksFromProviderUseCase: GetAllDecksByTournamentFromProviderUseCase,
     private readonly updateDeckUseCase: UpdateDeckUseCase,
+    private readonly deckMetricsUseCase: DeckMetricsUseCase,
   ) { }
 
   @Post("/save")
@@ -39,5 +42,12 @@ export class DecksController {
     @Body() body: UpdateDeckDto
   ) {
     return await this.updateDeckUseCase.execute(body);
+  }
+
+  @Get("/metrics")
+  async getMetrics(
+    @Body() body: DeckMetricsDto
+  ) {
+    return await this.deckMetricsUseCase.execute(body);
   }
 }

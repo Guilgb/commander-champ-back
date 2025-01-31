@@ -7,7 +7,7 @@ import { TournamentEntity } from "../entities/tournaments.entity";
 
 
 @Injectable()
-export class DataBaseDecksService {
+export class DbDecksService {
   constructor(
     @InjectRepository(DeckEntity)
     private readonly deckRepository: Repository<DeckEntity>,
@@ -41,7 +41,7 @@ export class DataBaseDecksService {
         relations: ["tournament_id"],
       });
 
-      const response = await this.deckRepository.update({ id: 65 }, {
+      const response = await this.deckRepository.update({ id: deck.id }, {
         username: input.username,
         decklist: input.decklist,
         tournament_id: { id: input.tournament_id } as TournamentEntity,
@@ -82,4 +82,36 @@ export class DataBaseDecksService {
       tournament_id,
     }));
   }
+
+  async getDeckByCommander(commander: string): Promise<any> {
+    const decks = await this.deckRepository.find({ where: { commander } });
+    return decks.map(deck => ({
+      ...deck,
+      tournament_id: deck.tournament_id.id,
+    }));
+  }
+
+  // async getMostUseddeckByCommanderName(body: MostDeckUsed): Promise<any> {
+  //   try {
+  //     const { name, start_date, end_date } = body;
+  //     const queryBuilder = this.deckRepository.createQueryBuilder('d')
+
+
+  //     if (start_date && end_date) {
+  //       queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+  //     }
+
+  //     const result = await queryBuilder.getRawMany();
+  //     return result.map(card => ({
+  //       name: card.c_name,
+  //       type: card.c_type,
+  //       cmc: card.c_cmc,
+  //       colors: JSON.parse(card.c_colors),
+  //       color_identity: JSON.parse(card.c_color_identity),
+  //       usage_count: parseInt(card.usage_count, 10),
+  //     }));
+  //   } catch (error) {
+  //     throw new Error(error);
+  //   }
+  // }
 }

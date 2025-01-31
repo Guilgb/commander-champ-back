@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CardsService } from '../db/services/cards.service';
 import { DataBaseTournamentService } from '../db/services/dbtournament.service';
 import { entitiesList } from '../db/entities';
-import { DataBaseDecksService } from '../db/services/dbdecks.service';
+import { DbDecksService } from '../db/services/dbdecks.service';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { DataBaseDecksService } from '../db/services/dbdecks.service';
     CurlProviderService,
     CardsService,
     DataBaseTournamentService,
-    DataBaseDecksService,
+    DbDecksService,
   ],
 })
 

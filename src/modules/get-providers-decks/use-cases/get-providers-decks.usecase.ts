@@ -5,7 +5,7 @@ import { TopDeck, TopdeckggService } from "src/modules/providers/topdeckgg/servi
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { CardsService } from "src/modules/db/services/cards.service";
 import { DataBaseTournamentService } from "src/modules/db/services/dbtournament.service";
-import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/dbdecks.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {
@@ -16,7 +16,7 @@ export class GetProvidersDecksUseCase {
     private readonly moxfieldService: MoxfieldService,
     private readonly cardsService: CardsService,
     private readonly tournamentService: DataBaseTournamentService,
-    private readonly deckService: DataBaseDecksService,
+    private readonly deckService: DbDecksService,
   ) { }
 
   async execute(input: GetDeckDto): Promise<any> {
@@ -106,7 +106,7 @@ export class GetProvidersDecksUseCase {
           }
         });
         const decks = await Promise.all(deckPromises);
-        
+
         return {
           status: 'success',
           message: 'Data fetched successfully',

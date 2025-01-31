@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { SaveCardsDto } from "./dto/save-cards.dto";
-import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
+import { SaveCardsDto } from "./types/save-cards.dto";
+import { DbDecksService } from "src/modules/db/services/dbdecks.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
 import { CardsService } from "src/modules/db/services/cards.service";
 
@@ -21,7 +21,7 @@ interface NormalizedDeck {
 @Injectable()
 export class SaveCardsUseCase {
   constructor(
-    private readonly dbDeckService: DataBaseDecksService,
+    private readonly dbDeckService: DbDecksService,
     private readonly moxFieldService: MoxfieldService,
     private readonly cardsService: CardsService,
   ) { }
@@ -37,7 +37,7 @@ export class SaveCardsUseCase {
         const mainboardCards = deckLists.boards.mainboard.cards;
         for (const cardKey in mainboardCards) {
           const card = mainboardCards[cardKey].card;
-            await this.cardsService?.saveCards({
+          await this.cardsService?.saveCards({
             cmc: card.cmc,
             color_identity: card.color_identity || null,
             colors: card.colors,
@@ -45,7 +45,7 @@ export class SaveCardsUseCase {
             name: card.name,
             type: card.type,
             deck_id: deck.id,
-            });
+          });
         }
       }
     });

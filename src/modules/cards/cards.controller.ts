@@ -1,14 +1,15 @@
 import { Body, Controller, Get, Post } from "@nestjs/common";
 import { SaveCardsUseCase } from "./use-cases/save-cards/save-cards.use-case";
-import { SaveCardsDto } from "./use-cases/save-cards/dto/save-cards.dto";
-import { MostUsedsUseCase } from "./use-cases/most-useds/most-useds.use-case";
-import { MostUsedsDto } from "./use-cases/most-useds/types/most-useds.dto";
+import { SaveCardsDto } from "./use-cases/save-cards/types/save-cards.dto";
+import { CardsMetricsUseCase } from "./use-cases/cards-metrics/cards-metrics.use-case";
+import { CardsMetricsDto } from "./use-cases/cards-metrics/types/cards-metrics.dto";
+import { DeckMetricsUseCase } from "../decks/use-cases/decks-metrics/deck-metrics.use-case";
 
 @Controller("/cards")
 export class CardsController {
   constructor(
     private readonly saveCardsUseCase: SaveCardsUseCase,
-    private readonly mostUsedsUseCase: MostUsedsUseCase,
+    private readonly cardsMetricsUseCase: CardsMetricsUseCase,
   ) { }
 
   @Post("/save")
@@ -22,13 +23,13 @@ export class CardsController {
   async mostUsedCards(
     @Body() tournament_id: number
   ) {
-    return await this.mostUsedsUseCase.execute(tournament_id);
+    return await this.cardsMetricsUseCase.execute(tournament_id);
   }
 
-  @Get("/filters")
+  @Get("/metrics")
   async filterCard(
-    @Body() body: MostUsedsDto
+    @Body() body: CardsMetricsDto
   ) {
-    return await this.mostUsedsUseCase.execute(body);
+    return await this.cardsMetricsUseCase.execute(body);
   }
 }

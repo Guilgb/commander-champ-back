@@ -4,7 +4,7 @@ import { CardsEntity } from "../entities/cards.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CardsDto } from "src/modules/get-providers-decks/use-cases/dto/cards.dto";
 import { DeckEntity } from "../entities/decks.entity";
-import { MostUsedsDto } from "src/modules/cards/use-cases/most-useds/types/most-useds.dto";
+import { CardsMetricsDto } from "src/modules/cards/use-cases/cards-metrics/types/cards-metrics.dto";
 
 @Injectable()
 export class CardsService {
@@ -41,14 +41,14 @@ export class CardsService {
     }
   }
 
-  async getFilterCards(filters: MostUsedsDto): Promise<any> {
+  async getFilterCards(filters: CardsMetricsDto): Promise<any> {
     try {
       const { start_date, end_date } = filters;
       const queryBuilder = this.cardRepository.createQueryBuilder('cards');
 
-      // if (start_date && end_date) {
-      //   queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
-      // }
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
       if (filters.name) {
         queryBuilder.andWhere('cards.name = :name', { name: filters.name });
@@ -77,7 +77,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCards(filters: MostUsedsDto): Promise<any> {
+  async getMostUsedCards(filters: CardsMetricsDto): Promise<any> {
     try {
       const queryBuilder = this.cardRepository.createQueryBuilder('cards');
 
@@ -86,6 +86,7 @@ export class CardsService {
       }
 
       const { start_date, end_date } = filters;
+
       queryBuilder
         .select(['cards.name', 'COUNT(cards.id) as usage_count'])
         .where('cards.type != :excludedType', { excludedType: '0' })
@@ -96,6 +97,7 @@ export class CardsService {
       if (start_date && end_date) {
         queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
       }
+
       const result = await queryBuilder.getRawMany();
       return result.map(card => ({
         name: card.c_name,
@@ -110,7 +112,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournament(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByTournament(body: CardsMetricsDto): Promise<any> {
     try {
       const { start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -139,7 +141,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournamentAndCmc(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByTournamentAndCmc(body: CardsMetricsDto): Promise<any> {
     try {
       const { tournament_id, cmc, start_date, end_date } = body;
 
@@ -171,7 +173,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournamentAndCmcAndCi(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByTournamentAndCmcAndCi(body: CardsMetricsDto): Promise<any> {
     try {
       const { tournament_id, cmc, color_identity, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -203,7 +205,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournamentAndCmcAndColors(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByTournamentAndCmcAndColors(body: CardsMetricsDto): Promise<any> {
     try {
       const { tournament_id, cmc, colors, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -235,7 +237,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournamentAndName(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByTournamentAndName(body: CardsMetricsDto): Promise<any> {
     try {
       const { tournament_id, name, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -266,7 +268,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByCmc(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByCmc(body: CardsMetricsDto): Promise<any> {
     try {
       const { cmc, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -295,7 +297,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByCmcAndColors(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByCmcAndColors(body: CardsMetricsDto): Promise<any> {
     try {
       const { cmc, colors, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
@@ -325,7 +327,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByName(body: MostUsedsDto): Promise<any> {
+  async getMostUsedCardsByName(body: CardsMetricsDto): Promise<any> {
     try {
       const { name, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')

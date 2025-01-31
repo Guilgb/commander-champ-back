@@ -7,10 +7,10 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CardsEntity } from '../db/entities/cards.entity';
 import { SaveCardsUseCase } from './use-cases/save-cards/save-cards.use-case';
-import { DataBaseDecksService } from '../db/services/dbdecks.service';
+import { DbDecksService } from '../db/services/dbdecks.service';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { DeckEntity } from '../db/entities/decks.entity';
-import { MostUsedsUseCase } from './use-cases/most-useds/most-useds.use-case';
+import { CardsMetricsUseCase } from './use-cases/cards-metrics/cards-metrics.use-case';
 
 @Module({
   imports: [
@@ -21,9 +21,9 @@ import { MostUsedsUseCase } from './use-cases/most-useds/most-useds.use-case';
   controllers: [CardsController],
   providers: [
     CardsService,
-    DataBaseDecksService,
+    DbDecksService,
     MoxfieldService,
-    MostUsedsUseCase,
+    CardsMetricsUseCase,
     SaveCardsUseCase,
   ],
 })

@@ -1,4 +1,4 @@
-export interface MostUsedsDto {
+export interface CardsMetricsDto {
   name?: string;
   cmc?: number;
   type?: string;

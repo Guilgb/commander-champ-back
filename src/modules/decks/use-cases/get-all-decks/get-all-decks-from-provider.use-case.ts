@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/dbdecks.service";
 
 @Injectable()
 export class GetAllDecksByTournamentFromProviderUseCase {
   constructor(
-    private readonly dbDeckService: DataBaseDecksService,
+    private readonly dbDeckService: DbDecksService,
   ) { }
 
   async execute(tournament_id: number) {

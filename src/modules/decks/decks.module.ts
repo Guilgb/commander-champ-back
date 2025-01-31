@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DataBaseDecksService } from '../db/services/dbdecks.service';
+import { DbDecksService } from '../db/services/dbdecks.service';
 import { DecksController } from './decks.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,6 +11,7 @@ import { MoxfieldService } from '../providers/moxfield/service/moxfield.service'
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-decks/get-all-decks-from-provider.use-case';
 import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case';
+import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-case';
 
 @Module({
   imports: [
@@ -21,13 +22,14 @@ import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case'
   ],
   controllers: [DecksController],
   providers: [
-    DataBaseDecksService,
+    DbDecksService,
     MoxfieldService,
-    DataBaseDecksService,
+    DbDecksService,
     CurlProviderService,
     SaveAllDecksFromProviderUseCase,
     GetAllDecksByTournamentFromProviderUseCase,
     UpdateDeckUseCase,
+    DeckMetricsUseCase,
   ],
   exports: [SaveAllDecksFromProviderUseCase]
 })

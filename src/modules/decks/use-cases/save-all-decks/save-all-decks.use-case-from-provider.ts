@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { SaveAllDeckDto } from "./dto/save-all-decks.dto";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
-import { DataBaseDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/dbdecks.service";
 
 interface Card {
   name: string;
@@ -23,7 +23,7 @@ export class SaveAllDecksFromProviderUseCase {
   constructor(
     private readonly topdeckggService: TopdeckggService,
     private readonly moxFieldService: MoxfieldService,
-    private readonly dbDeckService: DataBaseDecksService,
+    private readonly dbDeckService: DbDecksService,
   ) { }
   async execute(input: SaveAllDeckDto) {
     try {
