@@ -40,8 +40,7 @@ export class DataBaseDecksService {
         where: { id: 65 },
         relations: ["tournament_id"],
       });
-      // console.log(deck.tournament_id.id);
-      // return
+
       const response = await this.deckRepository.update({ id: 65 }, {
         username: input.username,
         decklist: input.decklist,

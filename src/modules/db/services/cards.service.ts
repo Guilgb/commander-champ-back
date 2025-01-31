@@ -41,7 +41,7 @@ export class CardsService {
     }
   }
 
-  async getCards(filters: MostUsedsDto): Promise<any> {
+  async getFilterCards(filters: MostUsedsDto): Promise<any> {
     try {
 
       const queryBuilder = this.cardRepository.createQueryBuilder('cards');
@@ -63,8 +63,7 @@ export class CardsService {
       }
 
       if (filters.color_identity) {
-        console.log(filters.color_identity);
-        queryBuilder.andWhere(':color_identity = ANY(cards.color_identity)', { color_identity: filters.color_identity });
+        queryBuilder.andWhere('cards.color_identity::jsonb = :color_identity::jsonb', { color_identity: JSON.stringify(filters.color_identity) });
       }
 
       const result = await queryBuilder.getMany();
@@ -95,7 +94,7 @@ export class CardsService {
     }
   }
 
-  async getMostUsedCardsByTournament(tournament_id: number): Promise<any> {
+  async getMostUsedCardsByTournament(body: MostUsedsDto): Promise<any> {
     try {
       const query = `
         SELECT c.name, c.type, c.cmc, c.colors, COUNT(*) as usage_count
@@ -106,8 +105,76 @@ export class CardsService {
         ORDER BY usage_count DESC
         LIMIT 100;
       `;
-      const result = await this.cardRepository.query(query, [tournament_id]);
+      const result = await this.cardRepository.query(query, [body.tournament_id]);
       return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByTournamentAndCmc(body: MostUsedsDto): Promise<any> {
+    try {
+      const { tournament_id, cmc } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'COUNT(*) as usage_count'])
+        .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
+        .where('d.tournament_id = :tournament_id', { tournament_id })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
+        .andWhere('c.cmc = :cmc', { cmc })
+        .groupBy('c.name, c.type, c.cmc, c.colors')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      const result = await queryBuilder.getRawMany();
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+  async getMostUsedCardsByTournamentAndCmcAndCi(body: MostUsedsDto): Promise<any> {
+    try {
+      const { tournament_id, cmc, color_identity } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'COUNT(*) as usage_count'])
+        .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
+        .where('d.tournament_id = :tournament_id', { tournament_id })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
+        .andWhere('c.cmc = :cmc', { cmc })
+        .andWhere('c.color_identity::jsonb = :color_identity::jsonb', { color_identity: JSON.stringify(color_identity) })
+        .groupBy('c.name, c.type, c.cmc, c.colors')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      const result = await queryBuilder.getRawMany();
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByTournamentAndCmcAndColors(body: MostUsedsDto): Promise<any> {
+    try {
+      const { tournament_id, cmc, colors } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
+        .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
+        .where('d.tournament_id = :tournament_id', { tournament_id })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
+        .andWhere('c.cmc = :cmc', { cmc })
+        .andWhere('c.colors::jsonb = :colors::jsonb', { colors: JSON.stringify(colors) })
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
     } catch (error) {
       throw new Error(error);
     }
