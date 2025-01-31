@@ -43,8 +43,12 @@ export class CardsService {
 
   async getFilterCards(filters: MostUsedsDto): Promise<any> {
     try {
-
+      const { start_date, end_date } = filters;
       const queryBuilder = this.cardRepository.createQueryBuilder('cards');
+
+      // if (start_date && end_date) {
+      //   queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      // }
 
       if (filters.name) {
         queryBuilder.andWhere('cards.name = :name', { name: filters.name });
@@ -76,19 +80,31 @@ export class CardsService {
   async getMostUsedCards(filters: MostUsedsDto): Promise<any> {
     try {
       const queryBuilder = this.cardRepository.createQueryBuilder('cards');
+
       if (filters.name) {
         queryBuilder.andWhere('cards.name = :name', { name: filters.name });
       }
-      const query = `
-        SELECT name, COUNT(*) as usage_count
-        FROM cards
-        WHERE type != '0'
-        GROUP BY name
-        ORDER BY usage_count DESC
-        LIMIT 10;
-      `;
-      const result = await this.cardRepository.query(query);
-      return result;
+
+      const { start_date, end_date } = filters;
+      queryBuilder
+        .select(['cards.name', 'COUNT(cards.id) as usage_count'])
+        .where('cards.type != :excludedType', { excludedType: '0' })
+        .groupBy('cards.name')
+        .orderBy('usage_count', 'DESC')
+        .limit(10);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
+
     } catch (error) {
       throw new Error(error);
     }
@@ -96,17 +112,28 @@ export class CardsService {
 
   async getMostUsedCardsByTournament(body: MostUsedsDto): Promise<any> {
     try {
-      const query = `
-        SELECT c.name, c.type, c.cmc, c.colors, COUNT(*) as usage_count
-        FROM cards c
-        JOIN decks d ON c.deck_id = d.id
-        WHERE d.tournament_id = $1 AND c.type != '8'
-        GROUP BY c.name, c.type, c.cmc, c.colors
-        ORDER BY usage_count DESC
-        LIMIT 100;
-      `;
-      const result = await this.cardRepository.query(query, [body.tournament_id]);
-      return result;
+      const { start_date, end_date } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'COUNT(*) as usage_count'])
+        .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
+        .where('d.tournament_id = :tournament_id', { tournament_id: body.tournament_id })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
+        .groupBy('c.name, c.type, c.cmc, c.colors')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
     } catch (error) {
       throw new Error(error);
     }
@@ -114,7 +141,8 @@ export class CardsService {
 
   async getMostUsedCardsByTournamentAndCmc(body: MostUsedsDto): Promise<any> {
     try {
-      const { tournament_id, cmc } = body;
+      const { tournament_id, cmc, start_date, end_date } = body;
+
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
         .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
@@ -124,6 +152,10 @@ export class CardsService {
         .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
       const result = await queryBuilder.getRawMany();
       return result.map(card => ({
@@ -141,7 +173,7 @@ export class CardsService {
 
   async getMostUsedCardsByTournamentAndCmcAndCi(body: MostUsedsDto): Promise<any> {
     try {
-      const { tournament_id, cmc, color_identity } = body;
+      const { tournament_id, cmc, color_identity, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
         .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
@@ -152,6 +184,10 @@ export class CardsService {
         .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
       const result = await queryBuilder.getRawMany();
       return result.map(card => ({
@@ -169,7 +205,7 @@ export class CardsService {
 
   async getMostUsedCardsByTournamentAndCmcAndColors(body: MostUsedsDto): Promise<any> {
     try {
-      const { tournament_id, cmc, colors } = body;
+      const { tournament_id, cmc, colors, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
         .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
@@ -180,6 +216,10 @@ export class CardsService {
         .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
       const result = await queryBuilder.getRawMany();
       return result.map(card => ({
@@ -197,7 +237,7 @@ export class CardsService {
 
   async getMostUsedCardsByTournamentAndName(body: MostUsedsDto): Promise<any> {
     try {
-      const { tournament_id, name } = body;
+      const { tournament_id, name, start_date, end_date } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
         .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
@@ -207,6 +247,98 @@ export class CardsService {
         .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByCmc(body: MostUsedsDto): Promise<any> {
+    try {
+      const { cmc, start_date, end_date } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
+        .where('c.type != :excludedType', { excludedType: '8' })
+        .andWhere('c.cmc = :cmc', { cmc })
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByCmcAndColors(body: MostUsedsDto): Promise<any> {
+    try {
+      const { cmc, colors, start_date, end_date } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
+        .where('c.type != :excludedType', { excludedType: '8' })
+        .andWhere('c.cmc = :cmc', { cmc })
+        .andWhere('c.colors::jsonb = :colors::jsonb', { colors: JSON.stringify(colors) })
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByName(body: MostUsedsDto): Promise<any> {
+    try {
+      const { name, start_date, end_date } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
+        .where('c.name = :name', { name })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
       const result = await queryBuilder.getRawMany();
       return result.map(card => ({

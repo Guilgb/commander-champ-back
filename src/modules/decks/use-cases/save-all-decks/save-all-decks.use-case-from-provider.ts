@@ -27,7 +27,7 @@ export class SaveAllDecksFromProviderUseCase {
   ) { }
   async execute(input: SaveAllDeckDto) {
     try {
-      const { url } = input;
+      const { url, tournament_id } = input;
       const allDecks = await this.topdeckggService.getTopDecks(url);
 
       const deckPromises = allDecks.map(async (deck) => {
@@ -47,7 +47,7 @@ export class SaveAllDecksFromProviderUseCase {
             await this.dbDeckService.createDeck({
               username,
               decklist,
-              tournament_id: 14,
+              tournament_id: tournament_id,
               wins: 0,
               losses: 0,
               draws: 0,

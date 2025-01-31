@@ -7,4 +7,6 @@ export interface MostUsedsDto {
   color_identity?: string[];
   deck_id?: number;
   tournament_id?: number;
+  start_date?: string;
+  end_date?: string;
 }
