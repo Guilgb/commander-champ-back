@@ -116,37 +116,52 @@ export class CardsService {
     try {
       const { tournament_id, cmc } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
-        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'COUNT(*) as usage_count'])
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
         .where('d.tournament_id = :tournament_id', { tournament_id })
         .andWhere('c.type != :excludedType', { excludedType: '8' })
         .andWhere('c.cmc = :cmc', { cmc })
-        .groupBy('c.name, c.type, c.cmc, c.colors')
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
 
       const result = await queryBuilder.getRawMany();
-      return result;
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
     } catch (error) {
       throw new Error(error);
     }
   }
+
   async getMostUsedCardsByTournamentAndCmcAndCi(body: MostUsedsDto): Promise<any> {
     try {
       const { tournament_id, cmc, color_identity } = body;
       const queryBuilder = this.cardRepository.createQueryBuilder('c')
-        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'COUNT(*) as usage_count'])
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
         .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
         .where('d.tournament_id = :tournament_id', { tournament_id })
         .andWhere('c.type != :excludedType', { excludedType: '8' })
         .andWhere('c.cmc = :cmc', { cmc })
         .andWhere('c.color_identity::jsonb = :color_identity::jsonb', { color_identity: JSON.stringify(color_identity) })
-        .groupBy('c.name, c.type, c.cmc, c.colors')
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);
 
       const result = await queryBuilder.getRawMany();
-      return result;
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
     } catch (error) {
       throw new Error(error);
     }
@@ -162,6 +177,33 @@ export class CardsService {
         .andWhere('c.type != :excludedType', { excludedType: '8' })
         .andWhere('c.cmc = :cmc', { cmc })
         .andWhere('c.colors::jsonb = :colors::jsonb', { colors: JSON.stringify(colors) })
+        .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
+        .orderBy('usage_count', 'DESC')
+        .limit(100);
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(card => ({
+        name: card.c_name,
+        type: card.c_type,
+        cmc: card.c_cmc,
+        colors: JSON.parse(card.c_colors),
+        color_identity: JSON.parse(card.c_color_identity),
+        usage_count: parseInt(card.usage_count, 10),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getMostUsedCardsByTournamentAndName(body: MostUsedsDto): Promise<any> {
+    try {
+      const { tournament_id, name } = body;
+      const queryBuilder = this.cardRepository.createQueryBuilder('c')
+        .select(['c.name', 'c.type', 'c.cmc', 'c.colors', 'c.color_identity', 'COUNT(*) as usage_count'])
+        .innerJoin(DeckEntity, 'd', 'c.deck_id = d.id')
+        .where('d.tournament_id = :tournament_id', { tournament_id })
+        .andWhere('c.name = :name', { name })
+        .andWhere('c.type != :excludedType', { excludedType: '8' })
         .groupBy('c.name, c.type, c.cmc, c.colors, c.color_identity')
         .orderBy('usage_count', 'DESC')
         .limit(100);

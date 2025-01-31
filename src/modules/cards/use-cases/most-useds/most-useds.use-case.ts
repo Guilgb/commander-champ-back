@@ -8,24 +8,29 @@ export class MostUsedsUseCase {
   ) { }
 
   async execute(body) {
+    const { tournament_id, name, cmc, colors, color_identity } = body;
+    const bodyKeysLength = Object.keys(body).length;
 
-    if (body.tournament_id && Object.keys(body).length === 1) {
-      const response = await this.cardsService.getMostUsedCardsByTournament(body);
-      return response;
-    } else if (body.tournament_id && body.cmc && Object.keys(body).length === 2) {
-      const response = await this.cardsService.getMostUsedCardsByTournamentAndCmc(body);
-      return response;
-    } else if (body.tournament_id && body.colors && body.color_identity && Object.keys(body).length === 3) {
-      const response = await this.cardsService.getMostUsedCardsByTournamentAndCmcAndCi(body);
-      return response;
-    } else if (body.tournament_id && body.colors && body.cmc && Object.keys(body).length === 3) {
-      const response = await this.cardsService.getMostUsedCardsByTournamentAndCmcAndColors(body);
-      return response;
-    }
-    else {
-      const response = await this.cardsService.getFilterCards(body);
-      return response;
+    if (tournament_id && bodyKeysLength === 1) {
+      return await this.cardsService.getMostUsedCardsByTournament(body);
     }
 
+    if (tournament_id && name && bodyKeysLength === 2) {
+      return await this.cardsService.getMostUsedCardsByTournamentAndName(body);
+    }
+
+    if (tournament_id && cmc && bodyKeysLength === 2) {
+      return await this.cardsService.getMostUsedCardsByTournamentAndCmc(body);
+    }
+
+    if (tournament_id && colors && color_identity && bodyKeysLength === 3) {
+      return await this.cardsService.getMostUsedCardsByTournamentAndCmcAndCi(body);
+    }
+
+    if (tournament_id && colors && cmc && bodyKeysLength === 3) {
+      return await this.cardsService.getMostUsedCardsByTournamentAndCmcAndColors(body);
+    }
+
+    return await this.cardsService.getFilterCards(body);
   }
 }
