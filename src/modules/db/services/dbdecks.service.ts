@@ -269,14 +269,43 @@ export class DbDecksService {
       draws: deck.d_draws,
       winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
     }));
-    
+
     return winratedecks;
+  }
+
+  async getUserWinrate(body: DeckMetricsDto): Promise<any> {
+    const { username } = body;
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.wins', 'd.losses', 'd.draws'])
+      .where('d.username = :username', { username })
+      .groupBy('d.username, d.wins, d.losses, d.draws')
+      .limit(100);
+
+    const result = await queryBuilder.getRawMany();
+
+    const results = result.map(deck => ({
+      username: deck.d_username,
+      wins: deck.d_wins,
+      losses: deck.d_losses,
+      draws: deck.d_draws,
+      winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+    }));
+
+    const total_matches = results.reduce((total, deck) => {
+      return total + +(deck.wins || 0) + +(deck.losses || 0) + +(deck.draws || 0);
+    }, 0);
+
+    return {
+      username,
+      total_matches,
+      winrate: this.calWinrate(results.map(deck => deck.wins).reduce((a, b) => a + b, 0), results.map(deck => deck.losses).reduce((a, b) => a + b, 0), results.map(deck => deck.draws).reduce((a, b) => a + b, 0)),
+    }
   }
 
   private calWinrate(wins, losses, draws): number {
     const games = (Number(wins) + Number(losses) + Number(draws));
     const cal = (Number(wins) / games)
-    const res = cal * 100;
-    return res
+    const res = Number((cal * 100).toFixed(2));
+    return res;
   }
 }

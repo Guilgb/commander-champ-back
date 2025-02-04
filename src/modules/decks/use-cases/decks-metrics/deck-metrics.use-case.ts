@@ -9,37 +9,43 @@ export class DeckMetricsUseCase {
     private readonly deckService: DbDecksService,
   ) { }
   async execute(body: DeckMetricsDto) {
-    const { color_identity, commander, tournament_id, username, winner} = body;
-    if( commander && tournament_id && !color_identity && !username && !winner){
+    const { color_identity, commander, tournament_id, username, winner } = body;
+    if (commander && tournament_id && !color_identity && !username && !winner) {
       this.logger.log('Getting deck by commander and tournament');
       return await this.deckService.getDeckByCommanderOrPartnerWithTournament(body);
     }
-    if( commander && !tournament_id && !color_identity && !username && !winner){
+
+    if (username && !commander && !tournament_id && !color_identity && !winner) {
+      this.logger.log('Getting deck by commander and tournament');
+      return await this.deckService.getUserWinrate(body);
+    }
+
+    if (commander && !tournament_id && !color_identity && !username && !winner) {
       this.logger.log('Getting deck by commander');
       return await this.deckService.getDeckByCommander(commander);
     }
 
-    if( color_identity && tournament_id && !commander && !username && !winner){
+    if (color_identity && tournament_id && !commander && !username && !winner) {
       this.logger.log('Getting deck by color identity and tournament');
       return await this.deckService.getDeckByColorIdentityWithTournament(body);
     }
 
-    if( username && tournament_id && !color_identity && !commander && !winner){
+    if (username && tournament_id && !color_identity && !commander && !winner) {
       this.logger.log('Getting deck by username and tournament');
       return await this.deckService.getDeckByUsernameWithTournament(body);
     }
 
-    if( winner && tournament_id && !color_identity && !commander && !username){
+    if (winner && tournament_id && !color_identity && !commander && !username) {
       this.logger.log('Getting deck by winner and tournament');
       return await this.deckService.getDeckByWinnerWithTournament(body);
     }
 
-    if(username && winner && !tournament_id && !color_identity && !commander){
+    if (username && winner && !tournament_id && !color_identity && !commander) {
       this.logger.log('Getting user winrate');
       return await this.deckService.getDeckByWinner(body);
     }
-    
-    if(username && winner && tournament_id && !color_identity && !commander){
+
+    if (username && winner && tournament_id && !color_identity && !commander) {
       this.logger.log('Getting user winrate by tournament');
       return await this.deckService.getUserWinrateByTournament(body);
     }
