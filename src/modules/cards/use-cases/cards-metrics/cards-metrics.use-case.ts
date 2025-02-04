@@ -9,7 +9,7 @@ export class CardsMetricsUseCase {
   ) { }
 
   async execute(body) {
-    const { tournament_id, name, cmc, colors, color_identity, start_date, end_date } = body;
+    const { tournament_id, name, cmc, colors, color_identity } = body;
 
     if (tournament_id && !name && !cmc && !colors && !color_identity) {
       this.logger.log('Getting most used cards by only tournament');

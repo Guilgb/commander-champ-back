@@ -4,6 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { DeckEntity } from "../entities/decks.entity";
 import { DeckDto } from "src/modules/get-providers-decks/use-cases/dto/deck.dto";
 import { TournamentEntity } from "../entities/tournaments.entity";
+import { DeckMetricsDto } from "src/modules/decks/use-cases/decks-metrics/dto/deck-metrics.dto";
 
 
 @Injectable()
@@ -91,27 +92,191 @@ export class DbDecksService {
     }));
   }
 
-  // async getMostUseddeckByCommanderName(body: MostDeckUsed): Promise<any> {
-  //   try {
-  //     const { name, start_date, end_date } = body;
-  //     const queryBuilder = this.deckRepository.createQueryBuilder('d')
+  async getDeckByCommanderOrPartnerWithTournament(body: DeckMetricsDto): Promise<any> {
+    try {
+      const { commander, partner, start_date, end_date, tournament_id } = body;
+      const queryBuilder = this.deckRepository.createQueryBuilder('d')
+        .select(['d.username', 'd.decklist', 'd.wins', 'd.losses', 'd.draws', 'd.winner', 'd.commander', 'd.partner', 'd.color_identity', 'd.created_at'])
+        .innerJoin(TournamentEntity, 't', 'd.tournament_id = t.id')
+        .where('t.id = :tournament_id', { tournament_id: tournament_id })
+        .andWhere('d.commander = :commander', { commander })
+        .groupBy('d.commander, d.partner, d.username, d.decklist, d.wins, d.losses, d.draws, d.winner, d.color_identity, d.created_at')
+        .limit(100);
 
+      if (partner) {
+        queryBuilder.andWhere('d.partner = :partner', { partner });
+      }
 
-  //     if (start_date && end_date) {
-  //       queryBuilder.andWhere('c.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
-  //     }
+      if (start_date && end_date) {
+        queryBuilder.andWhere('d.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
 
-  //     const result = await queryBuilder.getRawMany();
-  //     return result.map(card => ({
-  //       name: card.c_name,
-  //       type: card.c_type,
-  //       cmc: card.c_cmc,
-  //       colors: JSON.parse(card.c_colors),
-  //       color_identity: JSON.parse(card.c_color_identity),
-  //       usage_count: parseInt(card.usage_count, 10),
-  //     }));
-  //   } catch (error) {
-  //     throw new Error(error);
-  //   }
-  // }
+      const result = await queryBuilder.getRawMany();
+      return result.map(deck => ({
+        username: deck.d_username,
+        decklist: deck.d_decklist,
+        commander: deck.d_commander,
+        partner: deck.d_partner,
+        wins: deck.d_wins,
+        losses: deck.d_losses,
+        draws: deck.d_draws,
+        color_identity: JSON.parse(deck.d_color_identity),
+        created_at: deck.d_created_at,
+        usage_count: deck.usage_count,
+        winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getDeckByColorIdentityWithTournament(body: DeckMetricsDto): Promise<any> {
+    try {
+      const { color_identity, start_date, end_date, tournament_id } = body;
+      const queryBuilder = this.deckRepository.createQueryBuilder('d')
+        .select(['d.username', 'd.decklist', 'd.wins', 'd.losses', 'd.draws', 'd.winner', 'd.commander', 'd.partner', 'd.color_identity', 'd.created_at'])
+        .innerJoin(TournamentEntity, 't', 'd.tournament_id = t.id')
+        .where('t.id = :tournament_id', { tournament_id: tournament_id })
+        .andWhere('d.color_identity = :color_identity', { color_identity })
+        .groupBy('d.commander, d.partner, d.username, d.decklist, d.wins, d.losses, d.draws, d.winner, d.color_identity, d.created_at')
+        .limit(100);
+
+      if (start_date && end_date) {
+        queryBuilder.andWhere('d.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+      }
+
+      const result = await queryBuilder.getRawMany();
+      return result.map(deck => ({
+        username: deck.d_username,
+        decklist: deck.d_decklist,
+        commander: deck.d_commander,
+        partner: deck.d_partner,
+        wins: deck.d_wins,
+        losses: deck.d_losses,
+        draws: deck.d_draws,
+        color_identity: JSON.parse(deck.d_color_identity),
+        created_at: deck.d_created_at,
+        usage_count: deck.usage_count,
+        winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+      }));
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async getDeckByUsernameWithTournament(body: DeckMetricsDto): Promise<any> {
+    const { username, start_date, end_date, tournament_id } = body;
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.decklist', 'd.wins', 'd.losses', 'd.draws', 'd.winner', 'd.commander', 'd.partner', 'd.color_identity', 'd.created_at'])
+      .innerJoin(TournamentEntity, 't', 'd.tournament_id = t.id')
+      .where('t.id = :tournament_id', { tournament_id: tournament_id })
+      .andWhere('d.username = :username', { username })
+      .groupBy('d.commander, d.partner, d.username, d.decklist, d.wins, d.losses, d.draws, d.winner, d.color_identity, d.created_at')
+      .limit(100);
+
+    if (start_date && end_date) {
+      queryBuilder.andWhere('d.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+    }
+
+    const result = await queryBuilder.getRawMany();
+    return result.map(deck => ({
+      username: deck.d_username,
+      decklist: deck.d_decklist,
+      commander: deck.d_commander,
+      partner: deck.d_partner,
+      wins: deck.d_wins,
+      losses: deck.d_losses,
+      draws: deck.d_draws,
+      color_identity: JSON.parse(deck.d_color_identity),
+      created_at: deck.d_created_at,
+      usage_count: deck.usage_count,
+      winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+    }));
+  }
+
+  async getDeckByWinnerWithTournament(body: DeckMetricsDto): Promise<any> {
+    const { winner, start_date, end_date, tournament_id } = body;
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.decklist', 'd.wins', 'd.losses', 'd.draws', 'd.winner', 'd.commander', 'd.partner', 'd.color_identity', 'd.created_at'])
+      .innerJoin(TournamentEntity, 't', 'd.tournament_id = t.id')
+      .where('t.id = :tournament_id', { tournament_id: tournament_id })
+      .andWhere('d.winner = :winner', { winner })
+      .groupBy('d.commander, d.partner, d.username, d.decklist, d.wins, d.losses, d.draws, d.winner, d.color_identity, d.created_at')
+      .limit(100);
+
+    if (start_date && end_date) {
+      queryBuilder.andWhere('d.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+    }
+
+    const result = await queryBuilder.getRawMany();
+    return result.map(deck => ({
+      username: deck.d_username,
+      decklist: deck.d_decklist,
+      commander: deck.d_commander,
+      partner: deck.d_partner,
+      wins: deck.d_wins,
+      losses: deck.d_losses,
+      draws: deck.d_draws,
+      color_identity: JSON.parse(deck.d_color_identity),
+      created_at: deck.d_created_at,
+      usage_count: deck.usage_count,
+      winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+    }));
+  }
+
+  async getDeckByWinner(body: DeckMetricsDto): Promise<any> {
+    const { winner, start_date, end_date } = body;
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.decklist', 'd.wins', 'd.losses', 'd.draws', 'd.winner', 'd.commander', 'd.partner', 'd.color_identity', 'd.created_at'])
+      .andWhere('d.winner = :winner', { winner })
+      .groupBy('d.commander, d.partner, d.username, d.decklist, d.wins, d.losses, d.draws, d.winner, d.color_identity, d.created_at')
+      .limit(100);
+
+    if (start_date && end_date) {
+      queryBuilder.andWhere('d.created_at BETWEEN :start_date AND :end_date', { start_date, end_date });
+    }
+
+    const result = await queryBuilder.getRawMany();
+    return result.map(deck => ({
+      username: deck.d_username,
+      decklist: deck.d_decklist,
+      commander: deck.d_commander,
+      partner: deck.d_partner,
+      wins: deck.d_wins,
+      losses: deck.d_losses,
+      draws: deck.d_draws,
+      color_identity: JSON.parse(deck.d_color_identity),
+      created_at: deck.d_created_at,
+      usage_count: deck.usage_count,
+      winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+    }));
+  }
+
+  async getUserWinrateByTournament(body: DeckMetricsDto): Promise<any> {
+    const { username, tournament_id } = body;
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.wins', 'd.losses', 'd.draws'])
+      .where('d.username = :username', { username })
+      .where('t.id = :tournament_id', { tournament_id: tournament_id })
+      .groupBy('d.username, d.wins, d.losses, d.draws')
+      .limit(100);
+
+    const result = await queryBuilder.getRawMany();
+    const winratedecks = result.map(deck => ({
+      username: deck.d_username,
+      wins: deck.d_wins,
+      losses: deck.d_losses,
+      draws: deck.d_draws,
+      winrate: this.calWinrate(deck.d_wins, deck.d_losses, deck.d_draws),
+    }));
+    
+    return winratedecks;
+  }
+
+  private calWinrate(wins, losses, draws): number {
+    const games = (Number(wins) + Number(losses) + Number(draws));
+    const cal = (Number(wins) / games)
+    const res = cal * 100;
+    return res
+  }
 }

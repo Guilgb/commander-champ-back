@@ -1,5 +1,6 @@
 export interface DeckMetricsDto {
   tournament_id?: number;
+  winner?: number;
   commander?: string;
   partner?: string;
   username?: string;
