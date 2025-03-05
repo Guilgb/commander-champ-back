@@ -1,10 +1,28 @@
-// import { initializeCardModel } from "./cards.entity";
-import { CardsEntity } from "./cards.entity";
-import { DeckEntity } from "./decks.entity";
-import { TournamentEntity } from "./tournaments.entity";
+import { CardsEntity } from './cards.entity';
+import { DeckEntity } from './decks.entity';
+import { TournamentEntity } from './tournaments.entity';
+import { UsersEntity } from './user.entity';
+import { CategoriesEntity } from './categories.entity';
+import { TopicsEntity } from './topics.entity';
+import { PostsEntity } from './posts.entity';
+import { CommentsEntity } from './comments.entity';
+import { RolesEntity } from './roles.entity';
+import { PermissionsEntity } from './permissions.entity';
+import { RolePermissionsEntity } from './role-permissions.entity';
+import { UserRolesEntity } from './user-roles.entity';
+
 
 export const entitiesList = [
-    CardsEntity,
-    DeckEntity,
-    TournamentEntity
+  CardsEntity,
+  DeckEntity,
+  TournamentEntity,
+  UsersEntity,
+  CategoriesEntity,
+  TopicsEntity,
+  PostsEntity,
+  CommentsEntity,
+  RolesEntity,
+  PermissionsEntity,
+  RolePermissionsEntity,
+  UserRolesEntity,
 ];

@@ -3,9 +3,6 @@ import { GetDeckDto } from "./dto/get-providers-decks.dto";
 import { PlatformValidator } from "src/shared/util/platform.validator";
 import { TopDeck, TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
-import { CardsService } from "src/modules/db/services/cards.service";
-import { DataBaseTournamentService } from "src/modules/db/services/dbtournament.service";
-import { DbDecksService } from "src/modules/db/services/dbdecks.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {
@@ -14,9 +11,6 @@ export class GetProvidersDecksUseCase {
   constructor(
     private readonly topdeckggService: TopdeckggService,
     private readonly moxfieldService: MoxfieldService,
-    private readonly cardsService: CardsService,
-    private readonly tournamentService: DataBaseTournamentService,
-    private readonly deckService: DbDecksService,
   ) { }
 
   async execute(input: GetDeckDto): Promise<any> {
@@ -24,23 +18,12 @@ export class GetProvidersDecksUseCase {
       const platform = PlatformValidator.validatePlatform(input.provider);
 
       if (input.provider === 'topdeckgg') {
-
-        const { url, tournament_name, start_date, end_date, format } = input;
-
-        let decksArray = [];
-
-        const { id } = await this.tournamentService.createTournament({
-          name: tournament_name,
-          start_date: new Date(start_date),
-          end_date: new Date(end_date),
-          format
-        });
-
+        
+        const { url, tournament } = input;
         const topDecks = await this.topdeckggService.getTopDecks(url);
 
         const deckPromises = topDecks.map(async (deck: TopDeck) => {
           const { decklist, name } = deck;
-
           const deckLists = await this.retryRequest(() => this.moxfieldService.getMoxfieldDeck(decklist), decklist);
 
           if (deckLists) {
@@ -53,64 +36,33 @@ export class GetProvidersDecksUseCase {
 
             const maindeck = this.normalizeDeckData(mainboard);
             const commander = this.normalizeDeckData(commanders);
-
             let color_identity = [];
 
-            if (commander === null || commander === undefined) {
-              this.logger.error(`Failed to fetch deck list for URL: ${deck.decklist}`);
-            } else if (commander.length === 1) {
+            if (commander === null || undefined) {
+              this.logger.error(`failet to fetch deck list for URL: ${deck.decklist}`);
+            } else if (commander.length == 1) {
               for (const ci of commander) {
                 color_identity.push(...ci.card.color_identity);
               }
-            } else if (commander.length > 0) {
+            } else if (commander.length == 0) {
               color_identity = commander[0].card.color_identity;
             }
 
-            const deckData = {
+            return {
               name,
               format,
               commanders: commander,
               color_identity: color_identity.flat(),
               deck: maindeck
             };
-
-            if (deckData.name) decksArray.push(deckData);
           } else {
             this.logger.error(`Failed to fetch deck list for URL: ${deck.decklist}`);
-          }
-          for (const deck of decksArray) {
-
-            const deckSave = await this.deckService.createDeck({
-              decklist: decklist,
-              tournament_id: id,
-              draws: 0,
-              losses: 0,
-              wins: 0,
-              username: name,
-              commander: '',
-              partner: '',
-              color_identity: deck.color_identity,
-            });
-
-            deck.deck.map(async (card) => {
-              await this.cardsService.saveCards({
-                cmc: card.card.cmc,
-                color_identity: card.card.color_identity,
-                colors: card.card.colors,
-                deck_id: deckSave.id,
-                mana_cost: card.card.mana_cost,
-                name: card.card.name,
-                type: card.card.type,
-              });
-            });
+            return null;
           }
         });
-        const decks = await Promise.all(deckPromises);
 
-        return {
-          status: 'success',
-          message: 'Data fetched successfully',
-        }
+        const decks = await Promise.all(deckPromises);
+        return decks.filter(deck => deck !== null);
       }
     } catch (error) {
       throw new Error(error);
@@ -126,11 +78,9 @@ export class GetProvidersDecksUseCase {
           this.logger.error(`Failed to fetch data from ${url} after ${retries} attempts: ${error.message}`);
           return null;
         }
-        await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before retrying
       }
     }
   }
-
   private normalizeDeckData(data: any): any[] {
     try {
       const normalizedData = Object.keys(data).map(key => {
