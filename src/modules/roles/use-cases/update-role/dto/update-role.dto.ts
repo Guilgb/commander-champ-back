@@ -1,5 +1,5 @@
-export type IRoles = {
-  id?: number,
+export interface UpdateRoleDto {
+  id: number;
   name: string;
   description: string;
   created_at: Date;

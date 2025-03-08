@@ -38,15 +38,18 @@ export class DbRolesService {
     return role;
   }
 
-  async updateRole(id: number, input: IRoles) {
+  async updateRole(input: IRoles) {
+    const { id, name, description, created_at } = input;
+    
     const role = await this.userRoleRepository.findOne({ where: { id } });
     if (!role) {
       throw new Error('Role not found');
     }
 
     const updatedRole = await this.userRoleRepository.update({ id: id}, {
-      name: input.name,
-      description: input.description,
+      name: name,
+      description: description,
+      created_at: created_at,
       updated_at: new Date()
     });
 
@@ -59,5 +62,9 @@ export class DbRolesService {
   
   async getRoles() {
     return this.userRoleRepository.find();
+  }
+
+  async getRoleById(id: number) {
+    return this.userRoleRepository.findOne({ where: { id } });
   }
 }
