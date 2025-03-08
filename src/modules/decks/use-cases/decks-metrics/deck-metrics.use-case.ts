@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { DbDecksService } from '../../../db/services/dbdecks.service'
+import { DbDecksService } from '../../../db/services/db-decks.service'
 import { DeckMetricsDto } from "./dto/deck-metrics.dto";
 
 @Injectable()

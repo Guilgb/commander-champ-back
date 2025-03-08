@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { UsersDto } from "./use-cases/create-user/dto/user.dto";
 import { CreateUserUseCase } from "./use-cases/create-user/create-user.use-case";
 
@@ -13,5 +13,10 @@ export class UsersController {
     @Body() body: UsersDto
   ) {
     return await this.createUserUseCase.execute(body);
+  }
+
+  @Get('/roles')
+  async getUserRole() {
+    return;
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DbDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/db-decks.service";
 import { UpdateDeckDto } from "./dto/update-deck.dto";
 
 @Injectable()

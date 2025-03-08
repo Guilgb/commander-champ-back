@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
 import { SaveAllDeckDto } from "./dto/save-all-decks.dto";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
-import { DbDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/db-decks.service";
 
 interface Card {
   name: string;

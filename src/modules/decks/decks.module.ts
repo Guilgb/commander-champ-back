@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DbDecksService } from '../db/services/dbdecks.service';
+import { DbDecksService } from '../db/services/db-decks.service';
 import { DecksController } from './decks.controller';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-
 import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case';
 import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-case';
 import { TournamentEntity } from '../db/entities/tournaments.entity';
-import { DataBaseTournamentService } from '../db/services/dbtournament.service';
+import { DataBaseTournamentService } from '../db/services/db-tournament.service';
 
 @Module({
   imports: [

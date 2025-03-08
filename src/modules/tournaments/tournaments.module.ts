@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from "@nestjs/config";
-import { DataBaseTournamentService } from "../db/services/dbtournament.service";
+import { DataBaseTournamentService } from "../db/services/db-tournament.service";
 import { HttpModule } from "@nestjs/axios";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TournamentEntity } from "../db/entities/tournaments.entity";

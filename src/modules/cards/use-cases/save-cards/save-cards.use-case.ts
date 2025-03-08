@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { SaveCardsDto } from "./types/save-cards.dto";
-import { DbDecksService } from "src/modules/db/services/dbdecks.service";
+import { DbDecksService } from "src/modules/db/services/db-decks.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
-import { CardsService } from "src/modules/db/services/cards.service";
+import { CardsService } from "src/modules/db/services/db-cards.service";
 
 interface Card {
   name: string;

@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 import { AuthController } from "./auth.controller";
-import { DataBaseUsersService } from "../db/services/users.service";
+import { DataBaseUsersService } from "../db/services/db-users.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UsersEntity } from "../db/entities/user.entity";
 import { AuthService } from "./auth.service";
@@ -12,7 +12,7 @@ import { JwtStrategy } from "./jwt.strategy";
   imports: [
     PassportModule,
     JwtModule.register({
-      signOptions: { 
+      signOptions: {
         expiresIn: '1d',
         algorithm: 'RS256'
       },

@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DataBaseUsersService } from "src/modules/db/services/users.service";
+import { DataBaseUsersService } from "src/modules/db/services/db-users.service";
 import { UsersDto } from "./dto/user.dto";
 import { hash } from "bcryptjs";
 
