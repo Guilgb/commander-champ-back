@@ -12,12 +12,14 @@ import { CurlProviderService } from '../providers/curlProvider/service/curl-prov
 import { GetAllDecksByTournamentFromProviderUseCase } from './use-cases/get-all-decks/get-all-decks-from-provider.use-case';
 import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case';
 import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-case';
+import { TournamentEntity } from '../db/entities/tournaments.entity';
+import { DataBaseTournamentService } from '../db/services/dbtournament.service';
 
 @Module({
   imports: [
     ConfigModule,
     HttpModule.register({}),
-    TypeOrmModule.forFeature([DeckEntity]),
+    TypeOrmModule.forFeature([DeckEntity, TournamentEntity]),
     TopdeckggModule,
   ],
   controllers: [DecksController],
@@ -25,6 +27,7 @@ import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-c
     DbDecksService,
     MoxfieldService,
     DbDecksService,
+    DataBaseTournamentService,
     CurlProviderService,
     SaveAllDecksFromProviderUseCase,
     GetAllDecksByTournamentFromProviderUseCase,

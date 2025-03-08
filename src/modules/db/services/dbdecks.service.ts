@@ -12,6 +12,8 @@ export class DbDecksService {
   constructor(
     @InjectRepository(DeckEntity)
     private readonly deckRepository: Repository<DeckEntity>,
+    @InjectRepository(TournamentEntity)
+    private readonly tournamentRepository: Repository<TournamentEntity>,
   ) { }
 
   async createDeck(input: DeckDto): Promise<DeckDto> {
@@ -78,10 +80,14 @@ export class DbDecksService {
 
   async getAllDecksByTournament(tournament_id: number): Promise<any> {
     const decks = await this.deckRepository.find({ where: { tournament_id: { id: tournament_id } } });
-    return decks.map(deck => ({
-      ...deck,
-      tournament_id,
+    const tournamentInfo = await this.tournamentRepository.findOne({ where: { id: tournament_id } });
+    const decksList = decks.map(deck => ({
+      ...deck
     }));
+    return {
+      tournament: tournamentInfo,
+      decks: decksList,
+    }
   }
 
   async getDeckByCommander(commander: string): Promise<any> {
