@@ -11,12 +11,13 @@ import { DbDecksService } from '../db/services/dbdecks.service';
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { DeckEntity } from '../db/entities/decks.entity';
 import { CardsMetricsUseCase } from './use-cases/cards-metrics/cards-metrics.use-case';
+import { TournamentEntity } from '../db/entities/tournaments.entity';
 
 @Module({
   imports: [
     ConfigModule,
     HttpModule.register({}),
-    TypeOrmModule.forFeature([CardsEntity, DeckEntity]),
+    TypeOrmModule.forFeature([CardsEntity, DeckEntity, TournamentEntity]),
   ],
   controllers: [CardsController],
   providers: [

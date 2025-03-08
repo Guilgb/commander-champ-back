@@ -13,4 +13,10 @@ export class UsersEntity {
   
   @Column()
   email: string;
+
+  @Column()
+  created_at: Date;
+
+  @Column()
+  updated_at: Date;
 }

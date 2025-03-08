@@ -12,11 +12,12 @@ export class DataBaseUsersService {
   ) { }
 
   async createUser(input: UsersDto): Promise<any> {
-    console.log(input);
     const user = this.userRepository.save({
       name: input.name,
       email: input.email,
       password: input.password,
+      created_at: new Date(),
+      updated_at: new Date(),
     });
 
     return user;

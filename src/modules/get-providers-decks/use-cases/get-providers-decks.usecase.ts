@@ -19,7 +19,8 @@ export class GetProvidersDecksUseCase {
 
       if (input.provider === 'topdeckgg') {
         
-        const { url, tournament } = input;
+        const { url } = input;
+
         const topDecks = await this.topdeckggService.getTopDecks(url);
 
         const deckPromises = topDecks.map(async (deck: TopDeck) => {

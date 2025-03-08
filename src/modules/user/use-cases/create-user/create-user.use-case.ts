@@ -17,6 +17,8 @@ export class CreateUserUseCase {
         email: input.email,
         password: hashedPassword,
         name: input.name,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
       return user;
     } catch (error) {

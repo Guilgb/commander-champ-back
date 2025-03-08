@@ -12,6 +12,6 @@ export class GetProvidersDecksController {
     async getProvidersDecks(
         @Body() input: { provider: string, url: string, tournament: string }
     ) {
-        return this.getProvidersDecksUseCase.execute(input);
+        // return this.getProvidersDecksUseCase.execute(input);
     }
 }
