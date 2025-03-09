@@ -1,12 +1,12 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { DbDecksService } from '../../../db/services/db-decks.service'
+import { DBDecksService } from '../../../db/services/db-decks.service'
 import { DeckMetricsDto } from "./dto/deck-metrics.dto";
 
 @Injectable()
 export class DeckMetricsUseCase {
   private readonly logger = new Logger(DeckMetricsUseCase.name);
   constructor(
-    private readonly deckService: DbDecksService,
+    private readonly deckService: DBDecksService,
   ) { }
   async execute(body: DeckMetricsDto) {
     const { color_identity, commander, tournament_id, username, winner } = body;

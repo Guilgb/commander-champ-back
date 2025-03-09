@@ -8,7 +8,7 @@ import { DeckMetricsDto } from "src/modules/decks/use-cases/decks-metrics/dto/de
 
 
 @Injectable()
-export class DbDecksService {
+export class DBDecksService {
   constructor(
     @InjectRepository(DeckEntity)
     private readonly deckRepository: Repository<DeckEntity>,

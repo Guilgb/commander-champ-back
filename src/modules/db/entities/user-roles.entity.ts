@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryColumn, ManyToOne, JoinColumn, CreateDateColumn, Column } from 'typeorm';
 import { UsersEntity } from './user.entity';
 import { RolesEntity } from './roles.entity';
 
@@ -10,6 +10,12 @@ export class UserRolesEntity {
   @PrimaryColumn()
   role_id: number;
 
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  updated_at: Date;
+
   @ManyToOne(() => UsersEntity, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
   user: UsersEntity;
@@ -18,6 +24,4 @@ export class UserRolesEntity {
   @JoinColumn({ name: 'role_id' })
   role: RolesEntity;
 
-  @CreateDateColumn({ type: 'timestamp' })
-  created_at: Date;
 }

@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { DataBaseTournamentService } from "src/modules/db/services/db-tournament.service";
+import { DBTournamentService } from "src/modules/db/services/db-tournament.service";
 import { CreateTournamentDto } from "./dto/create-tournaments.dto";
 
 @Injectable()
 export class CreateTournamentUseCase {
   constructor(
-    private readonly tournamentService: DataBaseTournamentService,
+    private readonly tournamentService: DBTournamentService,
   ) { }
 
   async execute(input: CreateTournamentDto) {

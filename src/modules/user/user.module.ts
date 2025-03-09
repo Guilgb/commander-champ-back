@@ -5,7 +5,7 @@ import { HttpModule } from '@nestjs/axios';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from '../db/entities/user.entity';
 import { CreateUserUseCase } from './use-cases/create-user/create-user.use-case';
-import { DataBaseUsersService } from '../db/services/db-users.service';
+import { DBUsersService } from '../db/services/db-users.service';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { DataBaseUsersService } from '../db/services/db-users.service';
   controllers: [UsersController],
   providers: [
     CreateUserUseCase,
-    DataBaseUsersService
+    DBUsersService
   ],
 })
 export class UsersModule { }

@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { SaveCardsDto } from "./types/save-cards.dto";
-import { DbDecksService } from "src/modules/db/services/db-decks.service";
+import { DBDecksService } from "src/modules/db/services/db-decks.service";
 import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
-import { CardsService } from "src/modules/db/services/db-cards.service";
+import { DBCardsService } from "src/modules/db/services/db-cards.service";
 
 interface Card {
   name: string;
@@ -21,9 +21,9 @@ interface NormalizedDeck {
 @Injectable()
 export class SaveCardsUseCase {
   constructor(
-    private readonly dbDeckService: DbDecksService,
+    private readonly dbDeckService: DBDecksService,
     private readonly moxFieldService: MoxfieldService,
-    private readonly cardsService: CardsService,
+    private readonly cardsService: DBCardsService,
   ) { }
 
   async execute(body: SaveCardsDto) {

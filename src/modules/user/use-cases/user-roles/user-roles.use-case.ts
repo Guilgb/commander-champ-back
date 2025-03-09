@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { DataBaseUsersService } from "src/modules/db/services/db-users.service";
+import { DBUsersService } from "src/modules/db/services/db-users.service";
 
 @Injectable()
 export class UserRoles {
   constructor(
-    private readonly usersService: DataBaseUsersService,
+    private readonly usersService: DBUsersService,
   ) { }
 
   async execute() {

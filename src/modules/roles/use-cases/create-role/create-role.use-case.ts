@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
-import { DbRolesService } from "src/modules/db/services/db-roles.service";
+import { DBRolesService } from "src/modules/db/services/db-roles.service";
 import { CreateRoleDto } from "./dto/create-role.dto";
 
 @Injectable()
 export class CreateRoleUseCase {
   constructor(
-    private readonly rolesService: DbRolesService,
+    private readonly rolesService: DBRolesService,
   ) { }
 
   async execute(input: CreateRoleDto) {

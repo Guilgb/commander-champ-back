@@ -7,7 +7,7 @@ import { DeckEntity } from "../entities/decks.entity";
 import { CardsMetricsDto } from "src/modules/cards/use-cases/cards-metrics/types/cards-metrics.dto";
 
 @Injectable()
-export class CardsService {
+export class DBCardsService {
   constructor(
     @InjectRepository(CardsEntity)
     private readonly cardRepository: Repository<CardsEntity>,

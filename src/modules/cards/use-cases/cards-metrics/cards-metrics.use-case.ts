@@ -1,11 +1,11 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { CardsService } from "src/modules/db/services/db-cards.service";
+import { DBCardsService } from "src/modules/db/services/db-cards.service";
 
 @Injectable()
 export class CardsMetricsUseCase {
   private readonly logger = new Logger(CardsMetricsUseCase.name);
   constructor(
-    private readonly cardsService: CardsService,
+    private readonly cardsService: DBCardsService,
   ) { }
 
   async execute(body) {

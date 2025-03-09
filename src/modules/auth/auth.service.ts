@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { DataBaseUsersService } from "src/modules/db/services/db-users.service";
+import { DBUsersService } from "src/modules/db/services/db-users.service";
 import { compare } from "bcryptjs";
 import { AuthDto } from "./dto/auth.dto";
 
@@ -8,7 +8,7 @@ import { AuthDto } from "./dto/auth.dto";
 export class AuthService {
   constructor(
     private readonly jwt: JwtService,
-    private readonly dataBaseUsersService: DataBaseUsersService
+    private readonly dataBaseUsersService: DBUsersService
   ) { }
 
   async login(body: AuthDto) {

@@ -8,7 +8,7 @@ import { CreateRoleUseCase } from './use-cases/create-role/create-role.use-case'
 import { UpdateRoleUseCase } from './use-cases/update-role/update-role.use-case';
 import { DeleteRoleUseCase } from './use-cases/delete-role/delete-role.use-case';
 import { GetRoleUseCase } from './use-cases/get-role/get-role.use-case';
-import { DbRolesService } from '../db/services/db-roles.service';
+import { DBRolesService } from '../db/services/db-roles.service';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { DbRolesService } from '../db/services/db-roles.service';
     UpdateRoleUseCase,
     DeleteRoleUseCase,
     GetRoleUseCase,
-    DbRolesService
+    DBRolesService
   ],
 })
 export class RolesModule { }

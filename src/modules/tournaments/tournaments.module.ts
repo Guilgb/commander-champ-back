@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from "@nestjs/config";
-import { DataBaseTournamentService } from "../db/services/db-tournament.service";
+import { DBTournamentService } from "../db/services/db-tournament.service";
 import { HttpModule } from "@nestjs/axios";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { TournamentEntity } from "../db/entities/tournaments.entity";
@@ -20,7 +20,7 @@ import { UpdateTournamentUseCase } from './use-cases/update-tournaments/update-t
     CreateTournamentUseCase,
     ListTournamentsUseCase,
     UpdateTournamentUseCase,
-    DataBaseTournamentService,
+    DBTournamentService,
   ],
 })
 

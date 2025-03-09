@@ -8,6 +8,7 @@ import { CardsModule } from './modules/cards/cards.module';
 import { UsersModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
+import { UserRoleModule } from './modules/user-roles/user-role.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { RolesModule } from './modules/roles/roles.module';
     UsersModule,
     AuthModule,
     RolesModule,
+    UserRoleModule,
   ],
 })
 export class AppModule {}

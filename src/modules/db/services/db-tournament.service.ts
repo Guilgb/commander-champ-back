@@ -5,7 +5,7 @@ import { TournamentEntity } from "../entities/tournaments.entity";
 import { TournamentDto } from "src/modules/get-providers-decks/use-cases/dto/tournaments.dto";
 
 @Injectable()
-export class DataBaseTournamentService {
+export class DBTournamentService {
   constructor(
     @InjectRepository(TournamentEntity)
     private readonly tournamentRepository: Repository<TournamentEntity>,

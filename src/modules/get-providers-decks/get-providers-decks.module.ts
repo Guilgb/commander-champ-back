@@ -7,10 +7,10 @@ import { TopdeckggService } from '../providers/topdeckgg/services/topdeckgg.serv
 import { MoxfieldService } from '../providers/moxfield/service/moxfield.service';
 import { CurlProviderService } from '../providers/curlProvider/service/curl-provider.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CardsService } from '../db/services/db-cards.service';
-import { DataBaseTournamentService } from '../db/services/db-tournament.service';
+import { DBCardsService } from '../db/services/db-cards.service';
+import { DBTournamentService } from '../db/services/db-tournament.service';
 import { entitiesList } from '../db/entities';
-import { DbDecksService } from '../db/services/db-decks.service';
+import { DBDecksService } from '../db/services/db-decks.service';
 
 @Module({
   imports: [
@@ -24,9 +24,9 @@ import { DbDecksService } from '../db/services/db-decks.service';
     TopdeckggService,
     MoxfieldService,
     CurlProviderService,
-    CardsService,
-    DataBaseTournamentService,
-    DbDecksService,
+    DBCardsService,
+    DBTournamentService,
+    DBDecksService,
   ],
 })
 

@@ -1,17 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
-import { IRoles } from "../types/IRoles";
+import { IRolesCreate, IRolesUpdate } from "../types/IRoles";
 import { RolesEntity } from "../entities/roles.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 
 @Injectable()
-export class DbRolesService {
+export class DBRolesService {
   constructor(
     @InjectRepository(RolesEntity)
     private readonly userRoleRepository: Repository<RolesEntity>
   ) { }
 
-  async createRole(input: IRoles) {
+  async createRole(input: IRolesCreate) {
     const role = this.userRoleRepository.create({
       name: input.name,
       description: input.description,
@@ -29,7 +29,7 @@ export class DbRolesService {
 
   async deleteRole(id: number) {
     const role = await this.userRoleRepository.findOne({ where: { id } });
-    
+
     if (!role) {
       throw new Error('Role not found');
     }
@@ -38,15 +38,16 @@ export class DbRolesService {
     return role;
   }
 
-  async updateRole(input: IRoles) {
+  async updateRole(input: IRolesUpdate) {
     const { id, name, description, created_at } = input;
-    
+
     const role = await this.userRoleRepository.findOne({ where: { id } });
+    console.log(role)
     if (!role) {
       throw new Error('Role not found');
     }
 
-    const updatedRole = await this.userRoleRepository.update({ id: id}, {
+    const updatedRole = await this.userRoleRepository.update({ id: id }, {
       name: name,
       description: description,
       created_at: created_at,
@@ -59,7 +60,7 @@ export class DbRolesService {
       updated_at: updatedRole
     }
   }
-  
+
   async getRoles() {
     return this.userRoleRepository.find();
   }
