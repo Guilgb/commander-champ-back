@@ -10,6 +10,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RolesModule } from './modules/roles/roles.module';
 import { UserRoleModule } from './modules/user-roles/user-role.module';
 import { PermissionModule } from './modules/permissions/permissions.module';
+import { RolePermissionsModule } from './modules/role-permissions/role-permissions.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { PermissionModule } from './modules/permissions/permissions.module';
     RolesModule,
     UserRoleModule,
     PermissionModule,
+    RolePermissionsModule,
   ],
 })
 export class AppModule {}
