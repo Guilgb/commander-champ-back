@@ -42,7 +42,7 @@ export class DBRolesService {
     const { id, name, description, created_at } = input;
 
     const role = await this.userRoleRepository.findOne({ where: { id } });
-    console.log(role)
+    
     if (!role) {
       throw new Error('Role not found');
     }
