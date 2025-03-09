@@ -32,7 +32,7 @@ export class PermissionsController {
     return await this.getPermissionUseCase.execute();
   }
 
-  @Get(':id')
+  @Get("/id")
   async findOne(
     @Body() input: GetPermissionByIdDto) {
     return await this.getPermissionByIdUseCase.execute(input);
