@@ -1,4 +1,3 @@
-
 export interface CardsDto {
   id?: number;
   name: string;
