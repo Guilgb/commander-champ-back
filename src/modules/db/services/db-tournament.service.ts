@@ -13,13 +13,21 @@ export class DBTournamentService {
 
   async createTournament(input: TournamentDto): Promise<TournamentDto> {
 
-    const tournament = this.tournamentRepository.save({
+    const tournament = await this.tournamentRepository.save({
       name: input.name,
       start_date: input.start_date,
       end_date: input.end_date,
       format: input.format,
+      user_id: { id: input.user_id }
     });
-    return tournament;
+    return {
+      id: tournament.id,
+      name: tournament.name,
+      start_date: tournament.start_date,
+      end_date: tournament.end_date,
+      format: tournament.format,
+      user_id: tournament.user_id.id,
+    };
   }
 
   async listTournament(): Promise<any> {
@@ -27,7 +35,18 @@ export class DBTournamentService {
   }
 
   async getTournamentById(id: number): Promise<TournamentDto> {
-    return this.tournamentRepository.findOneBy({ id: id });
+    const tournament = await this.tournamentRepository.findOneBy({ id: id });
+    if (!tournament) {
+      return null;
+    }
+    return {
+      id: tournament.id,
+      name: tournament.name,
+      start_date: tournament.start_date,
+      end_date: tournament.end_date,
+      format: tournament.format,
+      user_id: tournament.user_id.id,
+    };
   }
 
   async updateTournament(id: number, input: TournamentDto): Promise<TournamentDto> {
@@ -41,8 +60,15 @@ export class DBTournamentService {
     tournament.start_date = input.start_date;
     tournament.end_date = input.end_date;
     tournament.format = input.format;
+    tournament.user_id = input.user_id;
 
-    await this.tournamentRepository.update(id, tournament);
+    await this.tournamentRepository.update(id, {
+      name: tournament.name,
+      start_date: tournament.start_date,
+      end_date: tournament.end_date,
+      format: tournament.format,
+      user_id: { id: input.user_id },
+    });
 
     return this.getTournamentById(id);
   }

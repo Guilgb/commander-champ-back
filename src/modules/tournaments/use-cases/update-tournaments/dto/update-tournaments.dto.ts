@@ -4,4 +4,5 @@ export interface UpdateTournamentDto {
     start_date: Date;
     end_date: Date;
     format: string;
+    user_id: number;
 }

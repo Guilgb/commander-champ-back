@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, OneToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from "typeorm";
 import { DeckEntity } from "./decks.entity";
 import { UsersEntity } from "./user.entity";
 
@@ -25,6 +25,7 @@ export class TournamentEntity {
     @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
     decks: DeckEntity[];
 
-    @OneToOne(() => UsersEntity, (user) => user.id)
+    @ManyToOne(() => UsersEntity, (user) => user.id)
     user_id: UsersEntity;
+
 }

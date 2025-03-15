@@ -14,7 +14,8 @@ export class UpdateTournamentUseCase {
         name: input.name,
         start_date: new Date(input.start_date),
         end_date: new Date(input.end_date),
-        format: input.format
+        format: input.format,
+        user_id: input.user_id
       });
       return tournament;
     } catch (error) {

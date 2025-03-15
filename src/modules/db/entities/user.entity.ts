@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { TournamentEntity } from './tournaments.entity';
 
 @Entity('users')
 export class UsersEntity {
@@ -13,6 +14,9 @@ export class UsersEntity {
   
   @Column()
   email: string;
+
+  @OneToMany(() => TournamentEntity, (tournament) => tournament.user_id)
+  tournaments: TournamentEntity[];
 
   @Column()
   created_at: Date;
