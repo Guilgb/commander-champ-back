@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateCol
 import { UsersEntity } from './user.entity';
 import { TopicsEntity } from './topics.entity';
 
-@Entity('posts')
-export class PostsEntity {
+@Entity('articles')
+export class ArticlesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

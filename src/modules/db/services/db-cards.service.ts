@@ -4,7 +4,7 @@ import { CardsEntity } from "../entities/cards.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CardsDto } from "src/modules/get-providers-decks/use-cases/dto/cards.dto";
 import { DeckEntity } from "../entities/decks.entity";
-import { CardsMetricsDto } from "src/modules/cards/use-cases/cards-metrics/types/cards-metrics.dto";
+import { CardsMetricsDto } from "src/modules/cards/use-cases/cards-metrics/dto/cards-metrics.dto";
 
 @Injectable()
 export class DBCardsService {

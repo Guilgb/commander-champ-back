@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { UsersEntity } from './user.entity';
-import { PostsEntity } from './posts.entity';
+import { ArticlesEntity } from './articles.entity';
 
 @Entity('comments')
 export class CommentsEntity {
@@ -14,9 +14,9 @@ export class CommentsEntity {
   @JoinColumn({ name: 'user_id' })
   user: UsersEntity;
 
-  @ManyToOne(() => PostsEntity, post => post.id, { onDelete: 'CASCADE' })
+  @ManyToOne(() => ArticlesEntity, post => post.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'post_id' })
-  post: PostsEntity;
+  post: ArticlesEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

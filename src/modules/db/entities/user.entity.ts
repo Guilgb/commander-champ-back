@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { TournamentEntity } from './tournaments.entity';
+import { CommentsEntity } from './comments.entity';
 
 @Entity('users')
 export class UsersEntity {
@@ -17,6 +18,9 @@ export class UsersEntity {
 
   @OneToMany(() => TournamentEntity, (tournament) => tournament.user_id)
   tournaments: TournamentEntity[];
+
+  @OneToMany(() => CommentsEntity, comment => comment.user)
+  comments: CommentsEntity[];
 
   @Column()
   created_at: Date;

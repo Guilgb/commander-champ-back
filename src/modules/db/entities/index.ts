@@ -4,7 +4,7 @@ import { TournamentEntity } from './tournaments.entity';
 import { UsersEntity } from './user.entity';
 import { CategoriesEntity } from './categories.entity';
 import { TopicsEntity } from './topics.entity';
-import { PostsEntity } from './posts.entity';
+import { ArticlesEntity } from './articles.entity';
 import { CommentsEntity } from './comments.entity';
 import { RolesEntity } from './roles.entity';
 import { PermissionsEntity } from './permissions.entity';
@@ -19,7 +19,7 @@ export const entitiesList = [
   UsersEntity,
   CategoriesEntity,
   TopicsEntity,
-  PostsEntity,
+  ArticlesEntity,
   CommentsEntity,
   RolesEntity,
   PermissionsEntity,
