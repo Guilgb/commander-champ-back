@@ -12,6 +12,7 @@ import { UserRoleModule } from './modules/user-roles/user-role.module';
 import { PermissionModule } from './modules/permissions/permissions.module';
 import { RolePermissionsModule } from './modules/role-permissions/role-permissions.module';
 import { CatogoriesModule } from './modules/catogories/use-cases/catogories.module';
+import { TopicModule } from './modules/topic/topic.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { CatogoriesModule } from './modules/catogories/use-cases/catogories.modu
     PermissionModule,
     RolePermissionsModule,
     CatogoriesModule,
+    TopicModule,
   ],
 })
 export class AppModule {}
