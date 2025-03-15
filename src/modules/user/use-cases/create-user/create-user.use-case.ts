@@ -13,6 +13,11 @@ export class CreateUserUseCase {
     try {
       const hashedPassword = await hash(input.password, 10);
 
+      const email = await this.usersService.getUserByEmail(input.email);
+      if (email) {
+        throw new Error("Email already exists");
+      }
+
       const user = await this.usersService.createUser({
         email: input.email,
         password: hashedPassword,
