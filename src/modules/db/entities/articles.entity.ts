@@ -8,6 +8,9 @@ export class ArticlesEntity {
   id: number;
 
   @Column({ type: 'text' })
+  title: string;
+
+  @Column({ type: 'text' })
   content: string;
 
   @ManyToOne(() => UsersEntity, user => user.id, { onDelete: 'CASCADE' })

@@ -6,7 +6,6 @@ import { GetTopicUseCase } from "./use-cases/get-topic-by-id/get-topic-by-id.use
 import { LisTopicsUseCase } from "./use-cases/list-topics/dto/list-topics.use-case";
 import { CreateTopicDto } from "./use-cases/create-topic/dto/create-topic.dto";
 import { UpdateTopicDto } from "./use-cases/update-topic/dto/update-topic.dto";
-import { DBTopicsService } from 'src/modules/db/services/db-topics.service';
 import { GetTopicByIdDto } from "./use-cases/get-topic-by-id/dto/get-topic-by-id.dto";
 import { DeleteTopicDto } from "./use-cases/delete-topic/dto/delete-topic.dto";
 
