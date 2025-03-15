@@ -15,11 +15,11 @@ export class ArticlesEntity {
 
   @ManyToOne(() => UsersEntity, user => user.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'user_id' })
-  user: UsersEntity;
+  user_id: UsersEntity;
 
   @ManyToOne(() => TopicsEntity, topic => topic.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'topic_id' })
-  topic: TopicsEntity;
+  topic_id: TopicsEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;

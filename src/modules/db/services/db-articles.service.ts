@@ -48,8 +48,8 @@ export class DBArticleService {
       const article = await this.dbArticleRepository.create({
         title: input.title,
         content: input.content,
-        user: user,
-        topic: topics,
+        user_id: user,
+        topic_id: topics,
         created_at: new Date(),
         updated_at: new Date(),
       });
@@ -78,8 +78,8 @@ export class DBArticleService {
         {
           title: input.title,
           content: input.content,
-          user: user,
-          topic: topics,
+          user_id: user,
+          topic_id: topics,
           updated_at: new Date(),
         }
       );
