@@ -1,0 +1,84 @@
+service: commander-api
+frameworkVersion: '4.9.0'
+
+custom:
+  params:
+    dbName: ${env:DB_NAME}
+    dbHost: ${env:DB_HOST}
+    dbPassword: ${env:DB_PASS}
+    dbPort: ${env:DB_PORT}
+    jwt_private_key: ${env:JWT_PRIVATE_KEY}
+    jwt_public_key: ${env:JWT_PUBLIC_KEY}
+    user_agent: ${env:USER_AGENT}
+    # deploymentBucket: ${ssm:/${self:provider.stage, 'dev'}/buckets/aic-api-deployment-bucket}
+
+plugins:
+  - serverless-kms-alias
+
+package:
+  excludeDevDependencies: true
+  patterns:
+    - "!tests/**"
+    - "!src/**"
+    - "!node_modules/**"
+    - "!.*"
+    - "!*.md"
+    - "!*.log"
+    - "!*.json"
+    - "!*.yml"
+    - "!*.yaml"
+    - "!*.lock"
+    - "!*.sh"
+    - "!*.txt"
+    - "!*.md"
+    - "!*.html"
+    - "!*.css"
+    - "!*.scss"
+    - "!*.less"
+    - "!*.sass"
+    - "!*.styl"
+    - "!*.ts"
+    - "!*.tsx"
+    - "!*.js"
+    - "!*.jsx"
+    - "!*.map"
+    - "!*.d.ts"
+    - "!*.d.ts.map"
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: us-east-1
+  timeout: 30
+  tracing: 
+    lambda: true
+  profile: default # Certifique-se de que o perfil AWS está configurado corretamente
+  # deploymentBucket:
+  #   name: ${self:custom.params.deploymentBucket}
+  environment:
+    NODE_ENV: ${opt:stage, 'dev'}
+    IS_CLOUD: true
+    CLOUD_AWS_REGION: ${self:provider.region}
+    DB_NAME: ${self:custom.params.dbName}
+    DB_HOST: ${self:custom.params.dbHost}
+    DB_PASS: ${self:custom.params.dbPassword}
+    DB_PORT: ${self:custom.params.dbPort}
+    JWT_PRIVATE_KEY: ${self:custom.params.jwt_private_key}
+    JWT_PUBLIC_KEY: ${self:custom.params.jwt_public_key}
+    USER_AGENT: ${self:custom.params.user_agent}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: "arn:aws:dynamodb:us-east-1:*:*"
+
+functions:
+  app:
+    handler: dist/lambda.handler
+    description: "Commander API"
