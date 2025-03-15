@@ -27,6 +27,7 @@ export class DBTournamentService {
       end_date: tournament.end_date,
       format: tournament.format,
       user_id: tournament.user_id.id,
+      online: tournament.online,
     };
   }
 
@@ -46,6 +47,7 @@ export class DBTournamentService {
       end_date: tournament.end_date,
       format: tournament.format,
       user_id: tournament.user_id.id,
+      online: tournament.online,
     };
   }
 

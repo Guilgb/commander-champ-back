@@ -7,7 +7,7 @@ import { UpdateTournamentDto } from "./use-cases/update-tournaments/dto/update-t
 import { AuthGuard } from "@nestjs/passport";
 
 @Controller("/tournaments")
-@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard('jwt'))
 export class TournamentsController {
   constructor(
     private readonly createTournamentUseCase: CreateTournamentUseCase,

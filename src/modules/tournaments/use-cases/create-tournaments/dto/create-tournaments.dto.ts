@@ -1,8 +1,9 @@
 export interface CreateTournamentDto {
-    id?: number;
-    name: string;
-    start_date: Date;
-    end_date: Date;
-    format: string;
-    user_id: number;
-  }
+  id?: number;
+  name: string;
+  start_date: Date;
+  end_date: Date;
+  format: string;
+  user_id: number;
+  online: boolean;
+}

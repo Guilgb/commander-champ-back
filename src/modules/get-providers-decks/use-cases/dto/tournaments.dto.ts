@@ -5,4 +5,5 @@ export interface TournamentDto {
   end_date: Date;
   format: string;
   user_id: number;
+  online: boolean;
 }

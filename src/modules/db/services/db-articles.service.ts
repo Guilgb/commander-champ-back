@@ -71,7 +71,8 @@ export class DBArticleService {
       if (!topics) {
         throw new Error(`Topic with id ${input.topic_id} not found`);
       }
-
+      console.log(user)
+      console.log(topics)
       await this.dbArticleRepository.update(
         { id: input.id },
         {

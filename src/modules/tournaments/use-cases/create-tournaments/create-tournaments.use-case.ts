@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { DBTournamentService } from "src/modules/db/services/db-tournament.service";
 import { CreateTournamentDto } from "./dto/create-tournaments.dto";
+import { on } from "events";
 
 @Injectable()
 export class CreateTournamentUseCase {
@@ -15,7 +16,8 @@ export class CreateTournamentUseCase {
         start_date: new Date(input.start_date),
         end_date: new Date(input.end_date),
         format: input.format,
-        user_id: input.user_id
+        user_id: input.user_id,
+        online: input.online
       });
       return tournament;
     } catch (error) {

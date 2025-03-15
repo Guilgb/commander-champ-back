@@ -19,7 +19,7 @@ export class TournamentEntity {
     @Column({ type: "varchar", length: 50, nullable: false })
     format!: string;
 
-    @Column({ type: "boolean", nullable: false })
+    @Column({ type: "boolean", nullable: true})
     online: boolean;
 
     @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
