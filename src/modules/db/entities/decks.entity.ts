@@ -13,7 +13,7 @@ export class DeckEntity {
   @Column()
   commander!: string;
 
-  @Column()
+  @Column( {type: 'varchar', length: 255, nullable: true})
   partner: string;
   
   @ManyToOne(() => TournamentEntity, (tournament) => tournament.id)
@@ -32,7 +32,7 @@ export class DeckEntity {
   @Column({ default: 0 })
   draws: number;
 
-  @Column("jsonb", { array: true })
+  @Column({type: 'varchar', length: 255, nullable: true})
   color_identity: string;
 
   @CreateDateColumn()

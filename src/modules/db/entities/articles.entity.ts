@@ -7,7 +7,7 @@ export class ArticlesEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'text' })
+  @Column({ type: 'varchar' })
   title: string;
 
   @Column({ type: 'text' })

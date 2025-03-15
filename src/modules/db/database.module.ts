@@ -19,7 +19,10 @@ import { entitiesList } from './entities';
         database: configService.get('DB_NAME'),
         entities: [...entitiesList],
         migrations: [__dirname + 'src/modules/db/migrations/*.ts'],
-        synchronize: false,
+        synchronize: true,
+        ssl: {
+          rejectUnauthorized: false
+        }
       }),
       inject: [ConfigService],
     }),

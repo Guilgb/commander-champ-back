@@ -10,16 +10,16 @@ export class TournamentEntity {
     @Column({ type: "varchar", length: 255, nullable: false })
     name!: string;
 
-    @Column({ type: "date", nullable: false })
+    @Column({ type: "timestamp", nullable: false })
     start_date!: Date;
 
-    @Column({ type: "date", nullable: false })
+    @Column({ type: "timestamp", nullable: false })
     end_date!: Date;
 
-    @Column({ type: "enum", enum: ["c500", "cedh", "casual", "conquest"], nullable: false })
+    @Column({ type: "varchar", length: 50, nullable: false })
     format!: string;
 
-    @Column()
+    @Column({ type: "boolean", nullable: false })
     online: boolean;
 
     @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)

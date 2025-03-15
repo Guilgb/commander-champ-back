@@ -10,7 +10,7 @@ export class TopicsEntity {
   @Column({ length: 255 })
   title: string;
 
-  @Column({ length: 255 })
+  @Column({ type: 'text' })
   content: string;
 
   @ManyToOne(() => UsersEntity, user => user.id, { onDelete: 'CASCADE' })
