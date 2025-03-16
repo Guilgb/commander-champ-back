@@ -17,33 +17,6 @@ plugins:
 
 package:
   excludeDevDependencies: true
-  patterns:
-    - "!tests/**"
-    - "!src/**"
-    - "!node_modules/**"
-    - "!.*"
-    - "!*.md"
-    - "!*.log"
-    - "!*.json"
-    - "!*.yml"
-    - "!*.yaml"
-    - "!*.lock"
-    - "!*.sh"
-    - "!*.txt"
-    - "!*.md"
-    - "!*.html"
-    - "!*.css"
-    - "!*.scss"
-    - "!*.less"
-    - "!*.sass"
-    - "!*.styl"
-    - "!*.ts"
-    - "!*.tsx"
-    - "!*.js"
-    - "!*.jsx"
-    - "!*.map"
-    - "!*.d.ts"
-    - "!*.d.ts.map"
 
 provider:
   name: aws
