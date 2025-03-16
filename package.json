@@ -12,7 +12,7 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "deploy:sls:dev": "npm run build && serverless deploy --stage dev --aws-profile default",
+    "deploy:sls:dev": "npm run build && serverless deploy --stage dev --aws-profile cmd_dev",
     "deploy:sls:hml": "npm run build && serverless deploy --stage dev --aws-profile cmd_hml",
     "deploy:sls:prod": "npm run build && serverless deploy --stage dev --aws-profile cmd_prod",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

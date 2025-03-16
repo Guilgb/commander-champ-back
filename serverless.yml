@@ -3,14 +3,14 @@ frameworkVersion: '4.9.0'
 
 custom:
   params:
-    dbName: ${env:DB_NAME}
-    dbHost: ${env:DB_HOST}
-    dbPassword: ${env:DB_PASS}
-    dbPort: ${env:DB_PORT}
-    jwt_private_key: ${env:JWT_PRIVATE_KEY}
-    jwt_public_key: ${env:JWT_PUBLIC_KEY}
-    user_agent: ${env:USER_AGENT}
-    # deploymentBucket: ${ssm:/${self:provider.stage, 'dev'}/buckets/aic-api-deployment-bucket}
+    stage: ${opt:stage, 'dev'}
+    dbName: ${ssm:/${opt:stage, 'dev'}/backend/db/name}
+    dbHost: ${ssm:/${opt:stage, 'dev'}/backend/db/host}
+    dbPassword: ${ssm:/${opt:stage, 'dev'}/backend/db/password}
+    dbPort: ${ssm:/${opt:stage, 'dev'}/backend/db/port}
+    jwt_private_key: ${ssm:/${opt:stage, 'dev'}/backend/secret/jwt_private_key}
+    jwt_public_key: ${ssm:/${opt:stage, 'dev'}/backend/secret/jwt_public_key}
+    user_agent: ${ssm:/${opt:stage, 'dev'}/backend/secret/user_agent}
 
 plugins:
   - serverless-kms-alias
@@ -53,9 +53,7 @@ provider:
   timeout: 30
   tracing: 
     lambda: true
-  profile: default # Certifique-se de que o perfil AWS está configurado corretamente
-  # deploymentBucket:
-  #   name: ${self:custom.params.deploymentBucket}
+  profile: cmd_dev
   environment:
     NODE_ENV: ${opt:stage, 'dev'}
     IS_CLOUD: true
