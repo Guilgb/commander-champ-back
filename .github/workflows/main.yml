@@ -12,6 +12,7 @@ jobs:
       - run: echo "Executar o docker build"
       - run: echo "Enviar a imagem docker para o docker hub"
   CD:
+    needs: CI
     runs-on: ubunto-latest
     steps:
       - run: echo "Obter codigo"
