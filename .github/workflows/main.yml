@@ -13,7 +13,7 @@ jobs:
       - run: echo "Enviar a imagem docker para o docker hub"
   CD:
     needs: CI
-    runs-on: ubunto-latest
+    runs-on: ubuntu-latest
     steps:
       - run: echo "Obter codigo"
       - run: echo "Configurar o Pub config"
