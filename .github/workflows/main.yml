@@ -1,0 +1,19 @@
+name: CI-CD
+on: 
+  push:
+    branches: ["main"]
+  workflow_dispatch: 
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Obter codigo"
+      - run: echo "Executar o docker build"
+      - run: echo "Enviar a imagem docker para o docker hub"
+  CD:
+    runs-on: ubunto-latest
+    steps:
+      - run: echo "Obter codigo"
+      - run: echo "Configurar o Pub config"
+      - run: echo "Executar o aplly"
