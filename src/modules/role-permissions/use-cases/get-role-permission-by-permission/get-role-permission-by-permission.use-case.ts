@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DBRolePermissionsService } from "src/modules/db/services/db-role-permissions.service";
+import { DBRolePermissionsService } from "modules/db/services/db-role-permissions.service";
 import { GetRolePermissionByPermissionDto } from "./dto/get-role-permission-by-permission.dto";
 
 @Injectable()

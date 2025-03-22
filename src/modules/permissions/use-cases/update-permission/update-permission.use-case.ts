@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { UpdatePermissionDto } from "./dto/update-permission.dto";
-import { DBPermissionsService } from "src/modules/db/services/db-permissions.service";
+import { DBPermissionsService } from "modules/db/services/db-permissions.service";
 
 @Injectable()
 export class UpdatePermissionUseCase {

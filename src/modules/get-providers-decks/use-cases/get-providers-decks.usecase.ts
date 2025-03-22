@@ -1,8 +1,8 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { GetDeckDto } from "./dto/get-providers-decks.dto";
-import { PlatformValidator } from "src/shared/util/platform.validator";
-import { TopDeck, TopdeckggService } from "src/modules/providers/topdeckgg/services/topdeckgg.service";
-import { MoxfieldService } from "src/modules/providers/moxfield/service/moxfield.service";
+import { PlatformValidator } from "shared/util/platform.validator";
+import { TopDeck, TopdeckggService } from "modules/providers/topdeckgg/services/topdeckgg.service";
+import { MoxfieldService } from "modules/providers/moxfield/service/moxfield.service";
 
 @Injectable()
 export class GetProvidersDecksUseCase {

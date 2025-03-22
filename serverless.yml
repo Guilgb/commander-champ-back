@@ -1,5 +1,5 @@
 service: commander-api
-frameworkVersion: '4.9.0'
+frameworkVersion: "4.9.0"
 
 custom:
   params:
@@ -11,12 +11,16 @@ custom:
     jwt_private_key: ${ssm:/${opt:stage, 'dev'}/backend/secret/jwt_private_key}
     jwt_public_key: ${ssm:/${opt:stage, 'dev'}/backend/secret/jwt_public_key}
     user_agent: ${ssm:/${opt:stage, 'dev'}/backend/secret/user_agent}
+    deploymentBucket: ${ssm:/${opt:stage, 'dev'}/buckets/cmd-deployment-bucket}
 
 plugins:
   - serverless-kms-alias
 
 package:
   excludeDevDependencies: true
+  exclude:
+    - node_modules/**
+    - venv/**
 
 provider:
   name: aws
@@ -24,8 +28,10 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: us-east-1
   timeout: 30
-  tracing: 
+  tracing:
     lambda: true
+  deploymentBucket:
+    name: ${self:custom.params.deploymentBucket}
   profile: cmd_dev
   environment:
     NODE_ENV: ${opt:stage, 'dev'}

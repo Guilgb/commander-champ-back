@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DBPermissionsService } from "src/modules/db/services/db-permissions.service";
+import { DBPermissionsService } from "modules/db/services/db-permissions.service";
 import { GetPermissionByIdDto } from "./dto/get-permission-by-id.dto";
 
 @Injectable()

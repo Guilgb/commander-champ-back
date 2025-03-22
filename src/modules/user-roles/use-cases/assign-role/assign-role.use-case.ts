@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DBUserRolesService } from "src/modules/db/services/db-user-roles.service";
+import { DBUserRolesService } from "modules/db/services/db-user-roles.service";
 import { AssignRoleDto } from "./dto/assign-role.dto";
 
 @Injectable()

@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeckEntity } from "../entities/decks.entity";
-import { DeckDto } from "src/modules/get-providers-decks/use-cases/dto/deck.dto";
+import { DeckDto } from "modules/get-providers-decks/use-cases/dto/deck.dto";
 import { TournamentEntity } from "../entities/tournaments.entity";
-import { DeckMetricsDto } from "src/modules/decks/use-cases/decks-metrics/dto/deck-metrics.dto";
+import { DeckMetricsDto } from "modules/decks/use-cases/decks-metrics/dto/deck-metrics.dto";
 
 
 @Injectable()

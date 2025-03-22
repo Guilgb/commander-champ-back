@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { DBTournamentService } from "src/modules/db/services/db-tournament.service";
+import { DBTournamentService } from "modules/db/services/db-tournament.service";
 import { CreateTournamentDto } from "./dto/create-tournaments.dto";
-import { on } from "events";
 
 @Injectable()
 export class CreateTournamentUseCase {

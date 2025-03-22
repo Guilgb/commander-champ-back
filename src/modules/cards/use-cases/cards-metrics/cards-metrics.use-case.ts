@@ -1,5 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
-import { DBCardsService } from "src/modules/db/services/db-cards.service";
+import { DBCardsService } from "modules/db/services/db-cards.service";
 
 @Injectable()
 export class CardsMetricsUseCase {

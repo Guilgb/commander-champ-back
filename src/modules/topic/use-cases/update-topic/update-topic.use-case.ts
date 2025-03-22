@@ -1,6 +1,6 @@
-import { TopicsEntity } from 'src/modules/db/entities/topics.entity';
+import { TopicsEntity } from 'modules/db/entities/topics.entity';
 import { UpdateTopicDto } from './dto/update-topic.dto';
-import { DBTopicsService } from 'src/modules/db/services/db-topics.service';
+import { DBTopicsService } from 'modules/db/services/db-topics.service';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

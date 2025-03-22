@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TournamentEntity } from "../entities/tournaments.entity";
-import { TournamentDto } from "src/modules/get-providers-decks/use-cases/dto/tournaments.dto";
+import { TournamentDto } from "modules/get-providers-decks/use-cases/dto/tournaments.dto";
 
 @Injectable()
 export class DBTournamentService {

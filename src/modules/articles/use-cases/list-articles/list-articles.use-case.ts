@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DBArticleService } from "src/modules/db/services/db-articles.service";
+import { DBArticleService } from "modules/db/services/db-articles.service";
 
 @Injectable()
 export class ListArticlesUseCase {

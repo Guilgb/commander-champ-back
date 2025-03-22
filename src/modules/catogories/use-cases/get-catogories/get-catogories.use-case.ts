@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { DbCategoriesService } from "src/modules/db/services/db-categories.service";
+import { DbCategoriesService } from "modules/db/services/db-categories.service";
 
 @Injectable()
 export class GetCatogoriesUseCase {

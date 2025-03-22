@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { TopicsEntity } from 'src/modules/db/entities/topics.entity';
+import { TopicsEntity } from 'modules/db/entities/topics.entity';
 import { CreateTopicDto } from './dto/create-topic.dto';
-import { DBTopicsService } from 'src/modules/db/services/db-topics.service';
+import { DBTopicsService } from 'modules/db/services/db-topics.service';
 
 @Injectable()
 export class CreateTopicUseCase {
