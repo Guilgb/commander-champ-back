@@ -2,10 +2,14 @@ FROM node:latest
 
 WORKDIR /usr/src/api
 
-COPY . .
-COPY ./.env.prod ./.env
+# Copiar apenas os arquivos necessários para instalar as dependências
+COPY package*.json ./
 
-RUN npm install --quiet --no-optional --no-fund --lolevel=error
+RUN npm install --quiet --no-optional --no-fund --loglevel=error
+
+COPY . .
+
+COPY ./.env.prod ./.env
 
 RUN npm run build
 

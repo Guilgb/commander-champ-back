@@ -2,6 +2,13 @@ service: commander-api
 frameworkVersion: "4.9.0"
 
 custom:
+  # webpack:
+  #     webpackConfig: './webpack.config.js'
+  #     includeModules: true
+  serverless-layers:
+    dependenciesPath: ./package.json
+    compatibleRuntimes:
+      - nodejs18.x
   params:
     stage: ${opt:stage, 'dev'}
     dbName: ${ssm:/${opt:stage, 'dev'}/backend/db/name}
@@ -15,12 +22,18 @@ custom:
 
 plugins:
   - serverless-kms-alias
+  - serverless-layers
 
 package:
   excludeDevDependencies: true
-  exclude:
-    - node_modules/**
-    - venv/**
+  patterns:
+    - "!tests/**"
+    - "!node_modules/.bin/**" # Exclui binários desnecessários
+    - "!dockerfile.yml"
+    - "!.env"
+    - "!.env.exemple"
+    - "node_modules/**" # Inclui todos os módulos
+    - "build/**" # Inclui o diretório de build
 
 provider:
   name: aws
@@ -57,5 +70,5 @@ provider:
 
 functions:
   app:
-    handler: dist/lambda.handler
+    handler: build/src/lambda.handler
     description: "Commander API"
