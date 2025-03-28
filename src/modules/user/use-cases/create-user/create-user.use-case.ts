@@ -22,6 +22,7 @@ export class CreateUserUseCase {
         email: input.email,
         password: hashedPassword,
         name: input.name,
+        avatar: input.avatar,
         created_at: new Date(),
         updated_at: new Date(),
       });

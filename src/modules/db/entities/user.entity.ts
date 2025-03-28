@@ -10,6 +10,9 @@ export class UsersEntity {
   @Column()
   name: string;
 
+  @Column( {type: 'varchar', nullable: true})
+  avatar: string;
+
   @Column()
   password: string;
   
