@@ -16,6 +16,7 @@ export class DBUsersService {
       name: input.name,
       email: input.email,
       password: input.password,
+      avatar: input.avatar,
       created_at: new Date(),
       updated_at: new Date(),
     });

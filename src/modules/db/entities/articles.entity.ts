@@ -26,4 +26,25 @@ export class ArticlesEntity {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updated_at: Date;
+
+  @Column({ type: 'varchar' })
+  excerpt: string;
+
+  @Column({ type: 'varchar' })
+  read_time: string;
+
+  @Column({ type: 'int' })
+  views: number;
+
+  @Column({ type: 'int' })
+  comments: number;
+
+  @Column({ type: 'bool' })
+  featured: boolean;
+  
+  @Column({ type: 'varchar' })
+  cover_image: string;
+
+  @Column({ type: 'varchar' })
+  tags: string;
 }

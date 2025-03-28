@@ -17,9 +17,34 @@ export class DBArticleService {
     private readonly dbTopicRepository: Repository<TopicsEntity>,
   ) { }
 
-  async findAll(): Promise<ArticlesEntity[]> {
+  async findAll(): Promise<any[]> {
     try {
-      return await this.dbArticleRepository.find();
+      // const articles = await this.dbArticleRepository.find();
+      const articles = await this.dbArticleRepository
+        .createQueryBuilder('articles')
+        .leftJoinAndSelect('articles.user_id', 'user')
+        .leftJoinAndSelect('articles.topic_id', 'topic')
+        .getMany();
+
+      return articles.map(article => ({
+        id: article.id,
+        title: article.title,
+        excerpt: article.excerpt,
+        content: article.content,
+        date: article.created_at.toLocaleDateString('pt-BR'),
+        readTime: article.read_time,
+        views: article.views,
+        comments: article.comments,
+        featured: article.featured,
+        coverImage: article.cover_image,
+        author: {
+          name: article.user_id?.name || 'Unknown Author',
+        },
+        tags: article.tags
+          .replace(/[\[\]"]+/g, '')
+          .split(',')
+          .map(tag => tag.trim()),
+      }));
     } catch (error) {
       throw new Error(`Error finding all articles: ${error.message}`);
     }
@@ -44,12 +69,20 @@ export class DBArticleService {
       if (!topics) {
         throw new Error(`Topic with id ${input.topic_id} not found`);
       }
-
+      // todo upar arquivo da imagem de fundo do artigo no s3
+      const formattedTags = `[ ${input.tags} ]`;
       const article = await this.dbArticleRepository.create({
         title: input.title,
         content: input.content,
         user_id: user,
         topic_id: topics,
+        comments: input.comments,
+        views: input.views,
+        featured: input.featured,
+        cover_image: input.cover_image,
+        tags: formattedTags,
+        excerpt: input.excerpt,
+        read_time: input.read_time,
         created_at: new Date(),
         updated_at: new Date(),
       });
@@ -71,14 +104,20 @@ export class DBArticleService {
       if (!topics) {
         throw new Error(`Topic with id ${input.topic_id} not found`);
       }
-      console.log(user)
-      console.log(topics)
+      const formattedTags = `[ ${input.tags} ]`;
       await this.dbArticleRepository.update(
         { id: input.id },
         {
           title: input.title,
           content: input.content,
           user_id: user,
+          comments: input.comments,
+          views: input.views,
+          featured: input.featured,
+          cover_image: input.cover_image,
+          tags: formattedTags,
+          excerpt: input.excerpt,
+          read_time: input.read_time,
           topic_id: topics,
           updated_at: new Date(),
         }

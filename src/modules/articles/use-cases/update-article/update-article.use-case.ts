@@ -15,6 +15,14 @@ export class UpdateArticleUsecase {
         content: input.content,
         user_id: input.user_id,
         topic_id: input.topic_id,
+        excerpt: input.excerpt,
+        read_time: input.read_time,
+        comments: input.comments,
+        views: input.views,
+        featured: input.featured,
+        cover_image: input.cover_image,
+        tags: input.tags,
+        created_at: input.created_at,
         updated_at: new Date(),
       }
     );
