@@ -17,7 +17,7 @@ export class CreateUserUseCase {
       if (email) {
         throw new Error("Email already exists");
       }
-
+      // todo upar avatar no s3 e salvar o link no banco
       const user = await this.usersService.createUser({
         email: input.email,
         password: hashedPassword,

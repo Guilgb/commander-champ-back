@@ -5,8 +5,8 @@ export interface CreateArticleDto {
   topic_id: number;
   excerpt: string;
   read_time: string;
-  views: number;
-  comments: number;
+  views?: number;
+  comments?: number;
   featured: boolean;
   cover_image: string;
   tags: string;

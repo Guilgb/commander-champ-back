@@ -10,6 +10,8 @@ import { UpdateUserRoleDto } from "./use-cases/update-user-role/dto/update-user-
 import { GetRolesByUserDto } from "./use-cases/get-roles-by-user/dto/get-roles-by-user.dto";
 import { GetUsersByRoleDto } from "./use-cases/get-users-by-role/dto/get-users-by-role.dto";
 import { GetUsersByRoleUseCase } from "./use-cases/get-users-by-role/get-users-by-role.use-case";
+import { GetUserAuthenticationDto } from "./use-cases/get-authentication-by-email/dto/get-authentication-by-email.dto";
+import { GetUserAuthenticationByEmailUseCase } from "./use-cases/get-authentication-by-email/get-authentication-by-email.use-case";
 
 @Controller("/user-roles")
 export class UserRoleController {
@@ -18,7 +20,8 @@ export class UserRoleController {
     private readonly removeRoleFromUserUseCase: RemoveRoleFromUserUseCase,
     private readonly getRolesByUserUseCase: GetRolesByUserUseCase,
     private readonly getRolesByRoleUseCase: GetUsersByRoleUseCase,
-    private readonly updateUserRoleUseCase: UpdateUserRoleUseCase
+    private readonly updateUserRoleUseCase: UpdateUserRoleUseCase,
+    private readonly getUserAuthenticationUseCase: GetUserAuthenticationByEmailUseCase,
   ) { }
 
   @Post("/assign")
@@ -54,5 +57,12 @@ export class UserRoleController {
     @Body() input: UpdateUserRoleDto
   ) {
     return await this.updateUserRoleUseCase.execute(input);
+  }
+
+  @Post("/authentication")
+  async getUserAuthentication(
+    @Body() input: GetUserAuthenticationDto
+  ) {
+    return await this.getUserAuthenticationUseCase.execute(input.email);
   }
 }

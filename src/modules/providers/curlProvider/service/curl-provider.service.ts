@@ -16,7 +16,6 @@ export class CurlProviderService {
       const data = JSON.parse(response);
       return data;
     } catch (error) {
-      console.log(url)
       throw new Error(`Failed to get: ${error.message}`);
     }
   }

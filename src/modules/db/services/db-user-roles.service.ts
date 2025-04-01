@@ -91,4 +91,25 @@ export class DBUserRolesService {
       throw new Error(`Error updating role from user: ${error.message}`);
     }
   }
+
+  async getAuthenticationByEmail(email: string) {
+    try {
+      const userquery = await this.userRepository.createQueryBuilder('u')
+        .select(['u.id AS id', 'u.email AS email', 'u.name AS name', 'r.name AS role'])
+        .innerJoin('user_roles', 'ur', 'u.id = ur.user_id')
+        .innerJoin('roles', 'r', 'ur.role_id = r.id')
+        .where('(u.email = :email)', { email })
+        .getRawOne();
+
+      return {
+        id: userquery.id,
+        name: userquery.name,
+        email: userquery.email,
+        role: userquery.role
+      };
+
+    } catch (error) {
+      throw new Error(`Error getting authentication: ${error.message}`);
+    }
+  }
 }

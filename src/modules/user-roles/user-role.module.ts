@@ -13,6 +13,7 @@ import { RemoveRoleFromUserUseCase } from './use-cases/remove-role-from-user/rem
 import { UpdateUserRoleUseCase } from './use-cases/update-user-role/update-user-role.use-case';
 import { AssignRoleToUserUseCase } from './use-cases/assign-role/assign-role.use-case';
 import { GetUsersByRoleUseCase } from './use-cases/get-users-by-role/get-users-by-role.use-case';
+import { GetUserAuthenticationByEmailUseCase } from './use-cases/get-authentication-by-email/get-authentication-by-email.use-case';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { GetUsersByRoleUseCase } from './use-cases/get-users-by-role/get-users-b
     GetRolesByUserUseCase,
     GetUsersByRoleUseCase,
     UpdateUserRoleUseCase,
+    GetUserAuthenticationByEmailUseCase,
   ],
 })
 

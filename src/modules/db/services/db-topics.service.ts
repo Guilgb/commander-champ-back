@@ -30,7 +30,6 @@ export class DBTopicsService {
       if (!category) {
         throw new InternalServerErrorException('Category not found');
       }
-      console.log('input', input);
       const topic = this.topicsRepository.create({
         title: input.title,
         content: input.content,
