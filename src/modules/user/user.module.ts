@@ -6,17 +6,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersEntity } from '../db/entities/user.entity';
 import { CreateUserUseCase } from './use-cases/create-user/create-user.use-case';
 import { DBUsersService } from '../db/services/db-users.service';
+import { RolesEntity } from '@modules/db/entities/roles.entity';
+import { UserRolesEntity } from '@modules/db/entities/user-roles.entity';
+import { DBUserRolesService } from '@modules/db/services/db-user-roles.service';
 
 @Module({
   imports: [
     ConfigModule,
     HttpModule.register({}),
-    TypeOrmModule.forFeature([UsersEntity])
+    TypeOrmModule.forFeature([UsersEntity, RolesEntity, UserRolesEntity])
   ],
   controllers: [UsersController],
   providers: [
     CreateUserUseCase,
-    DBUsersService
+    DBUsersService,
+    DBUserRolesService,
   ],
 })
 export class UsersModule { }
