@@ -12,8 +12,8 @@ export class CreateUserUseCase {
   async execute(input: UsersDto) {
     try {
       const hashedPassword = await hash(input.password, 10);
-
       const email = await this.usersService.getUserByEmail(input.email);
+
       if (email) {
         throw new Error("Email already exists");
       }

@@ -9,6 +9,7 @@ import { DBUsersService } from '../db/services/db-users.service';
 import { RolesEntity } from '@modules/db/entities/roles.entity';
 import { UserRolesEntity } from '@modules/db/entities/user-roles.entity';
 import { DBUserRolesService } from '@modules/db/services/db-user-roles.service';
+import { ListUsersUseCase } from './use-cases/list-users/list-users.use-case';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DBUserRolesService } from '@modules/db/services/db-user-roles.service';
   controllers: [UsersController],
   providers: [
     CreateUserUseCase,
+    ListUsersUseCase,
     DBUsersService,
     DBUserRolesService,
   ],

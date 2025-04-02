@@ -4,6 +4,7 @@ import { UsersEntity } from "../entities/user.entity";
 import { Repository } from "typeorm";
 import { UsersDto } from "modules/user/use-cases/create-user/dto/user.dto";
 import { DBUserRolesService } from "./db-user-roles.service";
+import { ListUsersDto } from "@modules/user/use-cases/list-users/dto/list-users.dto";
 
 
 export interface UserResponseDto {
@@ -53,6 +54,19 @@ export class DBUsersService {
 
   async getUserByEmail(email: string): Promise<any> {
     return this.userRepository.findOne({ where: { email } });
+  }
+
+  async listUsers(): Promise<ListUsersDto[]> {
+    const users = await this.userRepository.find();
+    if (!users) {
+      throw new Error("No users found");
+    }
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      created_at: user.created_at.toLocaleDateString('pt-BR'),
+    }));
   }
 
   async updateUserByEmail(email: string, input: UsersDto): Promise<any> {
