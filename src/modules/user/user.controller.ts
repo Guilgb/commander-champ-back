@@ -17,7 +17,7 @@ export class UsersController {
     return await this.createUserUseCase.execute(body);
   }
 
-  @Get('/')
+  @Get('/list')
   async listUsers() {
     return await this.listUsersUseCase.execute();
   }

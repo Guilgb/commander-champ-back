@@ -112,4 +112,18 @@ export class DBUserRolesService {
       throw new Error(`Error getting authentication: ${error.message}`);
     }
   }
+
+  async listUsers() {
+    try {
+      const userquery = await this.userRepository.createQueryBuilder('u')
+        .select(['u.id AS id', 'u.name AS name', 'u.email AS email', 'r.name AS role', 'u.created_at AS created_at'])
+        .innerJoin('user_roles', 'ur', 'u.id = ur.user_id')
+        .innerJoin('roles', 'r', 'ur.role_id = r.id')
+        .getRawMany();
+
+      return userquery
+    } catch (error) {
+      throw new Error(`Error getting authentication: ${error.message}`);
+    }
+  }
 }
