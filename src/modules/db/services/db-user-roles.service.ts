@@ -62,7 +62,7 @@ export class DBUserRolesService {
   }
 
   async updateRoleFromUser(input: IUpdateUserRolesInput) {
-    const { user_id, role_id, newRole_id } = input;
+    const { user_id, role_name, new_role_name } = input;
     try {
 
       const user = await this.userRepository.findOne({ where: { id: user_id } });
@@ -71,17 +71,23 @@ export class DBUserRolesService {
         throw new Error('User not found');
       }
 
-      const role = await this.rolesRepository.findOne({ where: { id: newRole_id } });
+      const role = await this.rolesRepository.findOneBy({ name: role_name });
 
       if (!role) {
         throw new Error('Role not found');
       }
 
-      await this.userRolesRepository.delete({ user_id, role_id });
+      const newRole = await this.rolesRepository.findOneBy({ name: new_role_name });
+
+      if (!newRole) {
+        throw new Error('New role not found');
+      }
+
+      const delete_user_role = await this.userRolesRepository.delete({ user_id, role_id: role.id });
 
       const userRole = await this.userRolesRepository.create({
         user_id: user.id,
-        role_id: role.id,
+        role_id: newRole.id,
         created_at: new Date(),
         updated_at: new Date()
       });
