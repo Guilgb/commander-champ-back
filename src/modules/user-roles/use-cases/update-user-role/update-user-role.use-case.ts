@@ -9,6 +9,13 @@ export class UpdateUserRoleUseCase {
   ) { }
 
   async execute(input: UpdateUserRoleDto) {
-    return await this.dbUserRolesService.updateRoleFromUser(input);
+    const { user_id, role_name, new_role_name } = input.data;
+    return await this.dbUserRolesService.updateRoleFromUser(
+      {
+        user_id,
+        role_name,
+        new_role_name
+      }
+    );
   }
 }

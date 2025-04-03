@@ -36,7 +36,7 @@ export class UserRoleController {
     return await this.removeRoleFromUserUseCase.execute(input);
   }
 
-  @Get("/user")
+  @Post("/user")
   async getRolesByUser(
     @Body() input: GetRolesByUserDto
   ) {

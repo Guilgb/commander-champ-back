@@ -38,7 +38,14 @@ export class DBUserRolesService {
 
   async getRolesByUserId(user_id: number) {
     try {
-      return await this.userRolesRepository.find({ where: { user_id: user_id } });
+      const user_role = await this.userRolesRepository.findOne({ where: { user_id: user_id } });
+      const role = await this.rolesRepository.findOne({ where: { id: user_role.role_id } });
+      return {
+        user_id: user_role.user_id,
+        role_name: role.name,
+        created_at: user_role.created_at,
+        updated_at: user_role.updated_at
+      };
     } catch (error) {
       throw new Error(`Error getting roles by user ID: ${error.message}`);
     }
@@ -62,39 +69,39 @@ export class DBUserRolesService {
   }
 
   async updateRoleFromUser(input: IUpdateUserRolesInput) {
-    const { user_id, role_name, new_role_name } = input;
     try {
+      const { user_id, role_name, new_role_name } = input;
 
       const user = await this.userRepository.findOne({ where: { id: user_id } });
-
       if (!user) {
         throw new Error('User not found');
       }
 
-      const role = await this.rolesRepository.findOneBy({ name: role_name });
-
+      const role = await this.rolesRepository.findOne({ where: { name: role_name } });
       if (!role) {
         throw new Error('Role not found');
       }
-
-      const newRole = await this.rolesRepository.findOneBy({ name: new_role_name });
-
+      
+      const newRole = await this.rolesRepository.findOne({ where: { name: new_role_name } });
+      
       if (!newRole) {
-        throw new Error('New role not found');
+        throw new Error('Role not found');
       }
+      
+      // Remove any existing user roles for the user
+      await this.userRolesRepository.delete({ user_id });
 
-      const delete_user_role = await this.userRolesRepository.delete({ user_id, role_id: role.id });
-
-      const userRole = await this.userRolesRepository.create({
-        user_id: user.id,
+      // Create and save the new user role
+      const newUserRole = this.userRolesRepository.create({
+        user_id,
         role_id: newRole.id,
         created_at: new Date(),
-        updated_at: new Date()
+        updated_at: new Date(),
       });
 
-      return await this.userRolesRepository.save(userRole);
+      return await this.userRolesRepository.save(newUserRole);
     } catch (error) {
-      throw new Error(`Error updating role from user: ${error.message}`);
+      throw new Error(`Error creating new user role: ${error.message}`);
     }
   }
 
