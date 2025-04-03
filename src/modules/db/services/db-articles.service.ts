@@ -27,7 +27,7 @@ export class DBArticleService {
         .getMany();
 
       return articles.map(article => ({
-        id: article.id,
+        id: article.id.toString(),
         title: article.title,
         excerpt: article.excerpt,
         content: article.content,
