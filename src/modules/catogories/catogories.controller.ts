@@ -1,11 +1,12 @@
 import { Body, Controller, Delete, Get, Post, Put } from "@nestjs/common";
-import { CreateCatogoryUseCase } from "./create-catogory/create-catogory.use-case";
-import { UpdateCatogoryUseCase } from "./update-catogory/update-catogory.use-case";
-import { DeleteCatogoryUseCase } from "./delete-catogory/delete-catogory.use-case";
-import { GetCatogoriesUseCase } from "./get-catogories/get-catogories.use-case";
-import { GetCatogoryByIdUseCase } from "./get-catogory-by-id/get-catogory-by-id.use-case";
-import { CreateCategoryDto } from "./create-catogory/dto/create-catogory.dto";
-import { UpdateCategoriesDto } from "./update-catogory/dto/update-catogory.dto";
+import { CreateCatogoryUseCase } from "./use-cases/create-catogory/create-catogory.use-case";
+import { CreateCategoryDto } from "./use-cases/create-catogory/dto/create-catogory.dto";
+import { DeleteCatogoryUseCase } from "./use-cases/delete-catogory/delete-catogory.use-case";
+import { GetCatogoriesUseCase } from "./use-cases/get-catogories/get-catogories.use-case";
+import { GetCatogoryByIdUseCase } from "./use-cases/get-catogory-by-id/get-catogory-by-id.use-case";
+import { UpdateCategoriesDto } from "./use-cases/update-catogory/dto/update-catogory.dto";
+import { UpdateCatogoryUseCase } from "./use-cases/update-catogory/update-catogory.use-case";
+
 
 @Controller('categories')
 export class CategoriesController {

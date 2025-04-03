@@ -11,7 +11,7 @@ import { RolesModule } from './modules/roles/roles.module';
 import { UserRoleModule } from './modules/user-roles/user-role.module';
 import { PermissionModule } from './modules/permissions/permissions.module';
 import { RolePermissionsModule } from './modules/role-permissions/role-permissions.module';
-import { CatogoriesModule } from './modules/catogories/use-cases/catogories.module';
+import { CatogoriesModule } from './modules/catogories/catogories.module';
 import { TopicModule } from './modules/topic/topic.module';
 import { ArticlesModule } from './modules/articles/articles.module';
 
