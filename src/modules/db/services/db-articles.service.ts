@@ -144,7 +144,7 @@ export class DBArticleService {
         .leftJoinAndSelect('articles.topic_id', 'topic')
         .getMany();
       return articles.map(article => ({
-        id: article.id,
+        id: article.id.toString(),
         title: article.title,
         author: article.user_id?.name,
         date: article.created_at.toLocaleDateString('pt-BR'),
