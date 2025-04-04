@@ -5,6 +5,7 @@ import { ArticlesEntity } from '../entities/articles.entity';
 import { IArticleCreate, IArticleUpdate } from '../types/IArticle';
 import { UsersEntity } from '../entities/user.entity';
 import { TopicsEntity } from '../entities/topics.entity';
+import { ListArticlesUsersResponse } from '@modules/articles/use-cases/list-articles-users/dto/list-articles-users.dto';
 
 @Injectable()
 export class DBArticleService {
@@ -19,7 +20,6 @@ export class DBArticleService {
 
   async findAll(): Promise<any[]> {
     try {
-      // const articles = await this.dbArticleRepository.find();
       const articles = await this.dbArticleRepository
         .createQueryBuilder('articles')
         .leftJoinAndSelect('articles.user_id', 'user')
@@ -133,6 +133,25 @@ export class DBArticleService {
       await this.dbArticleRepository.delete(id);
     } catch (error) {
       throw new Error(`Error removing article with id ${id}: ${error.message}`);
+    }
+  }
+
+  async listArticlesAndUsers(): Promise<ListArticlesUsersResponse[]> {
+    try {
+      const articles = await this.dbArticleRepository
+        .createQueryBuilder('articles')
+        .leftJoinAndSelect('articles.user_id', 'user')
+        .leftJoinAndSelect('articles.topic_id', 'topic')
+        .getMany();
+      return articles.map(article => ({
+        id: article.id,
+        title: article.title,
+        author: article.user_id?.name,
+        date: article.created_at.toLocaleDateString('pt-BR'),
+        status: 'published',
+      }));
+    } catch (error) {
+      throw new Error(`Error listing articles and users: ${error.message}`);
     }
   }
 }

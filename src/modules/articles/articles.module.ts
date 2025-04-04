@@ -13,6 +13,7 @@ import { ListArticlesUseCase } from './use-cases/list-articles/list-articles.use
 import { UpdateArticleUsecase } from './use-cases/update-article/update-article.use-case';
 import { TopicsEntity } from '../db/entities/topics.entity';
 import { DBArticleService } from '../db/services/db-articles.service';
+import { ListArticlesUsersUseCase } from './use-cases/list-articles-users/list-articles-users.use.case';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { DBArticleService } from '../db/services/db-articles.service';
     UpdateArticleUsecase,
     DeleteArticleUseCase,
     GetArticleByIdUseCase,
+    ListArticlesUsersUseCase,
     ListArticlesUseCase,
   ],
 })

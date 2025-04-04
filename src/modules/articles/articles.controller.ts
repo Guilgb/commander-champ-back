@@ -8,6 +8,7 @@ import { DeleteArticleDto } from "./use-cases/delete-article/dto/delete-article.
 import { GetArticleByIdDto } from "./use-cases/get-article-by-id/dto/get-article-by-id.dto";
 import { UpdateArticleDto } from "./use-cases/update-article/dto/update-article.dto";
 import { UpdateArticleUsecase } from "./use-cases/update-article/update-article.use-case";
+import { ListArticlesUsersUseCase } from "./use-cases/list-articles-users/list-articles-users.use.case";
 
 @Controller("/articles")
 export class ArticlesController {
@@ -17,6 +18,7 @@ export class ArticlesController {
     private readonly deleteArticleUseCase: DeleteArticleUseCase,
     private readonly getArticleUseCase: GetArticleByIdUseCase,
     private readonly ListArticlesUseCase: ListArticlesUseCase,
+    private readonly listArticlesUsersUseCase: ListArticlesUsersUseCase,
   ) { }
 
   @Post()
@@ -52,4 +54,8 @@ export class ArticlesController {
     return await this.ListArticlesUseCase.execute();
   }
 
+  @Get('/users')
+  async listArticlesUsers() {
+    return await this.listArticlesUsersUseCase.execute();
+  }
 }
