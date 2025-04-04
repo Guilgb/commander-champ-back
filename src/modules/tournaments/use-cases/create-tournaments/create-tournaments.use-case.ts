@@ -16,7 +16,8 @@ export class CreateTournamentUseCase {
         end_date: new Date(input.end_date),
         format: input.format,
         user_id: input.user_id,
-        online: input.online
+        online: input.online,
+        tournament_link: input.tournament_link,
       });
       return tournament;
     } catch (error) {

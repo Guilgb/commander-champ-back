@@ -6,4 +6,5 @@ export interface TournamentDto {
   format: string;
   user_id: number;
   online: boolean;
+  tournament_link: string;
 }

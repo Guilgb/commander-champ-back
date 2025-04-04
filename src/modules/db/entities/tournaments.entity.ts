@@ -22,10 +22,12 @@ export class TournamentEntity {
     @Column({ type: "boolean", nullable: true})
     online: boolean;
 
+    @Column({type: "varchar", nullable: true, unique: true})
+    tournament_link: string;
+
     @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
     decks: DeckEntity[];
 
     @ManyToOne(() => UsersEntity, (user) => user.id)
     user_id: UsersEntity;
-
 }

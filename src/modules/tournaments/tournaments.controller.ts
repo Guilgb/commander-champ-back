@@ -5,6 +5,8 @@ import { ListTournamentsUseCase } from "./use-cases/list-tournaments/list-tourna
 import { UpdateTournamentUseCase } from "./use-cases/update-tournaments/update-tournaments.use-case";
 import { UpdateTournamentDto } from "./use-cases/update-tournaments/dto/update-tournaments.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { LoadDecksUseCase } from "./use-cases/load-decks/load-decks.use-case";
+import { LoadDecksinput } from "./use-cases/load-decks/dto/load-decks.dto";
 
 @Controller("/tournaments")
 // @UseGuards(AuthGuard('jwt'))
@@ -13,12 +15,14 @@ export class TournamentsController {
     private readonly createTournamentUseCase: CreateTournamentUseCase,
     private readonly listTournamentUseCase: ListTournamentsUseCase,
     private readonly updateTournamentsUseCase: UpdateTournamentUseCase,
+    private readonly loadDecksUseCase: LoadDecksUseCase,
   ) { }
 
-  @Post("/create")
+  @Post("/")
   async createTournament(
     @Body() body: CreateTournamentDto
   ) {
+    console.log(body);
     return await this.createTournamentUseCase.execute(body);
   }
 
@@ -33,5 +37,12 @@ export class TournamentsController {
     @Body() body: UpdateTournamentDto
   ) {
     return await this.updateTournamentsUseCase.execute(body);
+  }
+
+  @Post("/load-decks")
+  async loadDecks(
+    @Body() input: LoadDecksinput
+  ) {
+    return await this.loadDecksUseCase.execute(input);
   }
 }
