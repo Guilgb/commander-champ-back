@@ -10,6 +10,8 @@ import { ListTournamentsUseCase } from './use-cases/list-tournaments/list-tourna
 import { UpdateTournamentUseCase } from './use-cases/update-tournaments/update-tournaments.use-case';
 import { DeckEntity } from '@modules/db/entities/decks.entity';
 import { LoadDecksUseCase } from './use-cases/load-decks/load-decks.use-case';
+import { UpdateAllDecksUseCase } from './use-cases/update-all-decks/update-all-decks.use-case';
+import { DBDecksService } from '@modules/db/services/db-decks.service';
 
 @Module({
   imports: [
@@ -22,7 +24,9 @@ import { LoadDecksUseCase } from './use-cases/load-decks/load-decks.use-case';
     CreateTournamentUseCase,
     ListTournamentsUseCase,
     UpdateTournamentUseCase,
+    UpdateAllDecksUseCase,
     LoadDecksUseCase,
+    DBDecksService,
     DBTournamentService,
   ],
 })

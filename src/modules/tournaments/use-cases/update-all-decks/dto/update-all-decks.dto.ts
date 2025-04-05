@@ -1,4 +1,13 @@
-export interface UpdateAllDecksDto {
+export interface UpdateAllDecksInput {
+  format: string;
+  id: string;
+  location: string;
+  name: string;
+  players: Decks[];
+  start_date: string;
+}
+
+interface Decks {
   id: number;
   username: string;
   decklist: string;

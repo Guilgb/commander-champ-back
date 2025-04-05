@@ -63,24 +63,22 @@ export class DBDecksService {
     }
   }
 
-  async updateAllDecks(input: DeckDto[]): Promise<any> {
+  async updateAllDecks(input: DeckDto[], tournament_id: number): Promise<any> {
     try {
-
       input.map(async (deck) => {
         const deckId = await this.deckRepository.findOne({
-          where: { id: 65 },
+          where: { id: deck.id },
           relations: ["tournament_id"],
         });
-
+        
         if (!deckId) {
           throw new Error("Deck not found");
         }
-        console.log(deck);
-        return
+
         const response = await this.deckRepository.update({ id: deck.id }, {
           username: deck.username,
           decklist: deck.decklist,
-          tournament_id: { id: deck.tournament_id } as TournamentEntity,
+          tournament_id: { id: tournament_id } as TournamentEntity,
           wins: deck.wins,
           losses: deck.losses,
           draws: deck.draws,
@@ -91,9 +89,6 @@ export class DBDecksService {
         });
         return response;
       })
-      
-      
-      return
     } catch (error) {
       console.log(error);
       throw new Error(error);

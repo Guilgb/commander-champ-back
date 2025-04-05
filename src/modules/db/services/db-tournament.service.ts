@@ -110,6 +110,7 @@ export class DBTournamentService {
       id: deck.id,
       name: deck.username,
       commander: deck.commander,
+      partner: deck.partner ? deck.partner : null,
       colors: Array.isArray(deck.color_identity)
         ? deck.color_identity.filter((color) => typeof color === 'string').join('')
         : deck.color_identity.replace(/[^a-zA-Z]/g, ''),
