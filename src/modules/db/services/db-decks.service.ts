@@ -70,7 +70,7 @@ export class DBDecksService {
           where: { id: deck.id },
           relations: ["tournament_id"],
         });
-        
+
         if (!deckId) {
           throw new Error("Deck not found");
         }
@@ -338,6 +338,86 @@ export class DBDecksService {
       total_matches,
       winrate: this.calWinrate(results.map(deck => deck.wins).reduce((a, b) => a + b, 0), results.map(deck => deck.losses).reduce((a, b) => a + b, 0), results.map(deck => deck.draws).reduce((a, b) => a + b, 0)),
     }
+  }
+
+  async getDeckStatistics(): Promise<any> {
+    const queryBuilder = this.deckRepository.createQueryBuilder('d')
+      .select([
+        'd.id AS id',
+        'd.commander AS name',
+        'COUNT(DISTINCT d.tournament_id) AS tournaments',
+        'SUM(CASE WHEN d.winner = true THEN 1 ELSE 0 END) AS champion',
+        'd.color_identity AS colors',
+      ])
+      .groupBy('d.id, d.commander, d.color_identity')
+      .orderBy('tournaments', 'DESC');
+
+    const result = await queryBuilder.getRawMany();
+
+    return result.map(deck => ({
+      id: deck.id,
+      name: deck.name,
+      tournaments: Number(deck.tournaments),
+      top8: Number(deck.top8),
+      top4: Number(deck.top4),
+      champion: Number(deck.champion),
+      colors: deck.colors,
+    }));
+  }
+
+
+  async getTop8DecksByTournament(tournament_id: number) {
+    const query = `
+      SELECT *
+      FROM (
+          SELECT 
+              p.*,
+              (p.wins * 3 + p.draws * 1 + p.losses * 0) AS points,
+              RANK() OVER (PARTITION BY p.tournament_id ORDER BY (p.wins * 3 + p.draws * 1) DESC) AS rank
+          FROM decks p
+          WHERE p.tournament_id = $1
+      ) ranked
+      WHERE rank <= 8
+      ORDER BY rank;
+    `;
+
+    return await this.deckRepository.query(query, [tournament_id]);
+  }
+
+  async getTop4DecksByTournament(tournament_id: number) {
+    const query = `
+      SELECT *
+      FROM (
+          SELECT 
+              p.*,
+              (p.wins * 3 + p.draws * 1 + p.losses * 0) AS points,
+              RANK() OVER (PARTITION BY p.tournament_id ORDER BY (p.wins * 3 + p.draws * 1) DESC) AS rank
+          FROM decks p
+          WHERE p.tournament_id = $1
+      ) ranked
+      WHERE rank <= 4
+      ORDER BY rank;
+    `;
+
+    return await this.deckRepository.query(query, [tournament_id]);
+  }
+
+  async getTopDecksOverall(): Promise<any> {
+    const query = `
+      SELECT *
+      FROM (
+          SELECT 
+              d.*,
+              (d.wins * 3 + d.draws * 1 + d.losses * 0) AS points,
+              RANK() OVER (ORDER BY (d.wins * 3 + d.draws * 1) DESC) AS rank
+          FROM decks d
+          JOIN tournaments t ON d.tournament_id = t.id
+      ) ranked
+      WHERE rank <= 8
+      ORDER BY rank;
+    `;
+
+    return await this.deckRepository.query(query);
   }
 
   private calWinrate(wins, losses, draws): number {

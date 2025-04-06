@@ -14,6 +14,7 @@ import { UpdateDeckUseCase } from './use-cases/update-deck/update-deck.use-case'
 import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-case';
 import { TournamentEntity } from '../db/entities/tournaments.entity';
 import { DBTournamentService } from '../db/services/db-tournament.service';
+import { GetDecksStatisticsUseCase } from './use-cases/get-decks-statistics/get-decks-statistics.use-case';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { DBTournamentService } from '../db/services/db-tournament.service';
     CurlProviderService,
     SaveAllDecksFromProviderUseCase,
     GetAllDecksByTournamentFromProviderUseCase,
+    GetDecksStatisticsUseCase,
     UpdateDeckUseCase,
     DeckMetricsUseCase,
   ],

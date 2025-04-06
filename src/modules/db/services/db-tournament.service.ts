@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { Repository } from "typeorm";
+import { Repository, MoreThanOrEqual, LessThanOrEqual } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { TournamentEntity } from "../entities/tournaments.entity";
 import { TournamentDto } from "modules/get-providers-decks/use-cases/dto/tournaments.dto";
@@ -107,18 +107,28 @@ export class DBTournamentService {
       start_date: tournament.start_date,
       format: tournament.format,
       players: decks.map((deck) => ({
-      id: deck.id,
-      name: deck.username,
-      commander: deck.commander,
-      partner: deck.partner ? deck.partner : null,
-      colors: Array.isArray(deck.color_identity)
-        ? deck.color_identity.filter((color) => typeof color === 'string').join('')
-        : deck.color_identity.replace(/[^a-zA-Z]/g, ''),
-      wins: deck.wins,
-      losses: deck.losses,
-      draws: deck.draws,
-      isWinner: deck.wins,
+        id: deck.id,
+        name: deck.username,
+        commander: deck.commander,
+        partner: deck.partner ? deck.partner : null,
+        colors: Array.isArray(deck.color_identity)
+          ? deck.color_identity.filter((color) => typeof color === 'string').join('')
+          : deck.color_identity.replace(/[^a-zA-Z]/g, ''),
+        wins: deck.wins,
+        losses: deck.losses,
+        draws: deck.draws,
+        isWinner: deck.wins,
       })),
     }
+  }
+  // todo corrigir as datas
+  async getTournamentsByDateRange(startDate: string, endDate: string): Promise<TournamentDto[]> {
+    const tournaments = await this.tournamentRepository.query(
+      `SELECT * FROM tournaments WHERE start_date BETWEEN $1 AND $2`,
+      [startDate, endDate]
+    );
+    return tournaments.map((tournament) => ({
+      id: tournament.id,
+    }));
   }
 }
