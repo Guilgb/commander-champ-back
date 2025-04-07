@@ -9,6 +9,7 @@ import { DeckMetricsUseCase } from "./use-cases/decks-metrics/deck-metrics.use-c
 import { DeckMetricsDto } from "./use-cases/decks-metrics/dto/deck-metrics.dto";
 import { GetDecksStatisticsUseCase } from "./use-cases/get-decks-statistics/get-decks-statistics.use-case";
 import { GetDecksStatisticsInput } from "./use-cases/get-decks-statistics/dto/get-decks-statistics.dto";
+import { GetCommanderWinrateUseCase } from "./use-cases/get-commander-winrate/get-commander-winrate.use-case";
 
 
 @Controller("/decks")
@@ -19,6 +20,7 @@ export class DecksController {
     private readonly updateDeckUseCase: UpdateDeckUseCase,
     private readonly deckMetricsUseCase: DeckMetricsUseCase,
     private readonly getDecksStatisticsUseCase: GetDecksStatisticsUseCase,
+    private readonly getCommanderWinrateUseCase: GetCommanderWinrateUseCase,
   ) { }
 
   @Post("/save")
@@ -60,5 +62,12 @@ export class DecksController {
     @Body() input: GetDecksStatisticsInput
   ) {
     return await this.getDecksStatisticsUseCase.execute(input);
+  }
+
+  @Post("/statistics/commander-winrate")
+  async getCommanderWinrate(
+    @Body() input: GetDecksStatisticsInput
+  ) {
+    return await this.getCommanderWinrateUseCase.execute(input);
   }
 }

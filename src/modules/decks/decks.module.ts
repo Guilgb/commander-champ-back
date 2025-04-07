@@ -15,6 +15,7 @@ import { DeckMetricsUseCase } from './use-cases/decks-metrics/deck-metrics.use-c
 import { TournamentEntity } from '../db/entities/tournaments.entity';
 import { DBTournamentService } from '../db/services/db-tournament.service';
 import { GetDecksStatisticsUseCase } from './use-cases/get-decks-statistics/get-decks-statistics.use-case';
+import { GetCommanderWinrateUseCase } from './use-cases/get-commander-winrate/get-commander-winrate.use-case';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { GetDecksStatisticsUseCase } from './use-cases/get-decks-statistics/get-
     GetDecksStatisticsUseCase,
     UpdateDeckUseCase,
     DeckMetricsUseCase,
+    GetCommanderWinrateUseCase,
   ],
   exports: [SaveAllDecksFromProviderUseCase]
 })
