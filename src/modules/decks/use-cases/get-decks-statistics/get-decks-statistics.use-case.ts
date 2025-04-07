@@ -1,6 +1,7 @@
 import { DBDecksService } from "@modules/db/services/db-decks.service";
 import { DBTournamentService } from "@modules/db/services/db-tournament.service";
 import { Injectable } from "@nestjs/common";
+import { GetDecksStatisticsInput } from "./dto/get-decks-statistics.dto";
 
 @Injectable()
 export class GetDecksStatisticsUseCase {
@@ -9,14 +10,26 @@ export class GetDecksStatisticsUseCase {
     private readonly dbTournamentService: DBTournamentService,
   ) { }
 
-  async execute() {
-    const tournaments = await this.dbTournamentService.getTournamentsByDateRange(
-      '2024-01-24',
-      '2025-12-31'
-    );
+  async execute(input: GetDecksStatisticsInput) {
+    let tournaments = [];
+    const { start_date, end_date } = input;
+    if (!start_date || !end_date) {
+      tournaments = await this.dbTournamentService.getTournamentsByDateRange(
+        "2024-01-24",
+        "2025-12-31"
+      );
+      if (!tournaments) {
+        return [];
+      }
+    } else {
 
-    if (!tournaments) {
-      return [];
+      tournaments = await this.dbTournamentService.getTournamentsByDateRange(
+        start_date,
+        end_date
+      );
+      if (!tournaments) {
+        return [];
+      }
     }
 
     const top8ByTournament = await Promise.all(

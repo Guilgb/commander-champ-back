@@ -8,6 +8,7 @@ import { UpdateDeckDto } from "./use-cases/update-deck/dto/update-deck.dto";
 import { DeckMetricsUseCase } from "./use-cases/decks-metrics/deck-metrics.use-case";
 import { DeckMetricsDto } from "./use-cases/decks-metrics/dto/deck-metrics.dto";
 import { GetDecksStatisticsUseCase } from "./use-cases/get-decks-statistics/get-decks-statistics.use-case";
+import { GetDecksStatisticsInput } from "./use-cases/get-decks-statistics/dto/get-decks-statistics.dto";
 
 
 @Controller("/decks")
@@ -22,9 +23,9 @@ export class DecksController {
 
   @Post("/save")
   async saveDecks(
-    @Body() body: SaveAllDeckDto
+    @Body() input: SaveAllDeckDto
   ) {
-    return await this.saveAllDecksUseCaseFromProvider.execute(body);
+    return await this.saveAllDecksUseCaseFromProvider.execute(input);
   }
 
   @Get("/list")
@@ -35,28 +36,29 @@ export class DecksController {
 
   @Get("/list/tournament")
   async listDecksByTournament(
-    @Body() body: GetAllDecksByTournamentDto
+    @Body() input: GetAllDecksByTournamentDto
   ) {
-    return await this.getAllDecksFromProviderUseCase.execute(body.tournament_id);
+    return await this.getAllDecksFromProviderUseCase.execute(input.tournament_id);
   }
 
   @Put("/update")
   async updateDeck(
-    @Body() body: UpdateDeckDto
+    @Body() input: UpdateDeckDto
   ) {
-    return await this.updateDeckUseCase.execute(body);
+    return await this.updateDeckUseCase.execute(input);
   }
 
   @Get("/metrics")
   async getMetrics(
-    @Body() body: DeckMetricsDto
+    @Body() input: DeckMetricsDto
   ) {
-    return await this.deckMetricsUseCase.execute(body);
+    return await this.deckMetricsUseCase.execute(input);
   }
 
-  @Get("/statistics")
+  @Post("/statistics")
   async getStatistics(
+    @Body() input: GetDecksStatisticsInput
   ) {
-    return await this.getDecksStatisticsUseCase.execute();
+    return await this.getDecksStatisticsUseCase.execute(input);
   }
 }
