@@ -15,8 +15,8 @@ export class GetDecksStatisticsUseCase {
     const { start_date, end_date } = input;
     if (!start_date || !end_date) {
       tournaments = await this.dbTournamentService.getTournamentsByDateRange(
-        "2024-01-24",
-        "2025-12-31"
+        "2023-01-24",
+        "2026-12-31"
       );
       if (!tournaments) {
         return [];
@@ -38,43 +38,41 @@ export class GetDecksStatisticsUseCase {
           tournamentId: tournament.id,
           top8: await this.dbDecksService.getTop8DecksByTournament(tournament.id),
           top4: await this.dbDecksService.getTop4DecksByTournament(tournament.id),
+          decks: await this.dbDecksService.getDecksByTournament(tournament.id),
         };
       })
     );
 
-    const deckStatistics = top8ByTournament.reduce((acc, tournament) => {
-      tournament.top8.forEach((deck) => {
-        const existingDeck = acc.find((d) => d.id === deck.id);
-        if (existingDeck) {
-          existingDeck.tournaments += 1;
-          existingDeck.top8 += 1;
-          if (tournament.top4.some((d) => d.id === deck.id)) {
-            existingDeck.top4 += 1;
-          }
-          if (tournament.top4[0]?.id === deck.id) {
-            existingDeck.champion += 1;
-          }
-        } else {
-          const combinedCommanders = [deck.commander, deck.partner].filter(Boolean).sort().join(' + ');
-          const existingCommander = acc.find((d) => d.commander === combinedCommanders);
-          if (existingCommander) {
-            existingCommander.tournaments += 1;
-            existingCommander.top8 += 1;
-            if (tournament.top4.some((d) => d.id === deck.id)) {
-              existingCommander.top4 += 1;
+    const decksStatistics = top8ByTournament.reduce((acc, tournament) => {
+      tournament.decks.forEach((deck) => {
+        const existingDeckEntries = acc.find((d) => d.commander === deck.commander);
+        if (existingDeckEntries) {
+          existingDeckEntries.entries += 1;
+        }
+        
+        if (tournament.top8.some((d) => d.commander === deck.commander)) {
+          const existingDeck = acc.find((d) => d.commander === deck.commander);
+          if (existingDeck) {
+            existingDeck.top8 += 1;
+            if (tournament.top4.some((d) => d.commander === deck.commander)) {
+              existingDeck.top4 += 1;
             }
-            if (tournament.top4[0]?.id === deck.id) {
-              existingCommander.champion += 1;
+            if (tournament.top4[0]?.commander === deck.commander) {
+              existingDeck.champion += 1;
             }
           } else {
+            const combinedCommanders = [deck.commander, deck.partner]
+              .filter(Boolean)
+              .sort()
+              .join(" + ");
             acc.push({
               id: deck.id,
               commander: combinedCommanders,
-              tournaments: 1,
-              top8: 1,
-              top4: tournament.top4.some((d) => d.id === deck.id) ? 1 : 0,
-              champion: tournament.top4[0]?.id === deck.id ? 1 : 0,
-              colors: deck.colors,
+              entries: 1,
+              top8: tournament.top8.some((d) => d.commander === deck.commander) ? 1 : 0,
+              top4: tournament.top4.some((d) => d.commander === deck.commander) ? 1 : 0,
+              champion: deck.is_winner ? +1 : 0,
+              colors: deck.color_identity,
             });
           }
         }
@@ -82,6 +80,6 @@ export class GetDecksStatisticsUseCase {
       return acc;
     }, []);
 
-    return deckStatistics;
+    return decksStatistics;
   }
 }

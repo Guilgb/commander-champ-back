@@ -32,6 +32,9 @@ export class DeckEntity {
   @Column({ default: 0 })
   draws: number;
 
+  @Column({type: 'boolean', default: false})
+  is_winner: boolean;
+
   @Column({type: 'varchar', length: 255, nullable: true})
   color_identity: string;
 

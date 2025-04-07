@@ -402,6 +402,10 @@ export class DBDecksService {
     return await this.deckRepository.query(query, [tournament_id]);
   }
 
+  async getDecksByTournament(tournament_id: number) {
+    return await this.deckRepository.findBy({ tournament_id: { id: tournament_id } });
+  }
+
   async getTopDecksOverall(): Promise<any> {
     const query = `
       SELECT *
