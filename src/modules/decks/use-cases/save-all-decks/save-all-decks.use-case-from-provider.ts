@@ -35,7 +35,7 @@ export class SaveAllDecksFromProviderUseCase {
 
         await new Promise(resolve => setTimeout(resolve, 1000));
         const deckLists = await this.moxFieldService.getMoxfieldDeck(decklist);
-
+        // todo colocar o is_winner para o deck
         if (deckLists) {
           const commanders = this.normalizeDeckData(deckLists.boards.commanders.cards)
           const color_identity = deckLists.colors;
