@@ -41,7 +41,7 @@ export class ListMostUserCardsByDateUseCase {
     }, []);
 
     return aggregatedCards
-      .filter(card => ['Forest', 'Island', 'Plains', 'Swamp', 'Mountain'].includes(card.name))
+      // .filter(card => ['Forest', 'Island', 'Plains', 'Swamp', 'Mountain'].includes(card.name))
       .map((card, index) => ({
       id: `card-${index + 1}`,
       ...card,
