@@ -12,6 +12,8 @@ import { MoxfieldService } from '../providers/moxfield/service/moxfield.service'
 import { DeckEntity } from '../db/entities/decks.entity';
 import { CardsMetricsUseCase } from './use-cases/cards-metrics/cards-metrics.use-case';
 import { TournamentEntity } from '../db/entities/tournaments.entity';
+import { ListMostUserCardsByDateUseCase } from './use-cases/list-most-user-cards-by-date/list-most-user-cards-by-date.use-case';
+import { ScryfallService } from '@modules/providers/scryfall/service/scryfall.service';
 
 @Module({
   imports: [
@@ -24,8 +26,10 @@ import { TournamentEntity } from '../db/entities/tournaments.entity';
     DBCardsService,
     DBDecksService,
     MoxfieldService,
+    ScryfallService,
     CardsMetricsUseCase,
     SaveCardsUseCase,
+    ListMostUserCardsByDateUseCase,
   ],
 })
 export class CardsModule { }

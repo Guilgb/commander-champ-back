@@ -1,16 +1,21 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Repository } from "typeorm";
 import { CardsEntity } from "../entities/cards.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CardsDto } from "modules/get-providers-decks/use-cases/dto/cards.dto";
 import { DeckEntity } from "../entities/decks.entity";
 import { CardsMetricsDto } from "modules/cards/use-cases/cards-metrics/dto/cards-metrics.dto";
+import { TournamentEntity } from "../entities/tournaments.entity";
 
 @Injectable()
 export class DBCardsService {
   constructor(
     @InjectRepository(CardsEntity)
     private readonly cardRepository: Repository<CardsEntity>,
+    @InjectRepository(DeckEntity)
+    private readonly deckRepository: Repository<DeckEntity>,
+    @InjectRepository(TournamentEntity)
+    private readonly tournamentRepository: Repository<TournamentEntity>,
   ) { }
 
   async saveCards(input: CardsDto): Promise<any> {
@@ -112,6 +117,43 @@ export class DBCardsService {
     }
   }
 
+  async listMostUserCardsByDate(input: any) {
+    try {
+      const { start_date, end_date } = input;
+
+      const tourmantsIds = await this.tournamentRepository.
+        query('SELECT id FROM tournaments WHERE start_date BETWEEN $1 AND $2', [start_date, end_date]);
+
+      if (!tourmantsIds.length) {
+        throw new Error('No tournaments found for the given date range');
+      }
+      const tournamentIds = tourmantsIds.map(t => t.id);
+      const decks = await this.deckRepository.query('SELECT id FROM decks WHERE tournament_id = ANY($1::int[])', [tournamentIds]);
+
+      if (!decks.length) {
+        throw new Error('No decks found for the given tournament IDs');
+      }
+
+      const deckIds = decks.map((d: { id: number }) => d.id);
+      const cards = await this.cardRepository
+        .query(
+          `SELECT name, cmc, type, colors FROM cards WHERE deck_id = ANY($1::int[])`,
+          [deckIds]);
+
+      if (!cards.length) {
+        throw new Error('No cards found for the given deck IDs');
+      }
+      return {
+        decks_quantity: decks.length,
+        cards,
+      }
+
+    } catch (error) {
+      throw new Error(`Error fetching data: ${error.message}`);
+    }
+
+  }
+
   async getMostUsedCardsByTournament(body: CardsMetricsDto): Promise<any> {
     try {
       const { start_date, end_date } = body;
@@ -133,7 +175,7 @@ export class DBCardsService {
         name: card.c_name,
         type: card.c_type,
         cmc: card.c_cmc,
-        colors: JSON.parse(card.c_colors),
+        colors: card.c_colors,
         usage_count: parseInt(card.usage_count, 10),
       }));
     } catch (error) {

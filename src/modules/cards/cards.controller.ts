@@ -4,19 +4,22 @@ import { SaveCardsDto } from "./use-cases/save-cards/dto/save-cards.dto";
 import { CardsMetricsUseCase } from "./use-cases/cards-metrics/cards-metrics.use-case";
 import { CardsMetricsDto } from "./use-cases/cards-metrics/dto/cards-metrics.dto";
 import { DeckMetricsUseCase } from "../decks/use-cases/decks-metrics/deck-metrics.use-case";
+import { ListMostUserCardsByDateUseCase } from "./use-cases/list-most-user-cards-by-date/list-most-user-cards-by-date.use-case";
+import { ListMostUserCardsByDateInput } from "./use-cases/list-most-user-cards-by-date/dto/list-most-user-cards-by-date.dto";
 
 @Controller("/cards")
 export class CardsController {
   constructor(
     private readonly saveCardsUseCase: SaveCardsUseCase,
     private readonly cardsMetricsUseCase: CardsMetricsUseCase,
+    private readonly listMostUserCardsByDateUseCase: ListMostUserCardsByDateUseCase,
   ) { }
 
   @Post("/save")
   async saveCards(
-    @Body() body: SaveCardsDto
+    @Body() input: SaveCardsDto
   ) {
-    return await this.saveCardsUseCase.execute(body);
+    return await this.saveCardsUseCase.execute(input);
   }
 
   @Get("/most-useds")
@@ -28,8 +31,15 @@ export class CardsController {
 
   @Get("/metrics")
   async filterCard(
-    @Body() body: CardsMetricsDto
+    @Body() input: CardsMetricsDto
   ) {
-    return await this.cardsMetricsUseCase.execute(body);
+    return await this.cardsMetricsUseCase.execute(input);
+  }
+
+  @Post("/metrics/list")
+  async listMostUserCardsByDate(
+    @Body() input: ListMostUserCardsByDateInput
+  ) {
+    return await this.listMostUserCardsByDateUseCase.execute(input);
   }
 }
