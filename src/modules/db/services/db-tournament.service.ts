@@ -15,12 +15,14 @@ export class DBTournamentService {
   ) { }
 
   async createTournament(input: TournamentDto): Promise<TournamentDto> {
+    console.log(input);
     const tournament = await this.tournamentRepository.save({
       name: input.name,
       start_date: input.start_date,
       end_date: input.end_date,
       format: input.format,
-      user_id: { id: input.user_id }
+      user_id: { id: input.user_id },
+      tournament_link: input.tournament_link,
     });
     return {
       id: tournament.id,

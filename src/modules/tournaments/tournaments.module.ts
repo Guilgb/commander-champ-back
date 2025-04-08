@@ -12,6 +12,8 @@ import { DeckEntity } from '@modules/db/entities/decks.entity';
 import { LoadDecksUseCase } from './use-cases/load-decks/load-decks.use-case';
 import { UpdateAllDecksUseCase } from './use-cases/update-all-decks/update-all-decks.use-case';
 import { DBDecksService } from '@modules/db/services/db-decks.service';
+import { TopdeckggService } from '@modules/providers/topdeckgg/services/topdeckgg.service';
+import { MoxfieldService } from '@modules/providers/moxfield/service/moxfield.service';
 
 @Module({
   imports: [
@@ -21,6 +23,8 @@ import { DBDecksService } from '@modules/db/services/db-decks.service';
   ],
   controllers: [TournamentsController],
   providers: [
+    TopdeckggService,
+    MoxfieldService,
     CreateTournamentUseCase,
     ListTournamentsUseCase,
     UpdateTournamentUseCase,

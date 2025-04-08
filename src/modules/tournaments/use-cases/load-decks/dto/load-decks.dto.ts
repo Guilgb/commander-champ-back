@@ -13,5 +13,5 @@ export interface NormalizedDeck {
 }
 
 export interface LoadDecksinput {
-  tournament_id: number;
+  url: string;
 }

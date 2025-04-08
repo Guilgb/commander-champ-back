@@ -1,11 +1,11 @@
 import { Body, Controller, Get } from "@nestjs/common";
-import { GetProvidersDecksUseCase } from "./use-cases/get-providers-decks.usecase";
+// import { GetProvidersDecksUseCase } from "./use-cases/get-providers-decks.usecase";
 import { TopdeckggService } from "../providers/topdeckgg/services/topdeckgg.service";
 
 @Controller("/list")
 export class GetProvidersDecksController {
     constructor(
-        private readonly getProvidersDecksUseCase: GetProvidersDecksUseCase,
+        // private readonly getProvidersDecksUseCase: GetProvidersDecksUseCase,
     ) { }
 
     @Get("/decks")

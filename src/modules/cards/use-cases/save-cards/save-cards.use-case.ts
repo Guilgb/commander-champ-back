@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { SaveCardsDto } from "./types/save-cards.dto";
+import { SaveCardsDto } from "./dto/save-cards.dto";
 import { DBDecksService } from "modules/db/services/db-decks.service";
 import { MoxfieldService } from "modules/providers/moxfield/service/moxfield.service";
 import { DBCardsService } from "modules/db/services/db-cards.service";
@@ -27,30 +27,44 @@ export class SaveCardsUseCase {
   ) { }
 
   async execute(body: SaveCardsDto) {
-    const { tournament_id } = body
+    try {
+      const { tournament_id } = body;
+      const allDeckList = await this.dbDeckService.getAllDecksByTournament(tournament_id);
+      await Promise.all(
+        allDeckList.decks.map(async (deck) => {
+          try {
+            const deckLists = await this.moxFieldService.getMoxfieldDeck(deck.decklist);
+            if (deckLists) {
+              const mainboardCards = deckLists.boards.mainboard.cards;
+              for (const cardKey in mainboardCards) {
+                const card = mainboardCards[cardKey].card;
+                try {
+                  await this.cardsService?.saveCards({
+                    cmc: card.cmc,
+                    color_identity: card.color_identity || null,
+                    colors: card.colors,
+                    mana_cost: card.mana_cost || null,
+                    name: card.name,
+                    type: card.type,
+                    deck_id: deck.id,
+                  });
+                } catch (cardError) {
+                  console.error(`Error saving card ${card.name}:`, cardError);
+                }
+              }
+            }
+          } catch (deckError) {
+            console.error(`Error processing deck ${deck.id}:`, deckError);
+          }
+        })
+      );
 
-    const allDeckList = await this.dbDeckService.getAllDecksByTournament(tournament_id);
-
-    allDeckList.map(async (deck) => {
-      const deckLists = await this.moxFieldService.getMoxfieldDeck(deck.decklist);
-      if (deckLists) {
-        const mainboardCards = deckLists.boards.mainboard.cards;
-        for (const cardKey in mainboardCards) {
-          const card = mainboardCards[cardKey].card;
-          await this.cardsService?.saveCards({
-            cmc: card.cmc,
-            color_identity: card.color_identity || null,
-            colors: card.colors,
-            mana_cost: card.mana_cost || null,
-            name: card.name,
-            type: card.type,
-            deck_id: deck.id,
-          });
-        }
-      }
-    });
-    return {
-      message: "Cards saved successfully",
-    };
+      return {
+        message: "Cards saved successfully",
+      };
+    } catch (error) {
+      console.error("Error executing SaveCardsUseCase:", error);
+      throw new Error("Failed to save cards");
+    }
   }
 }
