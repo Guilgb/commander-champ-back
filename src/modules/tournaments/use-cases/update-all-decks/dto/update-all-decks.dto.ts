@@ -18,4 +18,5 @@ interface Decks {
   commander: string;
   partner?: string;
   color_identity: string;
+  is_winner: boolean;
 }

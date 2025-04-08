@@ -18,7 +18,7 @@ export class MoxfieldService {
       'User-Agent': `${process.env.USER_AGENT}`,
     };
 
-    // this.logger.log(`Requesting Moxfield deck from ${url}`);
+    this.logger.log(`Requesting Moxfield deck from ${url}`);
 
     try {
       const response = await this.httpService.get(url, { headers });

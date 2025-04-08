@@ -55,6 +55,7 @@ export class DBDecksService {
         partner: input.partner ? input.partner : null,
         color_identity: input.color_identity,
         created_at: new Date(),
+        is_winner: input.is_winner,
       });
       return response;
     } catch (error) {

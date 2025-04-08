@@ -15,7 +15,6 @@ export class DBTournamentService {
   ) { }
 
   async createTournament(input: TournamentDto): Promise<TournamentDto> {
-    console.log(input);
     const tournament = await this.tournamentRepository.save({
       name: input.name,
       start_date: input.start_date,
