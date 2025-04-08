@@ -1,25 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { DBTournamentService } from "modules/db/services/db-tournament.service";
-import { CreateTournamentDto } from "./dto/create-tournaments.dto";
+import { CreateTournamentDto, NormalizedDeck } from "./dto/create-tournaments.dto";
 import { DBDecksService } from "@modules/db/services/db-decks.service";
 import { MoxfieldService } from "@modules/providers/moxfield/service/moxfield.service";
 import { TopdeckggService } from "@modules/providers/topdeckgg/services/topdeckgg.service";
-
-
-interface Card {
-  name: string;
-  cmc: number;
-  type: string;
-  mana_cost: string;
-  colors: string[];
-  color_identity: string[];
-}
-
-interface NormalizedDeck {
-  name: string;
-  card: Card;
-}
-
+import { DBCardsService } from "@modules/db/services/db-cards.service";
 
 @Injectable()
 export class CreateTournamentUseCase {
@@ -28,6 +13,7 @@ export class CreateTournamentUseCase {
     private readonly topDeckService: TopdeckggService,
     private readonly moxfieldService: MoxfieldService,
     private readonly dbDeckService: DBDecksService,
+    private readonly cardsService: DBCardsService,
   ) { }
 
   async execute(input: CreateTournamentDto) {
@@ -108,6 +94,36 @@ export class CreateTournamentUseCase {
           return null;
         })),
       };
+
+      const allDeckList = await this.dbDeckService.getAllDecksByTournament(tournament.id);
+      await Promise.all(
+        allDeckList.decks.map(async (deck) => {
+          try {
+            const deckLists = await this.moxfieldService.getMoxfieldDeck(deck.decklist);
+            if (deckLists) {
+              const mainboardCards = deckLists.boards.mainboard.cards;
+              for (const cardKey in mainboardCards) {
+                const card = mainboardCards[cardKey].card;
+                try {
+                  await this.cardsService?.saveCards({
+                    cmc: card.cmc,
+                    color_identity: card.color_identity || null,
+                    colors: card.colors,
+                    mana_cost: card.mana_cost || null,
+                    name: card.name,
+                    type: card.type,
+                    deck_id: deck.id,
+                  });
+                } catch (cardError) {
+                  console.error(`Error saving card ${card.name}:`, cardError);
+                }
+              }
+            }
+          } catch (deckError) {
+            console.error(`Error processing deck ${deck.id}:`, deckError);
+          }
+        })
+      );
 
       return combinedDecks
     } catch (error) {

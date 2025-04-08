@@ -14,17 +14,20 @@ import { UpdateAllDecksUseCase } from './use-cases/update-all-decks/update-all-d
 import { DBDecksService } from '@modules/db/services/db-decks.service';
 import { TopdeckggService } from '@modules/providers/topdeckgg/services/topdeckgg.service';
 import { MoxfieldService } from '@modules/providers/moxfield/service/moxfield.service';
+import { DBCardsService } from '@modules/db/services/db-cards.service';
+import { CardsEntity } from '@modules/db/entities/cards.entity';
 
 @Module({
   imports: [
     ConfigModule,
     HttpModule.register({}),
-    TypeOrmModule.forFeature([TournamentEntity, DeckEntity]),
+    TypeOrmModule.forFeature([TournamentEntity, DeckEntity, CardsEntity]),
   ],
   controllers: [TournamentsController],
   providers: [
     TopdeckggService,
     MoxfieldService,
+    DBCardsService,
     CreateTournamentUseCase,
     ListTournamentsUseCase,
     UpdateTournamentUseCase,
