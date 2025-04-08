@@ -25,7 +25,6 @@ export class TournamentsController {
   async createTournament(
     @Body() body: CreateTournamentDto
   ) {
-    console.log(body);
     return await this.createTournamentUseCase.execute(body);
   }
 
