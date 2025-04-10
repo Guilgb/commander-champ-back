@@ -5,6 +5,8 @@ import { DeckEntity } from "../entities/decks.entity";
 import { DeckDto } from "modules/get-providers-decks/use-cases/dto/deck.dto";
 import { TournamentEntity } from "../entities/tournaments.entity";
 import { DeckMetricsDto } from "modules/decks/use-cases/decks-metrics/dto/deck-metrics.dto";
+import { UserDecks } from "../types/IDecks";
+import { ListUserDecksInput } from "@modules/decks/use-cases/list-users-decks/dto/list-users-decks.dto";
 
 
 @Injectable()
@@ -96,8 +98,35 @@ export class DBDecksService {
     }
   }
 
-  async getDeck(): Promise<any> {
+  async ListDecks(): Promise<any> {
     return this.deckRepository.find();
+  }
+
+  async ListDecksByDate(input: ListUserDecksInput): Promise<UserDecks[]> {
+
+    const { start_date, end_date } = input;
+
+    if (!start_date || !end_date) {
+      const oneYearAgo = new Date();
+      oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+      input.start_date = oneYearAgo.toISOString().split('T')[0];
+      input.end_date = new Date().toISOString().split('T')[0];
+    }
+    const queryBuilderTournament = await this.tournamentRepository.createQueryBuilder('t')
+      .select(['t.id', 't.name', 't.start_date', 't.end_date'])
+      .where('t.start_date BETWEEN :start_date AND :end_date', { start_date, end_date })
+      .orWhere('t.end_date BETWEEN :start_date AND :end_date', { start_date, end_date })
+      .orderBy('t.start_date', 'ASC');
+    const tournaments = await queryBuilderTournament.getRawMany();
+    const tournamentIds = tournaments.map(tournament => tournament.t_id);
+
+    const queryBuilder = await this.deckRepository.createQueryBuilder('d')
+      .select(['d.username', 'd.id'])
+      .where('d.tournament_id IN (:...tournamentIds)', { tournamentIds })
+      .orderBy('d.username', 'ASC')
+
+    const decksReponse = await queryBuilder.getRawMany();
+    return decksReponse
   }
 
   async getDeckById(id: number): Promise<DeckDto> {
@@ -365,7 +394,6 @@ export class DBDecksService {
       colors: deck.colors,
     }));
   }
-
 
   async getTop8DecksByTournament(tournament_id: number) {
     const query = `
