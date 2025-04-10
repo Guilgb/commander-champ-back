@@ -37,6 +37,9 @@ export class GetCommanderWinrateUseCase {
       tournaments.map(async (tournament) => {
         return {
           tournamentId: tournament.id,
+          start_date: tournament.start_date,
+          end_date: tournament.end_date,
+          name: tournament.name,
           decks: await this.dbDecksService.getDecksByTournament(tournament.id),
         };
       })
@@ -62,6 +65,8 @@ export class GetCommanderWinrateUseCase {
               .join(" + ");
             acc.push({
               id: deck.id,
+              name: tournament.name,
+              username: deck.username,
               commander: deck.commander,
               partner: deck.partner,
               entries: 1,
@@ -73,6 +78,8 @@ export class GetCommanderWinrateUseCase {
               losses: deck.losses,
               draws: deck.draws,
               winrate: this.calWinrate(deck.wins, deck.losses, deck.draws),
+              start_date: tournament.start_date,
+              end_date: tournament.end_date,
             });
           }
         }

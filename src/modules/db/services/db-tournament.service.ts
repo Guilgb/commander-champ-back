@@ -130,6 +130,9 @@ export class DBTournamentService {
     );
     return tournaments.map((tournament) => ({
       id: tournament.id,
+      start_date: tournament.end_date,
+      end_date: tournament.end_date,
+      name: tournament.name,
     }));
   }
 }
