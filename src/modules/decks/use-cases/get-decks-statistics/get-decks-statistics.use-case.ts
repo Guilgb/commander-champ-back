@@ -49,7 +49,7 @@ export class GetDecksStatisticsUseCase {
         if (existingDeckEntries) {
           existingDeckEntries.entries += 1;
         }
-        
+
         if (tournament.top8.some((d) => d.commander === deck.commander)) {
           const existingDeck = acc.find((d) => d.commander === deck.commander);
           if (existingDeck) {
@@ -68,14 +68,15 @@ export class GetDecksStatisticsUseCase {
             acc.push({
               id: deck.id,
               commander: combinedCommanders,
+              tournament_id: tournament.tournamentId,
               entries: 1,
               top8: tournament.top8.some((d) => d.commander === deck.commander) ? 1 : 0,
               top4: tournament.top4.some((d) => d.commander === deck.commander) ? 1 : 0,
               champion: deck.is_winner ? +1 : 0,
               colors: deck.color_identity
-              .replace(/[\{\}\"]/g, "")
-              .split(",")
-              .map((color) => color.toUpperCase()),
+                .replace(/[\{\}\"]/g, "")
+                .split(",")
+                .map((color) => color.toUpperCase()),
             });
           }
         }
