@@ -72,7 +72,10 @@ export class GetDecksStatisticsUseCase {
               top8: tournament.top8.some((d) => d.commander === deck.commander) ? 1 : 0,
               top4: tournament.top4.some((d) => d.commander === deck.commander) ? 1 : 0,
               champion: deck.is_winner ? +1 : 0,
-              colors: deck.color_identity.replace(/[\{\}\"]/g, "").toLowerCase(),
+              colors: deck.color_identity
+              .replace(/[\{\}\"]/g, "")
+              .split(",")
+              .map((color) => color.toUpperCase()),
             });
           }
         }
