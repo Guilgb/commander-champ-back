@@ -33,6 +33,5 @@ export class ListUsersDecksUseCase {
       console.error("Error listing user decks:", error);
       throw error;
     }
-
   }
 }
