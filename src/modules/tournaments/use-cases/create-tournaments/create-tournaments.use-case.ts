@@ -18,6 +18,12 @@ export class CreateTournamentUseCase {
 
   async execute(input: CreateTournamentDto) {
     try {
+      const decksV2 = await this.topDeckService.getTopDecks(input.link);
+
+      if (!decksV2) {
+        throw new Error("Failed to fetch decks from Topdeck.gg");
+      }
+
       const tournament = await this.tournamentService.createTournament({
         name: input.name,
         start_date: new Date(input.start_date),
@@ -25,13 +31,12 @@ export class CreateTournamentUseCase {
         format: input.format,
         user_id: input.user_id,
         online: input.online,
-        tournament_link: input.tournament_link,
+        tournament_link: input.link,
       });
 
       if (!tournament) {
         throw new Error("Tournament creation failed");
       }
-      const decksV2 = await this.topDeckService.getTopDecks(input.tournament_link);
 
       let rounds = 0;
       const roundMapping = {
@@ -59,7 +64,7 @@ export class CreateTournamentUseCase {
           const losses = (rounds - wins) - draws;
 
           if (!player.decklist) {
-            const decksV1 = await this.topDeckService.getTopDecksV1(input.tournament_link);
+            const decksV1 = await this.topDeckService.getTopDecksV1(input.link);
             player.decklist = decksV1.find((deck) => deck.uid === player.id)?.decklist;
           }
 
@@ -105,15 +110,19 @@ export class CreateTournamentUseCase {
               for (const cardKey in mainboardCards) {
                 const card = mainboardCards[cardKey].card;
                 try {
-                  await this.cardsService?.saveCards({
-                    cmc: card.cmc,
-                    color_identity: card.color_identity || null,
-                    colors: card.colors,
-                    mana_cost: card.mana_cost || null,
-                    name: card.name,
-                    type: card.type,
-                    deck_id: deck.id,
-                  });
+                  if (card) {
+                    await this.cardsService?.saveCards({
+                      cmc: card.cmc,
+                      color_identity: card.color_identity || null,
+                      colors: card.colors,
+                      mana_cost: card.mana_cost || null,
+                      name: card.name,
+                      type: card.type,
+                      deck_id: deck.id,
+                    });
+                  } else {
+                    console.error(`Card not found for key: ${cardKey}`);
+                  }
                 } catch (cardError) {
                   console.error(`Error saving card ${card.name}:`, cardError);
                 }

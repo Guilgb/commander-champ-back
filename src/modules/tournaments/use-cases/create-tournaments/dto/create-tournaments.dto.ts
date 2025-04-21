@@ -6,7 +6,8 @@ export interface CreateTournamentDto {
   format: string;
   user_id: number;
   online: boolean;
-  tournament_link: string;
+  link: string;
+  type: string;
 }
 
 export interface Card {

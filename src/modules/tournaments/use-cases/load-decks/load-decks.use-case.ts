@@ -17,7 +17,6 @@ export class LoadDecksUseCase {
   async execute(input: LoadDecksinput) {
     try {
       const decksV2 = await this.topdeckggService.getTopDecks(input.url);
-
       let rounds = 0;
 
       const roundMapping = {

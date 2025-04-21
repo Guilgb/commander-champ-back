@@ -6,7 +6,7 @@ export class CardsEntity {
   @PrimaryGeneratedColumn()
   id?: number;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
   @ManyToOne(() => DeckEntity, (deck) => deck.cards)

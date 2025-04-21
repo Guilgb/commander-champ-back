@@ -12,6 +12,8 @@ import { GetDecksStatisticsInput } from "./use-cases/get-decks-statistics/dto/ge
 import { GetCommanderWinrateUseCase } from "./use-cases/get-commander-winrate/get-commander-winrate.use-case";
 import { ListUsersDecksUseCase } from "./use-cases/list-users-decks/list-users-decks.use-case";
 import { ListUserDecksInput } from "./use-cases/list-users-decks/dto/list-users-decks.dto";
+import { ListDecksByCommandeUseCase } from "./use-cases/list-decks-by-commander/decks-by-commander.use-case";
+import { ListDecksByCommandeInput } from "./use-cases/list-decks-by-commander/dto/decks-by-commander.dto";
 
 
 @Controller("/decks")
@@ -24,6 +26,7 @@ export class DecksController {
     private readonly getDecksStatisticsUseCase: GetDecksStatisticsUseCase,
     private readonly getCommanderWinrateUseCase: GetCommanderWinrateUseCase,
     private readonly listUsersDecksUseCase: ListUsersDecksUseCase,
+    private readonly listDecksByCommandeUseCase: ListDecksByCommandeUseCase,
   ) { }
 
   @Post("/save")
@@ -79,5 +82,12 @@ export class DecksController {
     @Body() input: ListUserDecksInput
   ) {
     return await this.listUsersDecksUseCase.execute(input);
+  }
+
+  @Post("commander")
+  async listDecksByCommander(
+    @Body() input: ListDecksByCommandeInput
+  ) {
+    return await this.listDecksByCommandeUseCase.execute(input);
   }
 }

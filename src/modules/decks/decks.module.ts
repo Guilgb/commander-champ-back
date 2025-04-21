@@ -17,12 +17,15 @@ import { DBTournamentService } from '../db/services/db-tournament.service';
 import { GetDecksStatisticsUseCase } from './use-cases/get-decks-statistics/get-decks-statistics.use-case';
 import { GetCommanderWinrateUseCase } from './use-cases/get-commander-winrate/get-commander-winrate.use-case';
 import { ListUsersDecksUseCase } from './use-cases/list-users-decks/list-users-decks.use-case';
+import { ListDecksByCommandeUseCase } from './use-cases/list-decks-by-commander/decks-by-commander.use-case';
+import { DBCardsDecksService } from '@modules/db/services/db-cards-decks.service';
+import { CardsEntity } from '@modules/db/entities/cards.entity';
 
 @Module({
   imports: [
     ConfigModule,
     HttpModule.register({}),
-    TypeOrmModule.forFeature([DeckEntity, TournamentEntity]),
+    TypeOrmModule.forFeature([DeckEntity, TournamentEntity, CardsEntity]),
     TopdeckggModule,
   ],
   controllers: [DecksController],
@@ -32,6 +35,7 @@ import { ListUsersDecksUseCase } from './use-cases/list-users-decks/list-users-d
     DBDecksService,
     DBTournamentService,
     CurlProviderService,
+    DBCardsDecksService,
     SaveAllDecksFromProviderUseCase,
     GetAllDecksByTournamentFromProviderUseCase,
     GetDecksStatisticsUseCase,
@@ -39,6 +43,7 @@ import { ListUsersDecksUseCase } from './use-cases/list-users-decks/list-users-d
     DeckMetricsUseCase,
     GetCommanderWinrateUseCase,
     ListUsersDecksUseCase,
+    ListDecksByCommandeUseCase,
   ],
   exports: [SaveAllDecksFromProviderUseCase]
 })
