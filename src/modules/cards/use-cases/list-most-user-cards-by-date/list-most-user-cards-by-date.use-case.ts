@@ -33,20 +33,18 @@ export class ListMostUserCardsByDateUseCase {
           name: card.name,
           cmc: card.cmc,
           type: card.type,
-          colorIdentity: card.colorIdentity,
+          colors: this.isValidJson(card.colors),
           quantity: card?.quantity || 1,
         });
       }
       return acc;
     }, []);
-
     return aggregatedCards
-      // .filter(card => ['Forest', 'Island', 'Plains', 'Swamp', 'Mountain'].includes(card.name))
       .map((card, index) => ({
-      id: `card-${index + 1}`,
-      ...card,
-      type: this.getCardType(card.type),
-      percentage: parseFloat(((card.quantity / decks_quantity) * 100).toFixed(2)),
+        id: `card-${index + 1}`,
+        ...card,
+        type: this.getCardType(card.type),
+        percentage: parseFloat(((card.quantity / decks_quantity) * 100).toFixed(2)),
       }));
   }
 
@@ -63,5 +61,25 @@ export class ListMostUserCardsByDateUseCase {
     };
 
     return typeMap[type] || "Unknown";
+  }
+
+  private isValidJson(jsonString: string): boolean | string[] | string {
+    try {
+      if (/^{.*}$/.test(jsonString) && jsonString.includes('",')) {
+        const arr = jsonString
+          .replace(/[{}]/g, '')
+          .split(',')
+          .map(s => s.trim().replace(/^"|"$/g, ''));
+        return arr;
+      } else {
+        const arr = jsonString
+          .replace(/[\[\]{}]/g, '')
+          .split(',')
+          .map(s => s.trim().replace(/^"|"$/g, ''));
+        return arr;
+      }
+    } catch {
+      throw new Error("Invalid JSON string");
+    }
   }
 }
