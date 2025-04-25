@@ -10,9 +10,6 @@ async function bootstrap() {
     credentials: true,
   });
   
-  app.setGlobalPrefix('api');
-  app.use('/health', (req, res) => res.json({ status: 'ok' }));
-  
   await app.listen(process.env.PORT || 3000, '0.0.0.0')
 }
 bootstrap();
