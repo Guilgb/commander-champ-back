@@ -73,6 +73,7 @@ export class GetDecksStatisticsUseCase {
               top8: tournament.top8.some((d) => d.commander === deck.commander) ? 1 : 0,
               top4: tournament.top4.some((d) => d.commander === deck.commander) ? 1 : 0,
               champion: deck.is_winner ? +1 : 0,
+              cmc: deck.cmc_commander,
               colors: deck.color_identity
                 .replace(/[\{\}\"]/g, "")
                 .split(",")

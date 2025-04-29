@@ -35,6 +35,9 @@ export class DeckEntity {
   @Column({type: 'boolean', default: false})
   is_winner: boolean;
 
+  @Column({type: 'int', nullable: true})
+  cmc_commander: number;
+
   @Column({type: 'varchar', length: 255, nullable: true})
   color_identity: string;
 

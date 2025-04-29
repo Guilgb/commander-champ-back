@@ -29,6 +29,7 @@ export class DBDecksService {
       commander: input.commander,
       partner: input.partner ? input.partner : null,
       color_identity: input.color_identity,
+      cmc_commander: input.cmc_commander,
       created_at: new Date(),
     });
 
@@ -88,6 +89,7 @@ export class DBDecksService {
           commander: deck.commander,
           partner: deck.partner ? deck.partner : null,
           color_identity: deck.color_identity,
+          cmc_commander: deck.cmc_commander,
           created_at: new Date(),
         });
         return response;

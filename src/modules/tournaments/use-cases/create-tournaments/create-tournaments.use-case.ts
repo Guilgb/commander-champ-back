@@ -86,6 +86,7 @@ export class CreateTournamentUseCase {
               draws,
               color_identity,
               commander: commander.card.name,
+              cmc_commander: commander.card.cmc,
               partner: partner ? partner.card.name : null,
               is_winner: player.standing == 1 ? true : false,
             });

@@ -9,5 +9,6 @@ export interface UpdateDeckDto {
     commander: string;
     partner?: string;
     color_identity: string;
+    cmc_commander: number;
     is_winner: boolean;
 }
