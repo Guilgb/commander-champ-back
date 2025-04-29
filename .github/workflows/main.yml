@@ -25,24 +25,21 @@ jobs:
         - name: Build
           run: npm run build
     
-    deploy:
-      needs: build
-      runs-on: self-hosted
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
+    # deploy:
+    #   needs: build
+    #   runs-on: self-hosted
+    #   steps:
+    #     - name: Checkout code
+    #       uses: actions/checkout@v4
 
-        - name: Pull repository
-          run: git pull origin master
+    #     - name: Pull repository
+    #       run: git pull origin master
 
-        - name: Install dependencies
-          run: npm i
+    #     - name: Install dependencies
+    #       run: npm i
 
-        - name: Install NestJS CLI
-          run: npm install -g @nestjs/cli
+    #     - name: Build
+    #       run: npm run build
 
-        - name: Build
-          run: npm run build
-
-        - name: Restart app with PM2
-          run: pm2 restart all
+    #     - name: Restart app with PM2
+    #       run: pm2 restart all
