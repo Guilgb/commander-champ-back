@@ -16,6 +16,9 @@ import { TopdeckggService } from '@modules/providers/topdeckgg/services/topdeckg
 import { MoxfieldService } from '@modules/providers/moxfield/service/moxfield.service';
 import { DBCardsService } from '@modules/db/services/db-cards.service';
 import { CardsEntity } from '@modules/db/entities/cards.entity';
+import { CreateTournamentAdapter } from '@shared/adapters/create-tournament-adapter/implementation/create-tournament-adapter';
+import { TopdeckAdapterService } from '@shared/adapters/create-tournament-adapter/factory/topdeck/topdeck.service';
+import { ManualAdapterService } from '@shared/adapters/create-tournament-adapter/factory/manual/manual.service';
 
 @Module({
   imports: [
@@ -35,6 +38,12 @@ import { CardsEntity } from '@modules/db/entities/cards.entity';
     LoadDecksUseCase,
     DBDecksService,
     DBTournamentService,
+    TopdeckAdapterService,
+    ManualAdapterService,
+    {
+      provide: 'CreateTournamentAdapterInterface',
+      useClass: CreateTournamentAdapter,
+    },
   ],
 })
 

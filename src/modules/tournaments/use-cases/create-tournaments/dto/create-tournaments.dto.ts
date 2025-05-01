@@ -8,6 +8,9 @@ export interface CreateTournamentDto {
   online: boolean;
   link: string;
   type: string;
+  registration_mode: string;
+  rounds: number;
+  players?: Players[];
 }
 
 export interface Card {
@@ -22,4 +25,16 @@ export interface Card {
 export interface NormalizedDeck {
   name: string;
   card: Card;
+}
+
+interface Players {
+  name: string,
+  commander: string,
+  partner: string,
+  colors: string,
+  decklist: string,
+  wins: number,
+  losses: number,
+  draws: number,
+  isWinner: boolean,
 }

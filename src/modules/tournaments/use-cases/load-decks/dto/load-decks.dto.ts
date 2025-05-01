@@ -14,4 +14,5 @@ export interface NormalizedDeck {
 
 export interface LoadDecksinput {
   url: string;
+  rounds: number;
 }
