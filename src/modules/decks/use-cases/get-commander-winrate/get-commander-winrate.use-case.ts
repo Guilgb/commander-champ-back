@@ -57,7 +57,8 @@ export class GetCommanderWinrateUseCase {
             existingDeck.champion += deck.is_winner ? 1 : 0;
             existingDeck.wins += deck.wins;
             existingDeck.losses += deck.losses;
-            existingDeck.draw += deck.draws;
+            existingDeck.draws += deck.draws;
+            existingDeck.winrate = this.calWinrate(existingDeck.wins, existingDeck.losses, existingDeck.draws);
           } else {
             const combinedCommanders = [deck.commander, deck.partner]
               .filter(Boolean)
@@ -91,8 +92,8 @@ export class GetCommanderWinrateUseCase {
 
   private calWinrate(wins, losses, draws): number {
     const games = (Number(wins) + Number(losses) + Number(draws));
-    const cal = (Number(wins) / games)
-    const res = Number((cal * 100).toFixed(2));
-    return res;
+    if (games === 0) return 0;
+    const winrateDecimal = Number(wins) / games;
+    return Number((winrateDecimal * 100).toFixed(2));
   }
 }
