@@ -14,11 +14,13 @@ import { RolePermissionsModule } from './modules/role-permissions/role-permissio
 import { CatogoriesModule } from './modules/catogories/catogories.module';
 import { TopicModule } from './modules/topic/topic.module';
 import { ArticlesModule } from './modules/articles/articles.module';
+import { BansModule } from '@modules/bans/bans.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     GetProvidersDecksModule,
     DatabaseModule,
@@ -34,6 +36,7 @@ import { ArticlesModule } from './modules/articles/articles.module';
     CatogoriesModule,
     TopicModule,
     ArticlesModule,
+    BansModule,
   ],
 })
 export class AppModule { }
