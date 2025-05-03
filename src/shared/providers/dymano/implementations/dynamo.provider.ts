@@ -13,7 +13,7 @@ export class DynamoProvider implements DynamoDBProviderInterface {
   constructor() {
     this.dynamoDB = new DynamoDB({
       region: process.env.CLOUD_AWS_REGION || "us-east-1",
-      credentials: fromIni(),
+      // credentials: fromIni(),
       // credentials: {
       //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
