@@ -2,6 +2,7 @@ import { Delete, Injectable, Logger } from "@nestjs/common";
 import { DynamoDBProviderInput, DynamoDBProviderInterface, DynamoDBProviderOutput, DynamoDBProviderSimpleOutput } from "../dynamo-provider.interface";
 import { DynamoDB, Get, ScanCommand, ScanCommandInput, Update } from "@aws-sdk/client-dynamodb";
 import { DeleteCommand, DeleteCommandInput, DynamoDBDocumentClient, GetCommand, GetCommandInput, PutCommand, PutCommandInput, UpdateCommand, UpdateCommandInput } from "@aws-sdk/lib-dynamodb";
+import { fromIni } from "@aws-sdk/credential-providers";
 
 @Injectable()
 export class DynamoProvider implements DynamoDBProviderInterface {
@@ -12,11 +13,12 @@ export class DynamoProvider implements DynamoDBProviderInterface {
   constructor() {
     this.dynamoDB = new DynamoDB({
       region: process.env.CLOUD_AWS_REGION || "us-east-1",
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-        sessionToken: process.env.AWS_SESSION_TOKEN,
-      },
+      credentials: fromIni(),
+      // credentials: {
+      //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      //   // sessionToken: process.env.AWS_SESSION_TOKEN,
+      // },
     });
     this.documentClient = DynamoDBDocumentClient.from(this.dynamoDB, {
       marshallOptions: {
