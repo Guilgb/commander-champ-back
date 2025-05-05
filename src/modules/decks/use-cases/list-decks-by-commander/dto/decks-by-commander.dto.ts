@@ -8,6 +8,7 @@ export interface DeckByCommanderResponse {
   username: string;
   commander: string;
   partner: string | null;
+  decklist: string;
   wins: number;
   losses: number;
   draws: number;

@@ -14,9 +14,9 @@ export class DBCardsDecksService {
     private readonly dbDecksRepository: Repository<DeckEntity>,
   ) { }
   async listByCommanderName(input: ListDecksByCommandeInput): Promise<DeckByCommanderResponse[]> {
-    const { commander_name,partner_name } = input;
+    const { commander_name, partner_name } = input;
     const decksQuery = this.dbDecksRepository.createQueryBuilder('decks')
-      .select(['decks.id','decks.username', 'decks.commander', 'decks.partner', 'decks.losses', 'decks.wins', 'decks.draws', 'decks.color_identity'])
+      .select(['decks.id', 'decks.username', 'decks.commander', 'decks.decklist', 'decks.partner', 'decks.losses', 'decks.wins', 'decks.draws', 'decks.color_identity'])
       .where('decks.commander LIKE :commander', { commander: `%${commander_name}%` });
 
     if (partner_name) {

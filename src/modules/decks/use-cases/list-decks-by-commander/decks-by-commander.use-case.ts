@@ -25,6 +25,7 @@ export class ListDecksByCommandeUseCase {
           name: deck.username,
           avatar: "/placeholder.svg?height=40&width=40"
         },
+        decklist: deck.decklist,
         commander: deck.commander,
         wins: deck.wins,
         losses: deck.losses,
