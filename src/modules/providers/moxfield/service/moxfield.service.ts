@@ -38,8 +38,6 @@ export class MoxfieldService {
       'User-Agent': `${process.env.USER_AGENT}`,
     };
 
-    // this.logger.log(`Requesting Moxfield deck from ${url}`);
-
     try {
       const response = await this.httpService.get(url, { headers });
       const { data } = await firstValueFrom(response);
@@ -47,8 +45,8 @@ export class MoxfieldService {
       return commannder;
 
     } catch (error) {
-      this.logger.error(`Failed to fetch Moxfield deck: ${error.message}`);
-      return 'null';
+      this.logger.error(`Failed to fetch Moxfield deck: ${url} - ${error.message}`);
+      return null;
     }
   }
 
