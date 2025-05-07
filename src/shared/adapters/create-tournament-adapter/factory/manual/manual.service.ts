@@ -16,7 +16,6 @@ export class ManualAdapterService {
 
   async createTournament(input: CreateTournamentDto) {
     const { name, link, format, online, user_id, rounds, type, players, end_date, start_date } = input;
-    console.log("Input data:", input);
     try {
       if (players.length < 4) {
         throw new Error("You need at least 4 players to create a tournament");

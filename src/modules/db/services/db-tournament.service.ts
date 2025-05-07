@@ -135,4 +135,37 @@ export class DBTournamentService {
       name: tournament.name,
     }));
   }
+
+  async getTournamentsInfoById(id: number): Promise<any> {
+    const tournament = await this.tournamentRepository.findOne({
+      where: { id: id },
+      relations: ["decks"],
+    });
+
+    if (!tournament) {
+      throw new Error("Tournament not found");
+    }
+
+    return {
+      id: tournament.id,
+      name: tournament.name,
+      location: 'none',
+      start_date: tournament.start_date,
+      format: tournament.format,
+      players_number: tournament.decks.length,
+      players: tournament.decks.map((deck) => ({
+        id: deck.id,
+        name: deck.username,
+        commander: deck.commander,
+        partner: deck.partner ? deck.partner : null,
+        colors: Array.isArray(deck.color_identity)
+          ? deck.color_identity.filter((color) => typeof color === 'string').join('')
+          : deck.color_identity.replace(/[^a-zA-Z]/g, ''),
+        wins: deck.wins,
+        losses: deck.losses,
+        draws: deck.draws,
+        isWinner: deck.wins,
+      })),
+    }
+  }
 }

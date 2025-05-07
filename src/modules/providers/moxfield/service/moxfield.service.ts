@@ -69,6 +69,7 @@ export class MoxfieldService {
       });
       return normalizedData;
     } catch (error) {
+      this.logger.error(`Failed to normalize deck data: ${error.message}`);
       return null;
     }
   }

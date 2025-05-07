@@ -27,8 +27,36 @@ export class LoadDecksUseCase {
           const draws = Math.max(input.rounds - Math.floor(player.points / 3) - Math.floor(player.points / 3), 0);
           const losses = (input.rounds - wins) - draws;
 
+          if (!player.decklist) {
+            return {
+              id: player.id,
+              name: player.name,
+              decklist: '-',
+              commander: '-',
+              partner: '-',
+              colors: '-',
+              wins: wins,
+              draws: draws,
+              losses: losses,
+            };
+          }
+
           const commanderData = await this.moxfieldService.getMoxfieldDeckCommander(player.decklist);
           const colors = await this.moxfieldService.getMoxfieldDeck(player.decklist);
+
+          if (!commanderData || !colors) {
+            return {
+              id: player.id,
+              name: player.name,
+              decklist: '-',
+              commander: '-',
+              partner: '-',
+              colors: '-',
+              wins: wins,
+              draws: draws,
+              losses: losses,
+            };
+          }
 
           return {
             id: player.id,
@@ -46,7 +74,6 @@ export class LoadDecksUseCase {
 
       return combinedDecks
     } catch (error) {
-      console.log(error);
       throw new Error(error.message);
     }
   }

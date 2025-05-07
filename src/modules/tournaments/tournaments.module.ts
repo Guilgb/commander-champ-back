@@ -19,6 +19,7 @@ import { CardsEntity } from '@modules/db/entities/cards.entity';
 import { CreateTournamentAdapter } from '@shared/adapters/create-tournament-adapter/implementation/create-tournament-adapter';
 import { TopdeckAdapterService } from '@shared/adapters/create-tournament-adapter/factory/topdeck/topdeck.service';
 import { ManualAdapterService } from '@shared/adapters/create-tournament-adapter/factory/manual/manual.service';
+import { TournamentInfoUseCase } from './use-cases/tournament-info/tournament-info.use-case';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { ManualAdapterService } from '@shared/adapters/create-tournament-adapter
     ListTournamentsUseCase,
     UpdateTournamentUseCase,
     UpdateAllDecksUseCase,
+    TournamentInfoUseCase,
     LoadDecksUseCase,
     DBDecksService,
     DBTournamentService,
