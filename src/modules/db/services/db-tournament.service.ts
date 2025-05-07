@@ -164,7 +164,7 @@ export class DBTournamentService {
         wins: deck.wins,
         losses: deck.losses,
         draws: deck.draws,
-        isWinner: deck.wins,
+        isWinner: deck.is_winner,
       })),
     }
   }
