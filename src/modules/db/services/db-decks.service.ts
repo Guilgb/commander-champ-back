@@ -7,6 +7,7 @@ import { TournamentEntity } from "../entities/tournaments.entity";
 import { DeckMetricsDto } from "modules/decks/use-cases/decks-metrics/dto/deck-metrics.dto";
 import { UserDecks } from "../types/IDecks";
 import { ListUserDecksInput } from "@modules/decks/use-cases/list-users-decks/dto/list-users-decks.dto";
+import { DecksResponseDto } from "@modules/tournaments/use-cases/delete-tournament/dto/delete-tournament.dto";
 
 
 @Injectable()
@@ -453,6 +454,19 @@ export class DBDecksService {
     `;
 
     return await this.deckRepository.query(query);
+  }
+
+  async getDecksByTournamentId(tournament_id: number): Promise<DecksResponseDto[]> {
+    const decks = await this.deckRepository.findBy({ tournament_id: { id: tournament_id } });
+    return decks as unknown as DecksResponseDto[];
+  }
+
+  async deleteDeckById(id: number): Promise<any> {
+    const deck = await this.deckRepository.findOneBy({ id: id });
+    if (!deck) {
+      return null;
+    }
+    await this.deckRepository.delete({ id: id });
   }
 
   private calWinrate(wins, losses, draws): number {

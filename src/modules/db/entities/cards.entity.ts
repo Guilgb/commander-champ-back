@@ -9,7 +9,7 @@ export class CardsEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   name: string;
 
-  @ManyToOne(() => DeckEntity, (deck) => deck.cards)
+  @ManyToOne(() => DeckEntity, (deck) => deck.cards, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'deck_id' })
   deck_id: DeckEntity;
 

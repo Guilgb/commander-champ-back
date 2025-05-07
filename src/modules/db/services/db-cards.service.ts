@@ -397,4 +397,19 @@ export class DBCardsService {
       throw new Error(error);
     }
   }
+
+  async listCardsByDeckId(deck_id: number): Promise<any> {
+    try {
+      const deck = await this.deckRepository.findOne({ where: { id: deck_id } });
+
+      if (!deck) {
+        throw new Error(`Deck with id ${deck_id} does not exist`);
+      }
+
+      const result = await this.cardRepository.findBy({ deck_id: deck });
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 }

@@ -39,6 +39,14 @@ export class DBTournamentService {
     return this.tournamentRepository.find();
   }
 
+  async deleteTournamentById(id: number): Promise<void> {
+    const tournament = await this.tournamentRepository.findOneBy({ id: id });
+    if (!tournament) {
+      throw new Error("Tournament not found");
+    }
+    await this.tournamentRepository.delete(id);
+  }
+
   async getTournamentById(id: number): Promise<TournamentDto> {
     const tournament = await this.tournamentRepository.findOneBy({ id: id });
     if (!tournament) {

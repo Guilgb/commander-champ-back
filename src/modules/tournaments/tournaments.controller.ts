@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { CreateTournamentUseCase } from "./use-cases/create-tournaments/create-tournaments.use-case";
 import { CreateTournamentDto } from "./use-cases/create-tournaments/dto/create-tournaments.dto";
 import { ListTournamentsUseCase } from "./use-cases/list-tournaments/list-tournaments.use-case";
@@ -10,6 +10,8 @@ import { LoadDecksinput } from "./use-cases/load-decks/dto/load-decks.dto";
 import { UpdateAllDecksUseCase } from "./use-cases/update-all-decks/update-all-decks.use-case";
 import { UpdateAllDecksInput } from "./use-cases/update-all-decks/dto/update-all-decks.dto";
 import { TournamentInfoUseCase } from "./use-cases/tournament-info/tournament-info.use-case";
+import { DeleteTournamentUseCase } from "./use-cases/delete-tournament/delete-tournament.use-case";
+import { DeleteTournamentDto } from "./use-cases/delete-tournament/dto/delete-tournament.dto";
 
 @Controller("/tournaments")
 // @UseGuards(AuthGuard('jwt'))
@@ -21,6 +23,7 @@ export class TournamentsController {
     private readonly loadDecksUseCase: LoadDecksUseCase,
     private readonly updateAllDecksUseCase: UpdateAllDecksUseCase,
     private readonly tournamentInfoUseCase: TournamentInfoUseCase,
+    private readonly deleteTournamentUseCase: DeleteTournamentUseCase,
   ) { }
 
   @Post("/")
@@ -62,5 +65,12 @@ export class TournamentsController {
     @Body() input: UpdateAllDecksInput
   ) {
     return await this.updateAllDecksUseCase.execute(input);
+  }
+
+  @Delete()
+  async deleteTournament(
+    @Body() input: DeleteTournamentDto
+  ) {
+    return await this.deleteTournamentUseCase.execute(input);
   }
 }

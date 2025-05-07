@@ -20,6 +20,7 @@ import { CreateTournamentAdapter } from '@shared/adapters/create-tournament-adap
 import { TopdeckAdapterService } from '@shared/adapters/create-tournament-adapter/factory/topdeck/topdeck.service';
 import { ManualAdapterService } from '@shared/adapters/create-tournament-adapter/factory/manual/manual.service';
 import { TournamentInfoUseCase } from './use-cases/tournament-info/tournament-info.use-case';
+import { DeleteTournamentUseCase } from './use-cases/delete-tournament/delete-tournament.use-case';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { TournamentInfoUseCase } from './use-cases/tournament-info/tournament-in
     UpdateTournamentUseCase,
     UpdateAllDecksUseCase,
     TournamentInfoUseCase,
+    DeleteTournamentUseCase,
     LoadDecksUseCase,
     DBDecksService,
     DBTournamentService,

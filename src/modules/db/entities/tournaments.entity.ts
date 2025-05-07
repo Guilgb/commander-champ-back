@@ -25,7 +25,7 @@ export class TournamentEntity {
     @Column({type: "varchar", nullable: true, unique: true})
     tournament_link: string;
 
-    @OneToMany(() => DeckEntity, (deck) => deck.tournament_id)
+    @OneToMany(() => DeckEntity, (deck) => deck.tournament_id, { onDelete: 'CASCADE' })
     decks: DeckEntity[];
 
     @ManyToOne(() => UsersEntity, (user) => user.id)

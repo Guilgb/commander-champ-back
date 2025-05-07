@@ -13,10 +13,10 @@ export class DeckEntity {
   @Column()
   commander!: string;
 
-  @Column( {type: 'varchar', length: 255, nullable: true})
+  @Column({ type: 'varchar', length: 255, nullable: true })
   partner: string;
-  
-  @ManyToOne(() => TournamentEntity, (tournament) => tournament.id)
+
+  @ManyToOne(() => TournamentEntity, (tournament) => tournament.id, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'tournament_id' })
   tournament_id: TournamentEntity;
 
@@ -32,18 +32,18 @@ export class DeckEntity {
   @Column({ default: 0 })
   draws: number;
 
-  @Column({type: 'boolean', default: false})
+  @Column({ type: 'boolean', default: false })
   is_winner: boolean;
 
-  @Column({type: 'int', nullable: true})
+  @Column({ type: 'int', nullable: true })
   cmc_commander: number;
 
-  @Column({type: 'varchar', length: 255, nullable: true})
+  @Column({ type: 'varchar', length: 255, nullable: true })
   color_identity: string;
 
   @CreateDateColumn()
   created_at: Date;
 
-  @OneToMany(() => CardsEntity, (card) => card.id)
+  @OneToMany(() => CardsEntity, (card) => card.id, { cascade: true, onDelete: 'CASCADE' })
   cards: CardsEntity[];
 }
