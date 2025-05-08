@@ -25,18 +25,18 @@ export class TopdeckAdapterService {
 
       const tournament = await this.tournamentService.createTournament({
         name: input.name,
-        start_date: new Date(input.start_date),
-        end_date: new Date(input.end_date),
-        format: input.format,
-        user_id: input.user_id,
-        online: input.online,
-        tournament_link: input.link,
+        start_date: start_date,
+        end_date: end_date,
+        format: format,
+        user_id: user_id,
+        online: online,
+        tournament_link: link,
       });
 
       if (!tournament) {
         throw new Error("Tournament creation failed");
       }
-
+      console.log(players)
       const combinedDecks = {
         name: name,
         date: start_date,

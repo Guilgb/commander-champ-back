@@ -9,14 +9,14 @@ export class CreateTournamentAdapter implements CreateTournamentAdapterInterface
   constructor(
     private readonly topdeckAdapterService: TopdeckAdapterService,
     private readonly manualAdapterService: ManualAdapterService,
-  ) {}
+  ) { }
 
   async createTournament(input: CreateTournamentAdapterDto): Promise<any> {
     const { registration_mode } = input;
     try {
-      switch(registration_mode){
+      switch (registration_mode) {
         case "manual":
-          return  await this.manualAdapterService.createTournament(input);
+          return await this.manualAdapterService.createTournament(input);
         case "topdeck":
           return await this.topdeckAdapterService.createTournament(input);
         default:
