@@ -36,7 +36,6 @@ export class TopdeckAdapterService {
       if (!tournament) {
         throw new Error("Tournament creation failed");
       }
-      console.log(players)
       const combinedDecks = {
         name: name,
         date: start_date,
@@ -45,6 +44,7 @@ export class TopdeckAdapterService {
           const wins = player.wins;
           const draws = player.draws;
           const losses = player.losses;
+          const isWinner = Boolean(player.isWinner || false);
 
           if (!player.decklist) {
             throw new Error("Player decklist is missing");
@@ -52,7 +52,7 @@ export class TopdeckAdapterService {
 
           const commanderData = await this.moxfieldService.getMoxfieldDeck(player.decklist);
 
-          if(!commanderData) {
+          if (!commanderData) {
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
@@ -64,7 +64,7 @@ export class TopdeckAdapterService {
               commander: player.commander,
               cmc_commander: 4,
               partner: player.partner ? player.partner : null,
-              is_winner: player.isWinner,
+              is_winner: isWinner,
             });
             return {
               username: player.name,
@@ -80,7 +80,6 @@ export class TopdeckAdapterService {
           if (commanders) {
             const commander = commanders[0];
             const partner = commanders?.length >= 1 ? commanders[1] : null;
-
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
@@ -92,7 +91,7 @@ export class TopdeckAdapterService {
               commander: commander.card.name,
               cmc_commander: commander.card.cmc,
               partner: partner ? partner.card.name : null,
-              is_winner: player.isWinner
+              is_winner: isWinner,
             });
             return {
               username: player.name,

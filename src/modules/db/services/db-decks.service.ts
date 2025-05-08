@@ -32,6 +32,7 @@ export class DBDecksService {
       color_identity: input.color_identity,
       cmc_commander: input.cmc_commander,
       created_at: new Date(),
+      is_winner: input.is_winner,
     });
 
     const savedDeck = await this.deckRepository.save(deck);
