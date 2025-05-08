@@ -74,6 +74,7 @@ export class GetDecksStatisticsUseCase {
               top4: tournament.top4.some((d) => d.commander === deck.commander) ? 1 : 0,
               champion: deck.is_winner ? +1 : 0,
               cmc: deck.cmc_commander,
+              date: new Date(deck.created_at).toLocaleDateString("pt-BR"),
               colors: deck.color_identity
                 .replace(/[\{\}\"]/g, "")
                 .split(",")

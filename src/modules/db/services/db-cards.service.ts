@@ -137,7 +137,7 @@ export class DBCardsService {
       const deckIds = decks.map((d: { id: number }) => d.id);
       const cards = await this.cardRepository
         .query(
-          `SELECT name, cmc, type, colors FROM cards WHERE deck_id = ANY($1::int[])`,
+          `SELECT name, cmc, type, colors, created_at FROM cards WHERE deck_id = ANY($1::int[])`,
           [deckIds]);
 
       if (!cards.length) {

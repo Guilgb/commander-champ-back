@@ -35,6 +35,7 @@ export class ListMostUserCardsByDateUseCase {
           type: card.type,
           colors: this.isValidJson(card.colors),
           quantity: card?.quantity || 1,
+          date: new Date(card.created_at).toLocaleDateString('pt-BR'),
         });
       }
       return acc;

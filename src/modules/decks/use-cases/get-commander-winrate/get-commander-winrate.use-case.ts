@@ -66,6 +66,7 @@ export class GetCommanderWinrateUseCase {
               .join(" + ");
             acc.push({
               id: deck.id,
+              tournament_id: tournament.tournamentId,
               name: tournament.name,
               username: deck.username,
               commander: deck.commander,
@@ -79,8 +80,8 @@ export class GetCommanderWinrateUseCase {
               losses: deck.losses,
               draws: deck.draws,
               winrate: this.calWinrate(deck.wins, deck.losses, deck.draws),
-              start_date: tournament.start_date,
-              end_date: tournament.end_date,
+              start_date: new Date(tournament.start_date).toLocaleDateString("pt-BR"),
+              end_date: new Date(tournament.end_date).toLocaleDateString("pt-BR"),
             });
           }
         }
