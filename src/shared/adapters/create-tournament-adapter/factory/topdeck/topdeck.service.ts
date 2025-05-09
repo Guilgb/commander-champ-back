@@ -36,6 +36,7 @@ export class TopdeckAdapterService {
       if (!tournament) {
         throw new Error("Tournament creation failed");
       }
+
       const combinedDecks = {
         name: name,
         date: start_date,
@@ -56,6 +57,7 @@ export class TopdeckAdapterService {
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
+              position: player.position,
               tournament_id: tournament?.id,
               wins,
               losses,
@@ -83,6 +85,7 @@ export class TopdeckAdapterService {
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
+              position: player.position,
               tournament_id: tournament?.id,
               wins,
               losses,

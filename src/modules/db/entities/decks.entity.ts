@@ -20,6 +20,9 @@ export class DeckEntity {
   @JoinColumn({ name: 'tournament_id' })
   tournament_id: TournamentEntity;
 
+  @Column({ type: 'int', nullable: true })
+  position: number;
+
   @Column()
   decklist: string;
 

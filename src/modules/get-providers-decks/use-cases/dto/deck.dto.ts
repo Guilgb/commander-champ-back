@@ -1,6 +1,7 @@
 export interface DeckDto {
   id?: number;
   username: string;
+  position: number;
   decklist: string;
   tournament_id: number;
   wins: number;

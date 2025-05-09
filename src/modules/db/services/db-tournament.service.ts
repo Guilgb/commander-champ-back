@@ -164,6 +164,7 @@ export class DBTournamentService {
       players: tournament.decks.map((deck) => ({
         id: deck.id,
         name: deck.username,
+        positiom: deck.position,
         commander: deck.commander,
         partner: deck.partner ? deck.partner : null,
         colors: Array.isArray(deck.color_identity)

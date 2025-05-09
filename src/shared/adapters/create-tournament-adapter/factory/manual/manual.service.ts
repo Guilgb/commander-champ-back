@@ -53,6 +53,7 @@ export class ManualAdapterService {
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
+              position: player.position,
               tournament_id: tournament?.id,
               wins,
               losses,
@@ -80,6 +81,7 @@ export class ManualAdapterService {
             await this.dbDeckService.createDeck({
               username: player.name,
               decklist: player.decklist,
+              position: player.position,
               tournament_id: tournament?.id,
               wins,
               losses,

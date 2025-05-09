@@ -29,6 +29,7 @@ export interface NormalizedDeck {
 
 interface Players {
   name: string,
+  position: number,
   commander: string,
   partner: string,
   colors: string,

@@ -24,6 +24,7 @@ export class DBDecksService {
       username: input.username,
       decklist: input.decklist,
       tournament_id: { id: input.tournament_id } as TournamentEntity,
+      position: input.position,
       wins: input.wins,
       losses: input.losses,
       draws: input.draws,
@@ -53,6 +54,7 @@ export class DBDecksService {
         username: input.username,
         decklist: input.decklist,
         tournament_id: { id: input.tournament_id } as TournamentEntity,
+        position: input.position,
         wins: input.wins,
         losses: input.losses,
         draws: input.draws,
@@ -84,6 +86,7 @@ export class DBDecksService {
         const response = await this.deckRepository.update({ id: deck.id }, {
           username: deck.username,
           decklist: deck.decklist,
+          position: deck.position,
           tournament_id: { id: tournament_id } as TournamentEntity,
           wins: deck.wins,
           losses: deck.losses,

@@ -10,6 +10,7 @@ export interface UpdateAllDecksInput {
 interface Decks {
   id: number;
   username: string;
+  position: number;
   decklist: string;
   tournament_id: number;
   wins: number;

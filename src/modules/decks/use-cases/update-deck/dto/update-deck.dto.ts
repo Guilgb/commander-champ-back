@@ -2,6 +2,7 @@ export interface UpdateDeckDto {
     id: number;
     username: string;
     decklist: string;
+    position: number;
     tournament_id: number;
     wins: number;
     losses: number;

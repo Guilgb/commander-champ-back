@@ -31,6 +31,7 @@ export class LoadDecksUseCase {
             return {
               id: player.id,
               name: player.name,
+              position: player.standing,
               decklist: '-',
               commander: '-',
               partner: '-',
@@ -48,6 +49,7 @@ export class LoadDecksUseCase {
             return {
               id: player.id,
               name: player.name,
+              position: player.standing,
               decklist: '-',
               commander: '-',
               partner: '-',
@@ -61,6 +63,7 @@ export class LoadDecksUseCase {
           return {
             id: player.id,
             name: player.name,
+            position: player.standing,
             decklist: player.decklist,
             commander: commanderData[0]?.card?.name || '-',
             partner: commanderData[1]?.card?.name || '-',
