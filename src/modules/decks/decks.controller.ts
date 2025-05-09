@@ -84,7 +84,7 @@ export class DecksController {
     return await this.listUsersDecksUseCase.execute(input);
   }
 
-  @Post("commander")
+  @Post("/commander")
   async listDecksByCommander(
     @Body() input: ListDecksByCommandeInput
   ) {
