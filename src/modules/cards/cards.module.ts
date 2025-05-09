@@ -14,6 +14,7 @@ import { CardsMetricsUseCase } from './use-cases/cards-metrics/cards-metrics.use
 import { TournamentEntity } from '../db/entities/tournaments.entity';
 import { ListMostUserCardsByDateUseCase } from './use-cases/list-most-user-cards-by-date/list-most-user-cards-by-date.use-case';
 import { ScryfallService } from '@modules/providers/scryfall/service/scryfall.service';
+import { PopularDecksUseCase } from './use-cases/pupular-decks/pupular-decks.use-case';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { ScryfallService } from '@modules/providers/scryfall/service/scryfall.se
     ScryfallService,
     CardsMetricsUseCase,
     SaveCardsUseCase,
+    PopularDecksUseCase,
     ListMostUserCardsByDateUseCase,
   ],
 })

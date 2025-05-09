@@ -6,6 +6,8 @@ import { CardsMetricsDto } from "./use-cases/cards-metrics/dto/cards-metrics.dto
 import { DeckMetricsUseCase } from "../decks/use-cases/decks-metrics/deck-metrics.use-case";
 import { ListMostUserCardsByDateUseCase } from "./use-cases/list-most-user-cards-by-date/list-most-user-cards-by-date.use-case";
 import { ListMostUserCardsByDateInput } from "./use-cases/list-most-user-cards-by-date/dto/list-most-user-cards-by-date.dto";
+import { PopularDecksUseCase } from "./use-cases/pupular-decks/pupular-decks.use-case";
+import { PopularDecksInput } from "./use-cases/pupular-decks/dto/pupular-decks.dto";
 
 @Controller("/cards")
 export class CardsController {
@@ -13,6 +15,7 @@ export class CardsController {
     private readonly saveCardsUseCase: SaveCardsUseCase,
     private readonly cardsMetricsUseCase: CardsMetricsUseCase,
     private readonly listMostUserCardsByDateUseCase: ListMostUserCardsByDateUseCase,
+    private readonly popularDecksUseCase: PopularDecksUseCase,
   ) { }
 
   @Post("/save")
@@ -41,5 +44,12 @@ export class CardsController {
     @Body() input: ListMostUserCardsByDateInput
   ) {
     return await this.listMostUserCardsByDateUseCase.execute(input);
+  }
+
+  @Post("/popular-decks")
+  async popularDecks(
+    @Body() input: PopularDecksInput
+  ) {
+    return await this.popularDecksUseCase.execute(input);
   }
 }

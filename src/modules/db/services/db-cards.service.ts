@@ -6,6 +6,7 @@ import { CardsDto } from "modules/get-providers-decks/use-cases/dto/cards.dto";
 import { DeckEntity } from "../entities/decks.entity";
 import { CardsMetricsDto } from "modules/cards/use-cases/cards-metrics/dto/cards-metrics.dto";
 import { TournamentEntity } from "../entities/tournaments.entity";
+import { PopularDecksOutput } from "@modules/cards/use-cases/pupular-decks/dto/pupular-decks.dto";
 
 @Injectable()
 export class DBCardsService {
@@ -411,5 +412,25 @@ export class DBCardsService {
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async listDecksByCardName(card_name: string): Promise<PopularDecksOutput[]> {
+    const decksCount = (await this.deckRepository.find()).length;
+    const decks = await this.deckRepository.createQueryBuilder('d')
+      .select(['d.id', 'd.commander', 'd.partner', 'd.wins', 'd.losses', 'd.draws', 'd.color_identity'])
+      .innerJoin('cards', 'c', 'd.id = c.deck_id')
+      .where('c.name = :name', { name: card_name })
+      .getMany();
+
+    return decks.map(deck => ({
+      id: deck.id,
+      commander: deck.commander,
+      partner: deck.partner,
+      wins: deck.wins,
+      losses: deck.losses,
+      draws: deck.draws,
+      color_identity: deck.color_identity,
+      decks_count: decksCount,
+    }))
   }
 }
