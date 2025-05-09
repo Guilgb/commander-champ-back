@@ -14,9 +14,23 @@ export class ScryfallService {
   }
 
   async getCardByName(cardName: string) {
-    // const response = await this.httpService.get(`https://api.scryfall.com/cards/named?exact=${cardName}`).toPromise();
-    // return response.data;
-    return {};
+    try {
+      const formattedCardName = encodeURIComponent(cardName.trim());
+      const response = await this.httpService.get(`https://api.scryfall.com/cards/named?exact=${formattedCardName}`).toPromise();
+
+      if (response.status !== 200) {
+        if (response.status === 404) {
+          console.warn(`Card not found: ${cardName}`);
+          return null;
+        }
+        throw new Error(`Scryfall API error: ${response.status}`);
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error(`Error fetching card data for ${cardName}:`, error.message);
+      return null;
+    }
   }
 
   async getCardImageUrl(cardName: string) {

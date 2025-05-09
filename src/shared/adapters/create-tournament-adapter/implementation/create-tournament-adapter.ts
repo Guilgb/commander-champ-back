@@ -3,12 +3,14 @@ import { CreateTournamentAdapterInterface } from "../create-tournament-adapter.i
 import { CreateTournamentAdapterDto } from "./create-tournament-adapter.dto";
 import { TopdeckAdapterService } from "../factory/topdeck/topdeck.service";
 import { ManualAdapterService } from "../factory/manual/manual.service";
+import { LigaMagicAdapterService } from "../factory/ligamagic/ligamagic.service";
 
 @Injectable()
 export class CreateTournamentAdapter implements CreateTournamentAdapterInterface {
   constructor(
     private readonly topdeckAdapterService: TopdeckAdapterService,
     private readonly manualAdapterService: ManualAdapterService,
+    private readonly ligaMagicAdapterService: LigaMagicAdapterService,
   ) { }
 
   async createTournament(input: CreateTournamentAdapterDto): Promise<any> {
@@ -19,6 +21,8 @@ export class CreateTournamentAdapter implements CreateTournamentAdapterInterface
           return await this.manualAdapterService.createTournament(input);
         case "topdeck":
           return await this.topdeckAdapterService.createTournament(input);
+        case "ligamagic":
+          return await this.ligaMagicAdapterService.createTournament(input);
         default:
           throw new Error("Invalid registration mode");
       }

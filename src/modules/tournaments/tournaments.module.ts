@@ -21,6 +21,8 @@ import { TopdeckAdapterService } from '@shared/adapters/create-tournament-adapte
 import { ManualAdapterService } from '@shared/adapters/create-tournament-adapter/factory/manual/manual.service';
 import { TournamentInfoUseCase } from './use-cases/tournament-info/tournament-info.use-case';
 import { DeleteTournamentUseCase } from './use-cases/delete-tournament/delete-tournament.use-case';
+import { LigaMagicService } from '@modules/providers/ligamagic/service/ligamagic.service';
+import { LigaMagicAdapterService } from '@shared/adapters/create-tournament-adapter/factory/ligamagic/ligamagic.service';
 
 @Module({
   imports: [
@@ -32,6 +34,7 @@ import { DeleteTournamentUseCase } from './use-cases/delete-tournament/delete-to
   providers: [
     TopdeckggService,
     MoxfieldService,
+    LigaMagicService,
     DBCardsService,
     CreateTournamentUseCase,
     ListTournamentsUseCase,
@@ -44,6 +47,7 @@ import { DeleteTournamentUseCase } from './use-cases/delete-tournament/delete-to
     DBTournamentService,
     TopdeckAdapterService,
     ManualAdapterService,
+    LigaMagicAdapterService,
     {
       provide: 'CreateTournamentAdapterInterface',
       useClass: CreateTournamentAdapter,
